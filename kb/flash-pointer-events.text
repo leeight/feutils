@@ -1,0 +1,94 @@
+% 透明flash的点击穿透在各浏览器下行为不一致
+% zhanglili
+% 2011-03-18
+% flash,IE,event
+
+介绍引入flash时，其透明部分对鼠标点击的响应方式在各浏览器下的差异。
+
+## 透明flash的点击穿透在各浏览器下行为不一致
+
+### 现象
+
+当使用`<object><embed /></object>`标签格式引入flash，并当flash中存在一部分内容为透明时，其透明部分对鼠标点击的响应在各浏览器下存在差异：
+
+* 在IE下，点击可以穿透flash的透明部分，前提是点击区域下方有非`body`或`document`的元素
+* 在IE下，双击flash的透明部分，会触发`body`和`document`元素的`click`事件
+* 在其他浏览器下，点击无法穿透flash的透明部分
+
+### 问题重现
+
+使用以下代码重现问题：
+
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="utf-8" />
+        <title>hello world</title>
+        <style>
+            div {
+                position: relative;
+            }
+            object {
+                position: absolute;
+                top: 0;
+                border: 1px solid red;
+                z-index: 999;
+            }
+            ul {
+                margin-left: 100px;
+            }
+            span {
+                padding: 6px 4px;
+                border: 1px solid blue;
+                position: absolute;
+                left: 200px;
+                cursor: pointer;
+            }
+            #in {
+                top: 200px;
+            }
+            #out {
+                top: 410px;
+            }
+            #log {
+                position: absolute;
+                right: 20px;
+            }
+        </style>
+    </head>
+    <body onclick="note('body');">
+        <h1>Flash点击穿透测试</h1>
+        <div>
+            <object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" width="400" height="400" align="middle"
+                    codebase="http://fpdownload.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=7,0,0,0">
+                <param name="allowScriptAccess" value="always">
+                <param name="quality" value="high"><param name="wmode" value="transparent">
+                <param name="movie" value="pointer-events-test.swf">
+                <embed wmode="transparent" src="pointer-events-test.swf" quality="high" width="400" height="400" align="middle" 
+                       allowscriptaccess="always" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" />
+            </object>
+            <span id="in" onclick="note('被flash遮住的span');">被flash遮住的span</span>
+            <span id="out" onclick="note('没被flash遮住的span');">没被flash遮住的span</span>
+        </div>
+        <p id="log"></p>
+        <script>
+            var logger = document.getElementById('log');
+            function note(target) {
+                logger.innerHTML += target + ' clicked!<br />';
+            }
+            document.documentElement.onclick = function() { note('document'); };
+        </script>
+    </body>
+    </html>
+
+期中pointer-event-test.swf为一个400\*400的flash，其中右边300\*400为透明区域。
+
+测试结果如下：
+
+|* 点击元素 *|* IE下 *|* 其他浏览器 *|
+| 被flash遮住的span | span -> body -> document | 无事件 |
+| 没被flash遮住的span | span -> body -> document | 无事件 |
+| flash透明区域 | 无事件 | 无事件 |
+| 双击flash透明区域 | body -> document | 无事件 |
+
+可在此页面进行测试：[测试页面](demo/flash-pointer-events.htm)
