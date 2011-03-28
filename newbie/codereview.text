@@ -1,0 +1,77 @@
+% [SDCFE]新人指南-CodeReview平台
+% liyubei
+% 20110328
+
+## 新人指南-CodeReview平台
+
+事先声明一下，这里所指的是<http://fe.baidu.com/codereview>这个平台，而不是
+`iCafe`里面每个项目中的`CodeReview`功能。
+
+### 基本原理
+
+把原始文件和进行修改之后的diff的内容提交到这个平台（原始文件+diff内容），因此
+理论上说可以支持任何的版本管理工具，实际上也支持了（svn，hg，git等多个版本管理工具）
+
+
+### 帐号申请
+
+在使用这个平台之前，首先需要一个帐号。（很可惜的是，现在这个平台还不能和内网
+的认证系统结合起来，如果有哪位同学想帮忙的话，非常欢迎）。帐号的申请可以直接
+找我`liyubei@baidu.com`，或者`leizhixing@baidu.com`。
+
+### 环境准备
+
+0. 首先需要安装`Python`的环境。如果你的系统是Linux或者Mac，默认应该都已经有了，如果是
+   Windows的话，请参考[这里](http://docs.python.org/using/windows.html)的安装步骤。
+1. 下载这个工具包<http://fe.baidu.com/codereview/static/Fcodereview.zip>。
+2. 解压到一个目录下，假定是`c:\dev\Fcodereview`（Windows系统）或者`$HOME/dev/Fcodereview`（NIX系统）。
+3. 修改环境变量`%PATH%`（Windows系统）或者`$PATH`（NIX系统）的值。
+![modify-windows-env.png](modify-windows-env.png)
+4. 打开终端，执行命令`Fcodereview --help`，如果有帮助信息输出，说明环境已经准备好了。
+
+### 提交Review
+
+1. 首先，我们本地需要有一个svn的repos，打开终端，切换到当前的repos
+2. 执行命令`svn st`，确保有被修改过之后的文件
+3. 此时执行`Fcodereview`，如果当前目录有没有添加到`repos`的文件，会给出提示：  
+![fcodereview-notification.png](fcodereview-notification.png)
+4. 此时选择`y`继续执行就可以了，之后输入主题，最好是`[产品]:主题`的格式。
+（第一次执行的时候会需要你输入`用户名`,`密码`）
+5. OK，提交完毕，会给出你最终的[地址](http://fe.baidu.com/codereview/234)。  
+![fcodereview-after-submit.png](fcodereview-after-submit.png)
+6. 现在就可以去那个平台上面查看这次提交的结果了，效果图如下：  
+![fcodereview-preview-234.png](fcodereview-preview-234.png)
+7. 选择`View`，进入代码Review的页面，如果你登录了，双击每一行，都可以添加你的Comment，如果你没有登陆，双击的
+时候都会提示你去登陆。
+8. 可以到这个[页面](http://fe.baidu.com/codereview/234/diff/311/build.py)查看添加了Comment之后的效果。  
+9. 等到对所有的代码都Review了之后，也添加了不少的Comment，但是现在Review的流程还没有结束呢，刚才你所添加的
+那些Comment仅仅是`Draft`，还需要最后一步的确认过程。回到刚才第六步的列表页面，此时发现多了一句提示：
+
+        :::shell
+        You have 3 draft comments . Drafts are not viewable by others; 
+        use Publish+Mail Comments ('m') to let others view them. 
+
+10. 点击`Publish+Mail Comments`这个链接，进入了`publish`页面，效果如下：  
+![fcodereview-publish.png](fcodereview-publish.png)
+11. 然后在`Reviewers`和`CC`里面输入邮箱地址，可以输入多个，逗号分割，不需要输入@baidu.com。
+12. 点击`Publish All My Drafts`，就能完成此次Review了，然后那些人就能收到邮件，继续此次的Review过程。
+13. 当然了，这次发布了之后，你还可以继续添加Comment，继续发布。
+
+### 再次提交
+
+如果按照上面的流程，我提交了一个修改让立理帮忙Review，他给出了一些修改建议，然后我按照他的建议进行了修改，此时我需要
+再次发起Review，但是我们最好不要创建一个新的Issue。因为如果创建新的Issue的话，上个Issue提交的那些Comment就无法在新的
+Issue中体现出来。对于这种情况，我们的做法是在执行`Fcodereview`命令的时候，添加参数：
+
+    :::shell
+    Fcodereview -i 234
+
+这样子就能把第二次的改动继续提交到234这个Issue上面来。如图所示： 
+![fcodereview-second-phrase.png](fcodereview-second-phrase.png)
+
+### 进阶
+
+*直接发送邮件给Reviewers*
+
+    :::shell
+    Fcodereview -r 'liyubei,zhanglili01,yuanhongliang' --send_mail
