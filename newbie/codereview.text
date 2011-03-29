@@ -75,3 +75,8 @@ Issue中体现出来。对于这种情况，我们的做法是在执行`Fcoderev
 
     :::shell
     Fcodereview -r 'liyubei,zhanglili01,yuanhongliang' --send_mail
+
+*提交某两个Revision之间的更改*
+
+    :::shell
+    Fcodereview --rev=1234:1236 -r 'liyubei,zhanglili01,yuanhongliang' --send_mail
