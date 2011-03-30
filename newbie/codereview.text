@@ -12,7 +12,6 @@
 把原始文件和进行修改之后的diff的内容提交到这个平台（原始文件+diff内容），因此
 理论上说可以支持任何的版本管理工具，实际上也支持了（svn，hg，git等多个版本管理工具）
 
-
 ### 帐号申请
 
 在使用这个平台之前，首先需要一个帐号。（很可惜的是，现在这个平台还不能和内网
@@ -21,8 +20,9 @@
 
 ### 环境准备
 
-0. 首先需要安装`Python`的环境。如果你的系统是Linux或者Mac，默认应该都已经有了，如果是
-   Windows的话，请参考[这里](http://docs.python.org/using/windows.html)的安装步骤。
+使用之前确认一下需要的工具和环境已经准备完毕，请参考[这里](env.text)
+
+0. 准备必要的环境，请参考[这里](env.text)。
 1. 下载这个工具包<http://fe.baidu.com/codereview/static/Fcodereview.zip>。
 2. 解压到一个目录下，假定是`c:\dev\Fcodereview`（Windows系统）或者`$HOME/dev/Fcodereview`（NIX系统）。
 3. 修改环境变量`%PATH%`（Windows系统）或者`$PATH`（NIX系统）的值。
