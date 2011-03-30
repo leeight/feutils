@@ -1,0 +1,16 @@
+#!/usr/bin/python
+# EASY-INSTALL-ENTRY-SCRIPT: 'closure-linter==2.2.7','console_scripts','fixjsstyle'
+import sys
+import os
+
+MOD_HOME=os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
+LIB_HOME=os.path.join(MOD_HOME, 'lib')
+sys.path.insert(0, LIB_HOME)
+
+from pkg_resources import load_entry_point
+from pkg_resources import require
+
+require('closure-linter==2.2.7')
+sys.exit(
+   load_entry_point('closure-linter==2.2.7', 'console_scripts', 'fixjsstyle')()
+)
