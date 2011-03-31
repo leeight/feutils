@@ -60,13 +60,6 @@ ui.Control = function(options) {
      * @type {boolean}
      */
     this.autoState = true;
-    
-    /**
-     * 控件的皮肤
-     * @type {string}
-     */
-    this['skin'] = '';
-
     baidu.object.extend(this, options);
 
     /**
@@ -83,6 +76,12 @@ baidu.inherits(ui.Control, base.EventDispatcher);
  * @type {string}
  */
 ui.Control.prototype.type = '';
+
+/**
+ * 控件的皮肤
+ * @type {string}
+ */
+ui.Control.prototype.skin = '';
 
 /**
  * 控件的ID，逻辑ID，并不是真正的DOM ID
@@ -125,35 +124,11 @@ ui.Control.prototype._callChildren = function(method, var_args) {
 
     for (i = 0; i < this.children.length; i++) {
         child = this.children[i];
-        // if (child[method]) {
-            if (method == "init") {
-                child.init.apply(child, args);
-            } else if (method == "bindModel") {
-                child.bindModel.apply(child, args);
-            } else if (method == "render") {
-                child.render.apply(child, args);
-            } else if (method == "bindEvent") {
-                child.bindEvent.apply(child, args);
-            } else if (method == "dispose") {
-                child.dispose.apply(child, args);
-            } else if (method == "enable") {
-                child.enable.apply(child, args);
-            } else if (method == "dispose") {
-                child.dispose.apply(child, args);
-            } else {
-                throw "unsupport method (" + method + ")";
-            }
-        // }
+        if (child[method]) {
+            child[method].apply(child, args);
+        }
     }
 };
-
-/**
- * @return {boolean}
- */
-ui.Control.prototype.isRendered = function() {
-  return this.lifePhase >= ui.lifeCycle.RENDERED &&
-         this.lifePhase < ui.lifePhase.DISPOSED;
-}
 
 /**
  * 初始化控件。对子控件的实例化处理可以放在这里。
@@ -574,14 +549,14 @@ ui.Control.prototype.getClass = function(opt_key) {
 
     var type = me.type.toLowerCase(),
         className = 'ui-' + type.replace('.', '-'),
-        skinName = 'skin-' + me['skin'];
+        skinName = 'skin-' + me.skin;
 
     if (opt_key) {
         className += '-' + opt_key;
         skinName += '-' + opt_key;
     }
 
-    if (me['skin']) {
+    if (me.skin) {
         className += ' ' + skinName;
     }
 
