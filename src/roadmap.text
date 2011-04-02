@@ -6,24 +6,24 @@
 
 0. tangram + base
 1. er  
-   * locator
-   * dispatcher（原来的controler）
+    * locator
+    * dispatcher（原来的controler）
 2. enhancment requester  
    增强版的requester，业务无关，提供超时控制的机制
 3. ui  
-   * 基本组件 
-   * 业务组件
+    * 基本组件 
+    * 业务组件
 4. tests
-   * test cases
+    * test cases
 5. guide + tools
-   * 编码的规范（为了能够和closure compiler配合工作）
-   * 目录结构的规范
-   * 工具的使用方法
-   * 工具的开发（跨平台）
+    * 编码的规范（为了能够和closure compiler配合工作）
+    * 目录结构的规范
+    * 工具的使用方法
+    * 工具的开发（跨平台）
 6. docs
-   * api doc references
-   * how to develop a new ui control
-   * best parctice examples
+    * api doc references
+    * how to develop a new ui control
+    * best parctice examples
 
 ### MORE
 
