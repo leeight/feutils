@@ -1,0 +1,40 @@
+/*
+ * dn-web
+ * Copyright 2011 Baidu Inc. All rights reserved.
+ * 
+ * path:    ui-formfolder.css
+ * desc:    表单折叠控件样式
+ * author:  zhaolei,erik
+ * date:    $Date$
+ */
+
+.ui-formfolder {
+	background:#F0F6FA;
+    border:1px solid #C5DEF0;
+    height:28px;
+    line-height:28px;
+    margin:1px 1px 0;
+    position:relative;
+    cursor:pointer;
+}
+
+.ui-formfolder h3 {
+    font-size:12px;
+    padding-left:53px;
+    color:#FF9500;
+}
+
+.ui-formfolder .form-block-icon {
+    background:url("/assets/img/BlockSprites.png") -50px -305px;
+}
+
+.ui-formfolder-closed h3 {
+    color:#000;
+}
+
+.ui-formfolder-closed .form-block-icon {
+    background:url("/assets/img/BlockSprites.png") -61px -305px;
+}
+
+
+

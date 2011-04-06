@@ -8,6 +8,7 @@
  * date:    $Date$
  */
 
+goog.require('ui.Form');
 goog.require('ui.Button');
 
 goog.provide('ui.SubmitButton');
@@ -19,6 +20,7 @@ goog.provide('ui.SubmitButton');
  * @constructor
  * @extends {ui.Button}
  * @param {Object} options 控件初始化参数.
+ * @export
  */
 ui.SubmitButton = function(options) {
   ui.Button.call(this, options);

@@ -1,0 +1,111 @@
+/*
+ * dn-web
+ * Copyright 2011 Baidu Inc. All rights reserved.
+ * 
+ * path:    ui-buttonmenu.css
+ * desc:    菜单按钮样式
+ * author:  zhaolei,erik
+ * date:    $Date$
+ */
+
+/**
+ * 基础按钮样式
+ */
+.ui-buttonmenu, .ui-buttonmenu-label, .ui-buttonmenu-icon {
+    background-image:url('/assets/img/BlockSprites.png');
+    display:inline;
+    float:left;
+}
+
+.ui-buttonmenu-icon {
+    background-position:0 -439px;
+    width:9px;
+    height:6px;
+    margin:8px 2px 0 0;
+    overflow:hidden;
+}
+
+.ui-buttonmenu {
+    padding-right:5px;
+    margin-left:5px;
+    background-position:right 0;
+    text-align:center;
+    cursor:pointer;
+	position:relative;
+    zoom:1;
+}
+
+.ui-buttonmenu-layer {
+	position:absolute;
+	background:#fff;
+	border:1px solid #EDBB72;
+	left:-10000px;
+	top:-10000px;
+	padding:1px;
+}
+
+.ui-buttonmenu-layer li {
+	border:1px solid #fff;
+	color:#666;
+	cursor:pointer;
+	height:18px;
+	line-height:18px;
+	overflow:hidden;
+	padding:0 10px;
+	border:1px solid #fff;
+}
+
+.ui-buttonmenu-layer .item-hover {
+    background:url(/assets/img/InlineSprites.png) repeat-x 0 0;
+    border:1px solid #fad9ac;
+}
+
+.ui-buttonmenu-label {
+    position:relative;
+    line-height:21px;
+    overflow:hidden;
+    margin-left:-5px;
+    padding:0 5px 0 10px;
+    background-position:left 0;
+    font-size:12px;
+    font-weight:700;
+    /* Hack: 宋体是衬线字体，Arial是无衬线字体，一起用会高低不平。
+     * 因为按钮高度太小且无英文，此处统一改设为宋体来保持高度居中，
+     * 为兼容Mac下显示效果，前面增加STHeiti */
+    font-family:STHeiti, SimSun;
+    color:#35608C;
+    height:20px;
+}
+
+/**
+ * 基础按钮样式状态
+ */
+.ui-buttonmenu-hover {
+    background-position:right -20px;
+}
+.ui-buttonmenu-hover .ui-buttonmenu-label {
+    background-position:left -20px;
+}
+
+.ui-buttonmenu-press {
+    background-position:right -40px;
+}
+.ui-buttonmenu-press .ui-buttonmenu-label {
+    background-position:left -40px;
+}
+
+.ui-buttonmenu-active {
+    background-position:right -60px;
+}
+.ui-buttonmenu-active .ui-buttonmenu-label {
+    background-position:left -60px;
+}
+
+.ui-buttonmenu-disabled {
+    background-position:right -80px;
+    cursor:default;
+}
+.ui-buttonmenu-disabled .ui-buttonmenu-label {
+    background-position:left -80px;
+    color:#CCC;
+}

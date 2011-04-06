@@ -18,6 +18,7 @@ goog.provide('ui.Form');
  * @constructor
  * @extends {ui.Control}
  * @param {Object} options 控件初始化的配置项.
+ * @export
  */
 ui.Form = function(options) {
     ui.Control.call(this, options);

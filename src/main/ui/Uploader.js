@@ -13,6 +13,7 @@ goog.require('ui.InputControl');
 goog.require('ui.TextInput');
 goog.require('ui.events');
 goog.require('er.template');
+goog.include('css/ui-uploader.css');
 
 goog.provide('ui.Uploader');
 

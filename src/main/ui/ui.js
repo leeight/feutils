@@ -12,5 +12,6 @@ goog.provide('ui');
 
 /**
  * 声明ui namespace
+ * @suppress {duplicate}
  */
 var ui = {};

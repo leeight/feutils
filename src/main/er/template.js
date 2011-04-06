@@ -58,7 +58,8 @@ er.Template.prototype.parseVariableByType = function(varName, type) {
   type = type.toLowerCase();
   if (type === 'lang' || type === 'config') {
       // TODO：和dn解耦
-      variable = dn[type][varName];
+      variable = /** @type {string} */ (
+        er.base.getObjectByName('dn.' + type + '.' + varName));
   } else {
       throw 'Not handled';
   }

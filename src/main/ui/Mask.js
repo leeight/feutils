@@ -16,6 +16,7 @@ goog.provide('ui.Mask');
 /**
  * ui.Mask
  * @constructor
+ * @export
  */
 ui.Mask = function() {
   this.id = 'clbMask';

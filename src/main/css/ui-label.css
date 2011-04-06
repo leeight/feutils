@@ -1,0 +1,15 @@
+/*
+ * dn-web
+ * Copyright 2011 Baidu Inc. All rights reserved.
+ * 
+ * path:    ui-label.css
+ * desc:    标签显示控件样式
+ * author:  zhaolei,erik
+ * date:    $Date$
+ */
+
+.skin-labelfloat {
+    float:left;
+    margin-right:5px;
+}
+

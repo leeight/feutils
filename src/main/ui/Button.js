@@ -8,6 +8,7 @@
  * date:    $Date$
  */
 goog.require('ui.Control');
+goog.include('css/ui-button.css');
 
 goog.provide('ui.Button');
 
@@ -21,6 +22,7 @@ goog.provide('ui.Button');
  * @constructor
  * @extends {ui.Control}
  * @param {Object} options 控件初始化参数.
+ * @export
  */
 ui.Button = function(options) {
   ui.Control.call(this, options);
@@ -33,15 +35,6 @@ ui.Button = function(options) {
 };
 baidu.inherits(ui.Button, ui.Control);
 
-
-/**
- * FIXME
- * 控件的类型
- * @type {string}
- */
-// ui.Button.prototype.type = 'button';
-
-
 /**
  * 生成控件的模版
  * @type {string}
@@ -51,9 +44,10 @@ ui.Button.prototype.tplButton = '<div class="ui-button-bg-left"></div><div id="{
 
 /**
  * 文本上的内容
+ * @export
  * @type {string}
  */
-ui.Button.prototype.content;
+ui.Button.prototype.content = 'button';
 
 
 /**
@@ -73,7 +67,7 @@ ui.Button.prototype.getMainHtml = function() {
 
   return baidu.format(
       me.tplButton,
-      me.content || 'button',
+      me.content,
       me.getClass('label'),
       me.getId('label')
   );
@@ -108,7 +102,10 @@ ui.Button.prototype.active = function(stat) {
 };
 
 
-/** @inheritDoc */
+/** 
+ * @inheritDoc 
+ * @export
+ */
 ui.Button.prototype.render = function(opt_main) {
   ui.Button.superClass.render.call(this, opt_main);
 

@@ -16,6 +16,7 @@
  **/
 
 goog.require('base.EventDispatcher');
+goog.require('base.BaseModel');
 goog.require('er.template');
 goog.require('ui.lifeCycle');
 
@@ -26,6 +27,7 @@ goog.provide('ui.Control');
  * FIXME 最好把基类更新为baidu.lang.Class
  * @param {Object} options 控件初始化参数.
  * @extends {base.EventDispatcher}
+ * @export
  */
 ui.Control = function(options) {
     base.EventDispatcher.call(this);
@@ -60,6 +62,7 @@ ui.Control = function(options) {
      * @type {boolean}
      */
     this.autoState = true;
+
     baidu.object.extend(this, options);
 
     /**
@@ -79,6 +82,7 @@ ui.Control.prototype.type = '';
 
 /**
  * 控件的皮肤
+ * @export
  * @type {string}
  */
 ui.Control.prototype.skin = '';
@@ -743,19 +747,6 @@ ui.Control.prototype.getState = function(state) {
     }
 
     return !!this.state[state];
-};
-
-/**
- * 获取顶层Page控件实例
- *
- * @return {?ui.Page} Page控件.
- */
-ui.Control.prototype.getPage = function() {
-    var ctrl = this;
-    while (!(ctrl instanceof ui.Page)) {
-        ctrl = ctrl.parent;
-    }
-    return ctrl;
 };
 
 /**

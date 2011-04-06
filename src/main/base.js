@@ -284,7 +284,7 @@ goog.require = function(rule) {
         goog.global.console['error'](errorMessage);
       }
 
-        throw Error(errorMessage);
+      throw Error(errorMessage);
     }
   }
 };
@@ -1440,3 +1440,43 @@ goog.scope = function(fn) {
 };
 
 
+/**
+ * 引入ui控件的css或者模版文件
+ * 当然，也支持引入action的css或者模版文件
+ * @param {string} path 需要引入的文件路径，相对于base.js.
+ */
+goog.include = function(path) {
+  if (!COMPILED) {
+    // 当COMPILED的时候，goog.include函数就被移除掉了.
+    if (/\.css$/.test(path)) {
+      var doc = goog.global.document;
+      var styleElt = doc.createElement('LINK');
+      styleElt.setAttribute('type', 'text/css');
+      styleElt.setAttribute('rel', 'stylesheet');
+      styleElt.setAttribute('href', goog.basePath + '/' + path);
+      doc.getElementsByTagName('head')[0].appendChild(styleElt);
+    } else if (/\.html/.test(path)) {
+      // TODO goog是不知道er的存在的，但是解析模版内容的时候，的确需要er的呀???
+      var xhr = window.ActiveXObject ?
+                new window.ActiveXObject('Microsoft.XMLHTTP') :
+                new XMLHttpRequest();
+      /**
+       * @this {XMLHttpRequest}
+       */
+      xhr.onreadystatechange = function() {
+        if (this.readyState == 4) {
+          var status = this.status;
+          if ((status >= 200 && status < 300) ||
+              status == 304 ||
+              status == 1223) {
+            alert(this.responseText);
+          }
+        }
+      }
+      xhr.open('GET', goog.basePath + '/' + path, true);
+      xhr.send(null);
+    } else {
+      throw 'unsupported resource format';
+    }
+  }
+};

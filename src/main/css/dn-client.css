@@ -1,0 +1,56 @@
+/*
+ * dn-web
+ * Copyright 2011 Baidu Inc. All rights reserved.
+ * 
+ * path:    dn-client.css
+ * desc:    dn客户端模块自定义样式
+ * author:  lixiang
+ * date:    $Date$
+ */
+
+.clientHeader {
+    height:50px;
+    position:relative;
+    background:url(/assets/img/ClientHeader.png) repeat-x 0 0;
+}
+
+.clientlogo {
+    float:left;
+    margin:0px 15px;
+}
+
+.clientcontainer {
+    background: none repeat scroll 0 0 #FFFFFF;
+    padding: 10px;
+    position: relative;
+}
+
+/**
+ * 用户面板
+ * 
+ * @TODO: 先用单独图片，后续再合并成CSS Sprites
+ */
+.clientUserinfo {    
+	background: url("/assets/img/UserInfo.png") no-repeat scroll 0 0 transparent;
+    height: 50px;
+    margin-right: -8px;
+    overflow: hidden;
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 357px;
+}
+.clientUserinfo li {
+    float:left;
+    padding:0 8px;
+    margin-left:-1px;
+    line-height:15px;
+    height:15px;
+    background:url(/assets/img/UserInfo.png) no-repeat 0 3px;
+}
+
+.clientUserinfo-name {
+    font-weight:700;
+}
+
+

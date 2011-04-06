@@ -11,6 +11,8 @@
 goog.require('ui.Uploader');
 goog.require('ui.events');
 goog.require('er.template');
+goog.include('ui/MediaUploader.html');
+goog.include();
 
 goog.provide('ui.MediaUploader');
 

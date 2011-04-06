@@ -15,10 +15,9 @@
  * 为什么用ui.Lib呢，因为我感觉用ui.Util看起来很难看
  **/
 
-goog.require('Validator');
+// goog.require('Validator');
 goog.require('baidu');
 goog.require('ui');
-goog.require('ui.InputControl');
 goog.require('ui.Page');
 
 goog.provide('ui.util');
@@ -245,10 +244,12 @@ ui.Lib.prototype.disableFormByContainer = function(container, disabled) {
 
     for (var i = 0; i < controls.length; i++) {
         control = controls[i];
-        if (control instanceof ui.InputControl) {
-            if (disabled) {
+        if (disabled) {
+            if (baidu.lang.isFunction(control.disable)) {
                 control.disable();
-            } else {
+            }
+        } else {
+            if (baidu.lang.isFunction(control.enable)) {
                 control.enable();
             }
         }
@@ -256,7 +257,7 @@ ui.Lib.prototype.disableFormByContainer = function(container, disabled) {
 };
 
 ui.util = new ui.Lib();
-ui.util.validate = Validator;
+ui.util.validate = baidu.emptyMethod; // Validator;
 
 baidu.on(window, 'unload', function() {
     ui.util.dispose();

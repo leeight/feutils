@@ -1,0 +1,72 @@
+/***************************************************************************
+ * 
+ * Copyright (c) 2011 Baidu.com, Inc. All Rights Reserved
+ * $Id$ 
+ * 
+ **************************************************************************/
+ 
+ 
+ 
+/**
+ * ../css/dn-layout.css ~ 2011/02/19 16:30:23
+ * @author leeight(liyubei@baidu.com)
+ * @version $Revision$ 
+ * @description 
+ * @see http://kissy.googlecode.com/svn/trunk/src/cssgrids/grids.css
+ * 布局相关的样式文件
+ **/
+
+/** 布局基础样式 **/
+.col-main {
+  float: left;
+  width: 100%;
+  /* bug fix: 主栏没有内容时，在 Firefox 和 Chrome 等浏览器下，布局不对 */
+  min-height: 1px;
+}
+.col-sub, .col-extra {
+  float: left;
+  /*position: relative;  按需设置，仅在需要时添加 */
+}
+
+/** 清除浮动 **/
+.layout:after, 
+.main-wrap:after, 
+.col-sub:after, 
+.col-extra:after {
+	content: '\20';
+	display: block;
+	height: 0;
+	clear: both;
+}
+
+.layout, 
+.main-wrap, 
+.col-sub, 
+.col-extra {
+    *zoom: 1;
+}
+
+/** 用到的布局样式 */
+.grid-s180m0 .main-wrap { margin-left: 190px; }
+.grid-s180m0 .col-sub { width: 180px; margin-left: -100%; }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* vim: set ts=4 sw=4 sts=4 tw=100 noet: */
