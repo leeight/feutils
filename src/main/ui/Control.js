@@ -34,6 +34,7 @@ ui.Control = function(options) {
 
     /**
      * 使用的模板
+     * @noalias
      * @type {?string}
      */
     this.view = null;
@@ -76,13 +77,14 @@ baidu.inherits(ui.Control, base.EventDispatcher);
 
 /**
  * 控件的类型，用来生成class的时候用到
+ * @noalias
  * @type {string}
  */
 ui.Control.prototype.type = '';
 
 /**
  * 控件的皮肤
- * @export
+ * @noalias
  * @type {string}
  */
 ui.Control.prototype.skin = '';
@@ -103,6 +105,7 @@ ui.Control.prototype.domId = '';
 /**
  * 控件的状态，例如readonly, disabled之类的.
  * @private
+ * @noalias
  * @type {Object}
  */
 ui.Control.prototype.state;

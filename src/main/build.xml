@@ -1,0 +1,65 @@
+<project name="closure-experiments" basedir=".">
+  <property name="src.dir" value="${basedir}" />
+  <property name="tools.dir" value="${basedir}/../../tools" />
+  <property name="gcl.dir" value="/home/leeight/dev/closure-library/closure/goog/" />
+  <property name="yuicompressor.dir" value="${basedir}/../yuicompressor-2.4.2" />
+  <property name="build.dir" value="${basedir}/build" />
+  <property name="classes.dir" value="${build.dir}/classes" />
+  <property name="gcc.trunk.jar" value="/home/leeight/dev/closure-compiler/build/compiler.jar" />
+  <property name="outputwrapper" value='"// Copyright 2010&#10;(function(){%output%})();"' />
+
+  <macrodef name="calcdeps">
+    <attribute name="inputfile" />
+    <attribute name="outputfile" />
+    <attribute name="compilerjarfile" default="${tools.dir}/lib/google-closure-compiler.jar" />
+    <attribute name="compilationlevel" default="ADVANCED_OPTIMIZATIONS" />
+    <attribute name="outputmode" default="compiled" />
+    <attribute name="formatting" default="PRETTY_PRINT" />
+    <attribute name="cssoutputfile" default="${build.dir}/dn.css" />
+    <attribute name="tploutputfile" default="${build.dir}/tpl.html" />
+    <element name="extraflags" optional="yes" />
+    <sequential>
+      <mkdir dir="${build.dir}" />
+      <!--
+      <copy file="${gcc.trunk.jar}" tofile="${tools.dir}/lib/google-closure-compiler.jar" failonerror="false" />
+      -->
+      <exec executable="python"
+            failonerror="true"
+            logError="true"
+            output="${build.dir}/@{outputfile}">
+        <arg value="${tools.dir}/lib/calcdeps.py" />
+        <!-- Double-quote file arguments in case they contain spaces. -->
+        <arg line='-i "@{inputfile}"' />
+        <arg line='-p "."' />
+        <arg line='-p "${gcl.dir}"' />
+        <arg line='-o "@{outputmode}"' />
+        <arg line='-c "@{compilerjarfile}"' />
+        <arg line='-f "--compilation_level=@{compilationlevel}"' />
+        <arg line='-f "--summary_detail_level=3"' />
+        <arg line='-f "--generate_exports"' />
+        <arg line='-f "--formatting=@{formatting}"' />
+        <arg line='-f "--warning_level=VERBOSE"' />
+        <arg line='-f "--css_output_file=@{cssoutputfile}"' />
+        <arg line='-f "--tpl_output_file=@{tploutputfile}"' />
+        <extraflags />
+      </exec>
+    </sequential>
+  </macrodef>
+
+  <target name="clean" description="delete generated files">
+    <delete dir="${build.dir}" />
+  </target>
+
+  <target name="build" depends="clean">
+    <calcdeps inputfile="${inputfile}" 
+              outputfile="sample.js" 
+              compilerjarfile="${gcc.trunk.jar}">
+      <!--
+      <extraflags>
+        <arg line='-f "\-\-externs=${build.dir}/closure-lite-externs.js"' />
+        <arg line='-f "\-\-output_wrapper=${outputwrapper}"' />
+      </extraflags>
+      -->
+    </calcdeps>
+  </target>
+</project>

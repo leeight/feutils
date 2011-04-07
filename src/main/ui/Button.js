@@ -44,7 +44,7 @@ ui.Button.prototype.tplButton = '<div class="ui-button-bg-left"></div><div id="{
 
 /**
  * 文本上的内容
- * @export
+ * @noalias
  * @type {string}
  */
 ui.Button.prototype.content = 'button';

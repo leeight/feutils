@@ -9,6 +9,7 @@ python \
   -p . \
   -p ~/dev/closure-library/closure/goog/ \
   -c ${TOOL_DIR}/lib/google-closure-compiler.jar \
+  -f "--summary_detail_level=3" \
   -f "--compilation_level=ADVANCED_OPTIMIZATIONS" \
   -f "--generate_exports" \
   -f "--formatting=PRETTY_PRINT" \
