@@ -53,13 +53,11 @@
   <target name="build" depends="clean">
     <calcdeps inputfile="${inputfile}" 
               outputfile="sample.js" 
+              compilationlevel="ADVANCED_OPTIMIZATIONS"
               compilerjarfile="${gcc.trunk.jar}">
-      <!--
       <extraflags>
-        <arg line='-f "\-\-externs=${build.dir}/closure-lite-externs.js"' />
-        <arg line='-f "\-\-output_wrapper=${outputwrapper}"' />
+        <arg line='-f "--jscomp_warning=checkTypes"' />
       </extraflags>
-      -->
     </calcdeps>
   </target>
 </project>
