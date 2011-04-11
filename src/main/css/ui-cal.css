@@ -57,7 +57,7 @@
 .ui-cal-point {
     height:18px;
     width:21px;
-    background:url(img/BlockSprites.png) no-repeat -179px -333px;
+    background:url(http://img.bdimg.com/adm/BlockSprites.png) no-repeat -179px -333px;
     float:right;
     cursor:pointer;
 }
@@ -117,11 +117,11 @@
 }
 
 .ui-cal-mprev {
-    background:url(img/BlockSprites.png) no-repeat -172px -333px;
+    background:url(http://img.bdimg.com/adm/BlockSprites.png) no-repeat -172px -333px;
     left:7px;
 }
 .ui-cal-mnext {
-    background:url(img/BlockSprites.png) no-repeat -172px -342px;
+    background:url(http://img.bdimg.com/adm/BlockSprites.png) no-repeat -172px -342px;
     right:7px;
 }
 

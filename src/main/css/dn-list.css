@@ -117,7 +117,7 @@
     float:left;
     display:inline;
     margin:10px 6px 0px 10px;
-    background:url(img/BlockSprites.png) -58px -333px no-repeat;
+    background:url(http://img.bdimg.com/adm/BlockSprites.png) -58px -333px no-repeat;
 }
 
 /* 表格底部区域 */
@@ -201,7 +201,7 @@
     overflow:hidden;
     width:15px;
     height:12px;
-    background:url(img/BlockSprites.png) no-repeat -13px -304px;
+    background:url(http://img.bdimg.com/adm/BlockSprites.png) no-repeat -13px -304px;
     margin:2px 8px 0 0;
 }
 .list-position-title {
@@ -279,7 +279,7 @@
     margin:2px 8px 0 0;
     height:15px;
     width:15px;
-    background:url(img/BlockSprites.png) no-repeat -69px -316px;
+    background:url(http://img.bdimg.com/adm/BlockSprites.png) no-repeat -69px -316px;
 }
 
 /* "获取代码"图标 */
@@ -287,7 +287,7 @@
     margin:1px 8px 0 0;
     height:16px;
     width:21px;
-    background:url(img/BlockSprites.png) no-repeat -48px -316px;
+    background:url(http://img.bdimg.com/adm/BlockSprites.png) no-repeat -48px -316px;
 }
 
 /* 列表为空的情况 */
@@ -318,7 +318,7 @@
     height:17px;
     margin-right:5px;
     margin-bottom:-3px;
-    background:url(img/BlockSprites.png) no-repeat -141px -315px;
+    background:url(http://img.bdimg.com/adm/BlockSprites.png) no-repeat -141px -315px;
     _display:inline;
     zoom:1
 }
@@ -376,7 +376,7 @@
     width:16px;
     height:16px;
     vertical-align:middle;
-    background: transparent url(img/BlockSprites.png) -125px -315px no-repeat;
+    background: transparent url(http://img.bdimg.com/adm/BlockSprites.png) -125px -315px no-repeat;
 }
 
 .dn-sublist-table {

@@ -24,7 +24,7 @@
     height:11px;
     width:11px;
     overflow:hidden;
-    background:#C7DEEC url(img/BlockSprites.png) -180px -240px no-repeat;
+    background:#C7DEEC url(http://img.bdimg.com/adm/BlockSprites.png) -180px -240px no-repeat;
 }
 .ui-dialog-close-hover {
     background-position: -180px -251px;
@@ -79,11 +79,11 @@
 }
 
 .ui-dialog-icon-warning {
-    background:url(img/BlockSprites.png) -109px -314px no-repeat;
+    background:url(http://img.bdimg.com/adm/BlockSprites.png) -109px -314px no-repeat;
 }
 
 .ui-dialog-icon-notice {
-    background:url("img/BlockSprites.png") no-repeat scroll -141px -315px transparent;
+    background:url("http://img.bdimg.com/adm/BlockSprites.png") no-repeat scroll -141px -315px transparent;
     height:17px;
     width:14px;
 }

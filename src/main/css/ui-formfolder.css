@@ -25,7 +25,7 @@
 }
 
 .ui-formfolder .form-block-icon {
-    background:url("img/BlockSprites.png") -50px -305px;
+    background:url("http://img.bdimg.com/adm/BlockSprites.png") -50px -305px;
 }
 
 .ui-formfolder-closed h3 {
@@ -33,7 +33,7 @@
 }
 
 .ui-formfolder-closed .form-block-icon {
-    background:url("img/BlockSprites.png") -61px -305px;
+    background:url("http://img.bdimg.com/adm/BlockSprites.png") -61px -305px;
 }
 
 

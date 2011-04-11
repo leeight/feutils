@@ -49,7 +49,7 @@
     float:right;
     width:16px;
     height:16px;
-    background: #7E9DB9 url(img/BlockSprites.png) 0 -316px no-repeat;
+    background: #7E9DB9 url(http://img.bdimg.com/adm/BlockSprites.png) 0 -316px no-repeat;
     cursor:pointer;
 }
 
@@ -116,7 +116,7 @@
     margin:1px 5px 0 0;
     width:15px;
     height:15px;
-    background:url(img/BlockSprites.png) no-repeat -69px -316px;
+    background:url(http://img.bdimg.com/adm/BlockSprites.png) no-repeat -69px -316px;
 }
 .ui-combobox-icon-list {
     float:left;
@@ -124,7 +124,7 @@
     margin:1px 6px 0 0;
     width:14px;
     height:15px;
-    background:url(img/BlockSprites.png) no-repeat 0 -347px;
+    background:url(http://img.bdimg.com/adm/BlockSprites.png) no-repeat 0 -347px;
 }
 
 

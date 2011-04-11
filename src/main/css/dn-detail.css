@@ -111,7 +111,7 @@
     display:inline;
     width:13px;
     height:12px;
-    background: url(img/BlockSprites.png) no-repeat -72px -304px;
+    background: url(http://img.bdimg.com/adm/BlockSprites.png) no-repeat -72px -304px;
     margin:8px 0 0 10px;
     cursor:pointer;
 }
@@ -231,7 +231,7 @@
     width:14px;
     height:15px;
     margin:6px 1px 0;
-    background-image:url(img/BlockSprites.png);
+    background-image:url(http://img.bdimg.com/adm/BlockSprites.png);
     background-repeat: no-repeat;
 }
 
@@ -265,7 +265,7 @@
     width:120px;
     height:10px;
     font-size:0;
-    background:url(img/BlockSprites.png) no-repeat -70px -355px;
+    background:url(http://img.bdimg.com/adm/BlockSprites.png) no-repeat -70px -355px;
 }
 
 .detail-timeline-block {
@@ -294,7 +294,7 @@
 }
 
 .detail-plan-located {
-    background:url(img/BlockSprites.png) no-repeat -86px -330px;
+    background:url(http://img.bdimg.com/adm/BlockSprites.png) no-repeat -86px -330px;
     height:16px;
     width:16px;
     margin:6px 0 0 5px;
@@ -332,5 +332,5 @@
 .detail-icon-pan 
 {
     padding-left: 21px;
-    background: transparent url(img/BlockSprites.png) no-repeat -50px -454px;
+    background: transparent url(http://img.bdimg.com/adm/BlockSprites.png) no-repeat -50px -454px;
 }

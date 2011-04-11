@@ -12,7 +12,7 @@
  * 基础按钮样式
  */
 .ui-buttonmenu, .ui-buttonmenu-label, .ui-buttonmenu-icon {
-    background-image:url('img/BlockSprites.png');
+    background-image:url('http://img.bdimg.com/adm/BlockSprites.png');
     display:inline;
     float:left;
 }
