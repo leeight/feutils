@@ -10,7 +10,7 @@
 
   <macrodef name="calcdeps">
     <attribute name="inputfile" />
-    <attribute name="outputfile" />
+    <attribute name="outputfile" default="${build.dir}/sample.js" />
     <attribute name="compilerjarfile" default="${tools.dir}/lib/google-closure-compiler.jar" />
     <attribute name="compilationlevel" default="ADVANCED_OPTIMIZATIONS" />
     <attribute name="outputmode" default="compiled" />
@@ -26,7 +26,7 @@
       <exec executable="python"
             failonerror="true"
             logError="true"
-            output="${build.dir}/@{outputfile}">
+            output="@{outputfile}">
         <arg value="${tools.dir}/lib/calcdeps.py" />
         <!-- Double-quote file arguments in case they contain spaces. -->
         <arg line='-i "@{inputfile}"' />
@@ -52,7 +52,7 @@
 
   <target name="build" depends="clean">
     <calcdeps inputfile="${inputfile}" 
-              outputfile="sample.js" 
+              outputfile="${outputfile}" 
               compilationlevel="ADVANCED_OPTIMIZATIONS"
               compilerjarfile="${gcc.trunk.jar}">
       <extraflags>

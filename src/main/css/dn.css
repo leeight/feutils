@@ -109,19 +109,19 @@
 
 .nav-main .nav-item-hover a {
     color:#FFFFFF;
-    background:url(/assets/img/BlockSprites.png) no-repeat -90px -240px;
+    background:url(img/BlockSprites.png) no-repeat -90px -240px;
 }
 
 .nav-main li.nav-selected a,
 .nav-main li.nav-selected a:hover {
     color:#35608c;
-    background:url(/assets/img/BlockSprites.png) no-repeat 0 -240px;
+    background:url(img/BlockSprites.png) no-repeat 0 -240px;
 }
 
 .nav-main li.nav-back a,
 .nav-main li.nav-back a:hover {
     color:#35608c;
-    background:url(/assets/img/BlockSprites.png) no-repeat 0 -272px;
+    background:url(img/BlockSprites.png) no-repeat 0 -272px;
 }
 
 .nav-sub {
@@ -147,7 +147,7 @@
 .nav-sub li.nav-selected a {
     color:#333333;
     text-decoration:none;
-    background:url(/assets/img/BlockSprites.png) no-repeat -90px -293px;
+    background:url(img/BlockSprites.png) no-repeat -90px -293px;
 }
 
 li a.nav-wide {
@@ -162,7 +162,7 @@ li.nav-separator{
     margin-top:6px;
     width:4px;
     height:12px;
-    background:url(/assets/img/BlockSprites.png) no-repeat -14px -347px;
+    background:url(img/BlockSprites.png) no-repeat -14px -347px;
 }
 
 .switchuser {
@@ -293,7 +293,7 @@ li.nav-separator{
     font-size:14px;
 }
 .guide-okicon {
-    background:url("/assets/img/BlockSprites.png") no-repeat scroll -90px -315px;
+    background:url("img/BlockSprites.png") no-repeat scroll -90px -315px;
     height:15px;
     float:left;
     width:19px;
@@ -313,7 +313,7 @@ li.nav-separator{
 }
 
 .guide-tipicon {
-    background:url("/assets/img/BlockSprites.png") no-repeat scroll -141px -315px;
+    background:url("img/BlockSprites.png") no-repeat scroll -141px -315px;
     height:17px;
     float:left;
     width:14px;
@@ -341,7 +341,7 @@ li.nav-separator{
 }
 
 .dn-notice-icon {
-    background:url("/assets/img/BlockSprites.png") no-repeat -90px -315px;
+    background:url("img/BlockSprites.png") no-repeat -90px -315px;
     height:15px;
     width:19px;
     position:absolute;
@@ -350,7 +350,7 @@ li.nav-separator{
 }
 
 .dn-notice-icon-tip {
-    background:url("/assets/img/BlockSprites.png") no-repeat -125px -315px;
+    background:url("img/BlockSprites.png") no-repeat -125px -315px;
     height:16px;
     width:16px;
     position:absolute;
@@ -373,7 +373,7 @@ li.nav-separator{
 }
 
 .dn-notice-close {
-    background:url("/assets/img/BlockSprites.png") no-repeat -180px -240px;
+    background:url("img/BlockSprites.png") no-repeat -180px -240px;
     border:3px solid #FFF4DE;
     cursor:pointer;
     height:11px;

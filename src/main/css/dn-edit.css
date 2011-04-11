@@ -51,13 +51,13 @@
     width:5px;
     height:9px;
     margin:3px 5px;
-    background:url(/assets/img/BlockSprites.png) no-repeat -85px -316px;
+    background:url(img/BlockSprites.png) no-repeat -85px -316px;
     font-family:STHeiti, SimSun;
 }
 
 /* 面包屑小箭头图标 */
 .crumb-icon {
-    background:url(/assets/img/BlockSprites.png) no-repeat -182px -265px;
+    background:url(img/BlockSprites.png) no-repeat -182px -265px;
     margin:5px 8px 0 0;
     width:7px;
     height:5px;
@@ -151,7 +151,7 @@
     left:36px;
     width:11px;
     height:11px;
-    background:url(/assets/img/BlockSprites.png) no-repeat -61px -305px;
+    background:url(img/BlockSprites.png) no-repeat -61px -305px;
 }
 
 .form-block-close .form-block-icon {
@@ -381,7 +381,7 @@
     left:0;
     width:16px;
     height:16px;
-    background:#FEF7DB url(/assets/img/BlockSprites.png) -125px -315px no-repeat;
+    background:#FEF7DB url(img/BlockSprites.png) -125px -315px no-repeat;
 }
 
 /* 表单分支链接（支线任务） */
@@ -425,7 +425,7 @@
     position:absolute;
     width:14px;
     height:17px;
-    background:url(/assets/img/BlockSprites.png) no-repeat -141px -315px;
+    background:url(img/BlockSprites.png) no-repeat -141px -315px;
     left:40px;
     top:6px;
 }

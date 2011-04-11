@@ -75,7 +75,7 @@
     position:absolute;
     top:0;
     left:0;
-    background:url(/assets/img/BlockSprites.png) no-repeat -125px -315px;
+    background:url(img/BlockSprites.png) no-repeat -125px -315px;
     height:16px;
     width:16px;
 }

@@ -95,7 +95,7 @@
     height:11px;
     width:11px;
     overflow:hidden;
-    background:url('/assets/img/BlockSprites.png') -180px -240px;
+    background:url('img/BlockSprites.png') -180px -240px;
     cursor:pointer;
 }
 
@@ -316,7 +316,7 @@
 
 .ui-orient-sel-prevmonth span,
 .ui-orient-sel-nextmonth span{
-    background-image:url("/assets/img/BlockSprites.png");
+    background-image:url("img/BlockSprites.png");
     overflow:hidden;
     background-repeat:no-repeat;
     cursor:pointer;
@@ -519,7 +519,7 @@
 .ui-orient-sel-wtzonenight,
 .ui-orient-sel-wtzoneday {
     float:left;
-    background-image:url(/assets/img/BlockSprites.png);
+    background-image:url(img/BlockSprites.png);
     height:16px;
     width:16px;
     margin-right:4px;
@@ -536,7 +536,7 @@
     height:17px;
     line-height:16px;
     margin-right:2px;
-    background:url(/assets/img/BlockSprites.png) 0 -445px;
+    background:url(img/BlockSprites.png) 0 -445px;
     float:left;
     font-size:11px;
     cursor:pointer;
@@ -544,7 +544,7 @@
 }
 .ui-orient-sel-wttimehead-active {
     background:red;
-    background:url(/assets/img/BlockSprites.png) 0 -462px;
+    background:url(img/BlockSprites.png) 0 -462px;
 }
 .ui-orient-sel-wktimehover {
     background:#fff;
@@ -574,7 +574,7 @@
 .ui-orient-gticon{
     height:11px;
     width:15px;
-    background:url(/assets/img/BlockSprites.png) -33px -455px;
+    background:url(img/BlockSprites.png) -33px -455px;
     overflow:hidden;
     margin:90px 0 0 12px;
     float:left;

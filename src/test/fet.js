@@ -1,4 +1,3 @@
-goog.require('ui.Page');
 document.write('<script type="text/javascript" src="../qunit/qunit.js"></script>');
 
 (function(){

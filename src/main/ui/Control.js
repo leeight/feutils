@@ -42,6 +42,7 @@ ui.Control = function(options) {
     /**
      * 需要渲染的节点
      * @type {?Element}
+     * @noalias
      */
     this.main = null;
 

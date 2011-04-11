@@ -54,7 +54,7 @@
 /* 表头单元格排序标识 */
 .ui-table-thsort {
     margin-top:9px;
-    background:url(/assets/img/BlockSprites.png) -192px -260px no-repeat;
+    background:url(img/BlockSprites.png) -192px -260px no-repeat;
     height:10px;
     width:7px;
 
@@ -76,7 +76,7 @@
 .ui-table-thhelp {
     height:15px;
     width:15px;
-    background:url(/assets/img/BlockSprites.png) no-repeat -155px -315px;
+    background:url(img/BlockSprites.png) no-repeat -155px -315px;
     margin:6px 10px 0 0;
     display:inline;
     float:right;
@@ -197,7 +197,7 @@ div.ui-table-row-unfolded table {
 	overflow:hidden;
     width:11px;
     height:11px;
-    background-image: url(/assets/img/BlockSprites.png);
+    background-image: url(img/BlockSprites.png);
     background-repeat: no-repeat;
     cursor:pointer;
 }

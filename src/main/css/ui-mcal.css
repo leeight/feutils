@@ -57,7 +57,7 @@
 .ui-mcal-point {
     height:18px;
     width:21px;
-    background:url(/assets/img/BlockSprites.png) no-repeat -179px -333px;
+    background:url(img/BlockSprites.png) no-repeat -179px -333px;
     float:right;
     cursor:pointer;
 }
@@ -146,7 +146,7 @@
  */
 .ui-mcal-prev,
 .ui-mcal-next {
-    background-image:url(/assets/img/BlockSprites.png);
+    background-image:url(img/BlockSprites.png);
     background-repeat: no-repeat;
     display:block;
     width:6px;

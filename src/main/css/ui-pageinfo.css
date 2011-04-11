@@ -25,7 +25,7 @@
     position:absolute;
     left:9px;
     top:7px;
-    background:url(/assets/img/BlockSprites.png) no-repeat -90px -315px;
+    background:url(img/BlockSprites.png) no-repeat -90px -315px;
     width:19px;
     height:15px;
 }
@@ -49,7 +49,7 @@
     height:11px;
     width:11px;
     border:3px solid #FFF4DE;
-    background:url(/assets/img/BlockSprites.png) no-repeat -180px -240px;
+    background:url(img/BlockSprites.png) no-repeat -180px -240px;
     cursor:pointer;
 }
 
