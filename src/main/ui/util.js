@@ -105,8 +105,8 @@ ui.Lib.prototype.createControl = function(attrs, main) {
         attrs.main = main;
     }
 
-    var clazz = /** @type {Function} */ (baidu.getObjectByName(attrs.type, ui) ||
-                baidu.getObjectByName(attrs.type, window));
+    var clazz = /** @type {Function} */ (baidu.getObjectByName('ui.' + attrs.type) ||
+                baidu.getObjectByName(attrs.type));
     return new clazz(attrs);
 };
 

@@ -104,7 +104,6 @@ ui.Button.prototype.active = function(stat) {
 
 /** 
  * @inheritDoc 
- * @export
  */
 ui.Button.prototype.render = function(opt_main) {
   ui.Button.superClass.render.call(this, opt_main);

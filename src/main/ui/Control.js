@@ -141,6 +141,7 @@ ui.Control.prototype._callChildren = function(method, var_args) {
 /**
  * 初始化控件。对子控件的实例化处理可以放在这里。
  * @protected
+ * @noalias
  */
 ui.Control.prototype.init = function() {
     if (this.view) {
@@ -154,7 +155,7 @@ ui.Control.prototype.init = function() {
 
 /**
  * 绑定数据模型。调用后模板上的绑定字段会被设置响应的值
- *
+ * @noalias
  * @protected
  * @param {(Object|base.BaseModel)=} opt_model 绑定的数据模型，可选。.
  */
@@ -184,7 +185,7 @@ ui.Control.prototype.bindModel = function(opt_model) {
 
 /**
  * 渲染控件
- *
+ * @noalias
  * @protected
  * @param {?HTMLElement=} opt_main 控件挂载到的dom。为了原控件接口兼容，一般不需要设置。.
  */
@@ -214,6 +215,7 @@ ui.Control.prototype.render = function(opt_main) {
 
 /**
  * 绑定内部控件或dom元素的事件处理
+ * @noalias
  */
 ui.Control.prototype.bindEvent = function() {
     this._callChildren('bindEvent');
@@ -223,6 +225,7 @@ ui.Control.prototype.bindEvent = function() {
 
 /**
  * 销毁控件
+ * @noalias
  */
 ui.Control.prototype.dispose = function() {
     this._callChildren('dispose');
@@ -508,6 +511,7 @@ ui.Control.prototype.toggle = function() {
 
 /**
  * 启用控件
+ * @noalias
  */
 ui.Control.prototype.enable = function() {
     this.removeState('disabled');
@@ -522,6 +526,7 @@ ui.Control.prototype.enableChildren = function() {
 
 /**
  * 禁用控件
+ * @noalias
  */
 ui.Control.prototype.disable = function() {
     this.setState('disabled');
@@ -758,5 +763,5 @@ ui.Control.prototype.getState = function(state) {
  * @return {?Element}
  */
 ui.Control.prototype.getRoot = function() {
-  return this.main;
+    return this.main;
 };

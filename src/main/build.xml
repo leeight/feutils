@@ -10,12 +10,12 @@
 
   <macrodef name="calcdeps">
     <attribute name="inputfile" />
-    <attribute name="outputfile" default="${build.dir}/sample.js" />
+    <attribute name="outputfile" default="${build.dir}/app.js" />
     <attribute name="compilerjarfile" default="${tools.dir}/lib/google-closure-compiler.jar" />
     <attribute name="compilationlevel" default="ADVANCED_OPTIMIZATIONS" />
     <attribute name="outputmode" default="compiled" />
     <attribute name="formatting" default="PRETTY_PRINT" />
-    <attribute name="cssoutputfile" default="${build.dir}/dn.css" />
+    <attribute name="cssoutputfile" default="${build.dir}/app.css" />
     <attribute name="tploutputfile" default="${build.dir}/tpl.html" />
     <element name="extraflags" optional="yes" />
     <sequential>
@@ -52,7 +52,6 @@
 
   <target name="build" depends="clean">
     <calcdeps inputfile="${inputfile}" 
-              outputfile="${outputfile}" 
               compilationlevel="ADVANCED_OPTIMIZATIONS"
               compilerjarfile="${gcc.trunk.jar}">
       <extraflags>
