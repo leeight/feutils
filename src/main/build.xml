@@ -37,7 +37,6 @@
         <arg line='-f "--compilation_level=@{compilationlevel}"' />
         <arg line='-f "--summary_detail_level=3"' />
         <arg line='-f "--generate_exports"' />
-        <arg line='-f "--formatting=@{formatting}"' />
         <arg line='-f "--warning_level=VERBOSE"' />
         <arg line='-f "--css_output_file=@{cssoutputfile}"' />
         <arg line='-f "--tpl_output_file=@{tploutputfile}"' />
@@ -56,6 +55,7 @@
               compilerjarfile="${gcc.trunk.jar}">
       <extraflags>
         <arg line='-f "--jscomp_warning=checkTypes"' />
+        <!--arg line='-f "\-\-formatting=PRINT_INPUT_DELIMITER"' /-->
       </extraflags>
     </calcdeps>
   </target>

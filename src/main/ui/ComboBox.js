@@ -9,6 +9,7 @@
  */
 
 goog.require('ui.InputControl');
+goog.include('css/ui-combobox.css');
 
 goog.provide('ui.ComboBox');
 
@@ -17,8 +18,16 @@ goog.provide('ui.ComboBox');
  * @constructor
  * @extends {ui.InputControl}
  * @param {Object} options 控件初始化参数.
+ * @export
  */
 ui.ComboBox = function(options) {
+    /**
+     * @noalias
+     * @private
+     * @type {Array.<*>}
+     */
+    this.datasource = [];
+
     ui.InputControl.call(this, options);
 
     this.type = 'combobox';
@@ -27,15 +36,9 @@ ui.ComboBox = function(options) {
     this.emptyLabel = '<div class="' + this.getClass('cur-def') + '">请选择</div>';
     this.offsetSize = '-10000px';
 
-    this.options = this.datasource || [];
+    this.options = this.datasource;
     this.index = -1;
     this.maxItem = 10;
-
-    /**
-     * @private
-     * @type {Array.<*>}
-     */
-    this.datasource;
 
     /**
      * @private
@@ -48,6 +51,9 @@ ui.ComboBox.prototype = {
     // 主体部分模板
     tplMain: '<div id="{0}" class="{1}" value="" style="width:{4}px"><nobr>{2}</nobr></div><div class="{3}"></div>',
 
+    /**
+     * FIXME addEventListener就没有这个问题了
+     */
     onselect: new Function(),
 
     /**
@@ -465,30 +471,6 @@ ui.ComboBox.prototype = {
     },
 
     /**
-     * 选项移上事件
-     *
-     * @param {HTMLElement} item 选项.
-     */
-    itemOverHandler: function(item) {
-        if (item.getAttribute('dis') == 1) {
-            return;
-        }
-
-        var index = item.getAttribute('index');
-        baidu.addClass(this.getId('item') + index, this.getClass('item') + '-hover');
-    },
-
-    /**
-     * 选项移开事件
-     *
-     * @param {HTMLElement} item 选项.
-     */
-    itemOutHandler: function(item) {
-        var index = item.getAttribute('index');
-        baidu.removeClass(this.getId('item') + index, this.getClass('item') + '-hover');
-    },
-
-    /**
      * 设置为disabled
      *
      * @public
@@ -509,4 +491,29 @@ ui.ComboBox.prototype = {
         ui.ComboBox.superClass.dispose.call(me);
     }
 };
+
+/**
+ * 选项移上事件
+ * @export
+ * @param {HTMLElement} item 选项.
+ */
+ui.ComboBox.prototype.itemOverHandler = function(item) {
+  if (item.getAttribute('dis') == 1) {
+    return;
+  }
+
+  var index = item.getAttribute('index');
+  baidu.addClass(this.getId('item') + index, this.getClass('item') + '-hover');
+}
+
+/**
+ * 选项移开事件
+ * @export
+ * @param {HTMLElement} item 选项.
+ */
+ui.ComboBox.prototype.itemOutHandler = function(item) {
+  var index = item.getAttribute('index');
+  baidu.removeClass(this.getId('item') + index, this.getClass('item') + '-hover');
+}
+
 baidu.inherits(ui.ComboBox, ui.InputControl);

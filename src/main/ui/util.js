@@ -181,7 +181,7 @@ ui.Lib.prototype.parseAttrStr = function(attrStr) {
 
 /**
  * 获取控件对象
- *
+ * @export
  * @param {string} domId 控件的domId.
  * @param {ui.Page=} opt_page 包含该控件Page.
  * @return {?ui.Control}
@@ -256,6 +256,9 @@ ui.Lib.prototype.disableFormByContainer = function(container, disabled) {
     }
 };
 
+/**
+ * @export
+ */
 ui.util = new ui.Lib();
 ui.util.validate = baidu.emptyMethod; // Validator;
 
