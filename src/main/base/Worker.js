@@ -12,7 +12,6 @@ goog.require('base.EventDispatcher');
 
 goog.provide('base.AbstractWorker');
 goog.provide('base.LocalWorker');
-goog.provide('base.RequestWorker');
 goog.provide('base.FuncWorker');
 goog.provide('base.TimeoutWorker');
 goog.provide('base.ParallelWorkerManager');
@@ -108,37 +107,6 @@ base.FuncWorker.prototype = function() {
     };
 }();
 baidu.inherits(base.FuncWorker, base.AbstractWorker);
-
-/**
- * 访问远程的数据
- * @constructor
- * @extends {base.AbstractWorker}
- * @param {string} url url地址.
- * @param {...*} var_args 请求参数.
- */
-base.RequestWorker = function(url, var_args) {
-    base.AbstractWorker.call(this);
-
-    var me = this;
-    me.callback = arguments[arguments.length - 1];
-    me.args = [];
-    for (var i = 0; i < arguments.length - 1; i++) {
-        me.args.push(arguments[i]);
-    }
-    if (arguments.length === 2) {
-        me.args.push(null);
-    }
-    me.args.push(function() {
-        me.callback.apply(window, arguments);
-        me.done();
-    });
-};
-baidu.inherits(base.RequestWorker, base.AbstractWorker);
-
-/** @inheritDoc */
-base.RequestWorker.prototype.start = function() {
-    Requester.post.apply(Requester, this.args);
-};
 
 /**
  * @constructor

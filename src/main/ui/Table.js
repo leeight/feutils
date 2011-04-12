@@ -23,7 +23,16 @@ goog.provide('ui.Table');
  * @export
  */
 ui.Table = function(options) {
-    ui.Control.call(this, options);
+    
+    /**
+     * @type {Array.<Object>}
+     * @noalias
+     */
+    this.datasource = null;
+
+    /**
+     * @type {string}
+     */
     this.type = 'table';
 
     /**
@@ -35,8 +44,9 @@ ui.Table = function(options) {
      * 表格的字段.
      * @private
      * @type {Array.<UITableField>}
+     * @noalias
      */
-    this.fields;
+    this.fields = null;
 
     /**
      * @private;
@@ -53,6 +63,7 @@ ui.Table = function(options) {
     /**
      * multi,single或者其它值(没有单选或者多选列了).
      * @type {string}
+     * @noalias
      */
     this.select;
 
@@ -74,20 +85,29 @@ ui.Table = function(options) {
     /**
      * 是否去掉表头.
      * @type {boolean}
+     * @noalias
      */
-    this.noTitle;
+    this.noTitle = false;
+
+    /**
+     * 表格的宽度
+     * 如果是0的话，用动态计算的值
+     * @type {number}
+     * @noalias
+     */
+    this.width = 0;
 
     /**
      * 是否支持列的排序.
      * @type {boolean}
+     * @noalias
      */
     this.sortable;
+    
+    ui.Control.call(this, options);
 };
 
-/**
- * @lends {ui.Table.prototype}
- */
-ui.Table.prototype = {
+ui.Table.prototype = /** @lends {ui.Table.prototype }*/ {
     subEntryTipOpen: '点击展开',
     subEntryTipClose: '点击收起',
 
@@ -390,19 +410,6 @@ ui.Table.prototype = {
     onselect: new Function(),
 
     /**
-     * 行的checkbox点击时间处理函数
-     *
-     * @private
-     */
-    rowCheckboxClick: function(index) {
-        if (this.selectMode != 'line') {
-            this.selectMulti(index);
-        } else {
-            this.preSelectIndex = index;
-        }
-    },
-
-    /**
      * 根据checkbox是否全部选中，更新头部以及body的checkbox状态
      *
      * @private
@@ -467,35 +474,6 @@ ui.Table.prototype = {
         selectAll.checked = allChecked;
     },
 
-    /**
-     * 单选选取
-     *
-     * @private
-     * @param {number} index 选取的序号.
-     */
-    selectSingle: function(index) {
-        var selectedClass = this.getClass('row-selected'),
-            selectedIndex = this.selectedIndex;
-
-        this.selection = this.datasource[index];
-        if (this.onselect(this.selection)) {
-            if ('number' == typeof selectedIndex) {
-                baidu.removeClass(this.getRow(selectedIndex), selectedClass);
-            }
-
-            this.selectedIndex = index;
-            baidu.addClass(this.getRow(index), selectedClass);
-        }
-    },
-
-    /**
-     * 全选/不选 所有的checkbox表单
-     *
-     * @private
-     */
-    toggleSelectAll: function() {
-        this.selectAll(this.getHeadCheckbox().checked);
-    },
 
     /**
      * 更新所有checkbox的选择状态
@@ -1055,61 +1033,7 @@ ui.Table.prototype = {
     tplSortIcon: '<div class="{0}"></div>',
     tplTipIcon: '<div class="{0}" {1}></div>',
 
-    /**
-     * 表格头单元格鼠标移入的事件handler
-     *
-     * @private
-     * @param {HTMLElement} cell 移出的单元格.
-     */
-    titleOverHandler: function(cell) {
-        if (this.isDraging || this.dragReady) {
-            return;
-        }
-
-        this.sortReady = 1;
-        baidu.addClass(cell.firstChild, this.getClass('thcntr-hover'));
-    },
-
-    /**
-     * 表格头单元格鼠标移出的事件handler
-     *
-     * @private
-     * @param {HTMLElement} cell 移出的单元格.
-     */
-    titleOutHandler: function(cell) {
-        this.sortReady = 0;
-        baidu.removeClass(cell.firstChild, this.getClass('thcntr-hover'));
-    },
-
     onsort: new Function(),
-
-    /**
-     * 表格头单元格点击的事件handler
-     *
-     * @private
-     * @param {HTMLElement} cell 点击的单元格.
-     */
-    titleClickHandler: function(cell) {
-        if (this.sortReady) { // 避免拖拽触发排序行为
-            var me = this,
-                field = me._fields[cell.getAttribute('index')],
-                orderBy = me.orderBy,
-                order = me.order;
-
-            if (orderBy == field.field) {
-                order = (!order || order == 'asc') ? 'desc' : 'asc';
-            } else {
-                order = 'desc';
-            }
-
-            me.onsort.call(me, field, order);
-            me.order = order;
-            me.orderBy = field.field;
-            me.renderHead();
-
-            me.renderBody();
-        }
-    },
 
     /**
      * 重置表头样式
@@ -1333,50 +1257,6 @@ ui.Table.prototype = {
         return this.getId('subentry') + index;
     },
 
-    entryOver: function(index) {
-        var el = baidu.g(this.getSubentryId(index)),
-            opened = /subentry-opened/.test(el.className),
-            classBase = 'subentry-hover';
-
-        if (opened) {
-            classBase = 'subentry-opened-hover';
-        }
-
-        baidu.addClass(el, this.getClass(classBase));
-    },
-
-    entryOut: function(index) {
-        var id = this.getSubentryId(index);
-        baidu.removeClass(id, this.getClass('subentry-hover'));
-        baidu.removeClass(id, this.getClass('subentry-opened-hover'));
-    },
-
-    fireSubrow: function(index) {
-        var me = this,
-            currentIndex = me.subrowIndex,
-            datasource = me.datasource,
-            dataLen = (datasource instanceof Array && datasource.length),
-            dataItem;
-
-        if (!dataLen || index >= dataLen) {
-            return;
-        }
-
-        if (currentIndex !== index) {
-            dataItem = datasource[index];
-            if (me.onsubrowopen(index, dataItem) !== false) {
-                me.openSubrow(index);
-            }
-        } else {
-        	dataItem = datasource[index];
-            if (me.onsubrowclose(index, dataItem) !== false) {
-                me.closeSubrow(index);
-            }
-        }
-
-        me.entryOver(index);
-    },
-
     closeSubrow: function(index) {
         var me = this,
             subrowId = me.getSubrowId(index),
@@ -1413,76 +1293,12 @@ ui.Table.prototype = {
     },
 
     /**
-     * 表格行鼠标移上的事件handler
-     *
-     * @private
-     * @param {number} index 表格行序号.
-     */
-    rowOverHandler: function(index) {
-        if (this.isDraging) {
-            return;
-        }
-
-        var row = this.getRow(index);
-        if (row) {
-            baidu.addClass(row, this.getClass('row-over'));
-        }
-    },
-
-    /**
-     * 表格行鼠标移出的事件handler
-     *
-     * @private
-     * @param {number} index 表格行序号.
-     */
-    rowOutHandler: function(index) {
-        var row = this.getRow(index);
-        if (row) {
-            baidu.removeClass(row, this.getClass('row-over'));
-        }
-    },
-
-    /**
      * 阻止行选，用于点击在行的其他元素，不希望被行选时。
      *
      * @public
      */
     preventLineSelect: function() {
         this.dontSelectLine = 1;
-    },
-
-    /**
-     * 表格行鼠标点击的事件handler
-     *
-     * @private
-     * @param {number} index 表格行序号.
-     */
-    rowClickHandler: function(index) {
-        if (this.selectMode == 'line') {
-            if (this.dontSelectLine) {
-                this.dontSelectLine = false;
-                return;
-            }
-
-            var input;
-
-            switch (this.select) {
-                case 'multi':
-                    input = baidu.g(this.getId('multiSelect') + index);
-                    // 如果点击的是checkbox，则不做checkbox反向处理
-                    if (!baidu.lang.hasValue(this.preSelectIndex)) {
-                        input.checked = !input.checked;
-                    }
-                    this.selectMulti(index);
-                    this.preSelectIndex = null;
-                    break;
-                case 'single':
-                    input = baidu.g(this.getId('singleSelect') + index);
-                    input.checked = true;
-                    this.selectSingle(index);
-                    break;
-            }
-        }
     },
 
     /**
@@ -1547,4 +1363,221 @@ ui.Table.prototype = {
         }
     }
 };
+
+/**
+ * 表格行鼠标点击的事件handler
+ * @export
+ * @param {number} index 表格行序号.
+ */
+ui.Table.prototype.rowClickHandler = function(index) {
+  if (this.selectMode == 'line') {
+    if (this.dontSelectLine) {
+      this.dontSelectLine = false;
+      return;
+    }
+
+    var input;
+
+    switch (this.select) {
+      case 'multi':
+        input = baidu.g(this.getId('multiSelect') + index);
+        // 如果点击的是checkbox，则不做checkbox反向处理
+        if (!baidu.lang.hasValue(this.preSelectIndex)) {
+          input.checked = !input.checked;
+        }
+        this.selectMulti(index);
+        this.preSelectIndex = null;
+        break;
+      case 'single':
+        input = baidu.g(this.getId('singleSelect') + index);
+        input.checked = true;
+        this.selectSingle(index);
+        break;
+    }
+  }
+};
+
+
+/**
+ * 表格行鼠标移出的事件handler
+ * @export
+ * @param {number} index 表格行序号.
+ */
+ui.Table.prototype.rowOutHandler = function(index) {
+  var row = this.getRow(index);
+  if (row) {
+    baidu.removeClass(row, this.getClass('row-over'));
+  }
+};
+
+
+/**
+ * 表格行鼠标移上的事件handler
+ * @export
+ * @param {number} index 表格行序号.
+ */
+ui.Table.prototype.rowOverHandler = function(index) {
+  if (this.isDraging) {
+    return;
+  }
+
+  var row = this.getRow(index);
+  if (row) {
+    baidu.addClass(row, this.getClass('row-over'));
+  }
+};
+
+
+/**
+ * 单选选取
+ * @export
+ * @param {number} index 选取的序号.
+ */
+ui.Table.prototype.selectSingle = function(index) {
+    var selectedClass = this.getClass('row-selected'),
+        selectedIndex = this.selectedIndex;
+
+    this.selection = this.datasource[index];
+    if (this.onselect(this.selection)) {
+        if ('number' == typeof selectedIndex) {
+            baidu.removeClass(this.getRow(selectedIndex), selectedClass);
+        }
+
+        this.selectedIndex = index;
+        baidu.addClass(this.getRow(index), selectedClass);
+    }
+};
+
+/**
+ * 全选/不选 所有的checkbox表单
+ * @export
+ */
+ui.Table.prototype.toggleSelectAll = function() {
+    this.selectAll(this.getHeadCheckbox().checked);
+};
+
+
+/**
+ * 行的checkbox点击时间处理函数
+ * @export
+ */
+ui.Table.prototype.rowCheckboxClick = function(index) {
+    if (this.selectMode != 'line') {
+        this.selectMulti(index);
+    } else {
+        this.preSelectIndex = index;
+    }
+};
+
+/**
+ * @export
+ * @param {number} index 索引值.
+ */
+ui.Table.prototype.fireSubrow = function(index) {
+    var me = this,
+        currentIndex = me.subrowIndex,
+        datasource = me.datasource,
+        dataLen = (datasource instanceof Array && datasource.length),
+        dataItem;
+
+    if (!dataLen || index >= dataLen) {
+        return;
+    }
+
+    if (currentIndex !== index) {
+        dataItem = datasource[index];
+        if (me.onsubrowopen(index, dataItem) !== false) {
+            me.openSubrow(index);
+        }
+    } else {
+      dataItem = datasource[index];
+        if (me.onsubrowclose(index, dataItem) !== false) {
+            me.closeSubrow(index);
+        }
+    }
+
+    me.entryOver(index);
+};
+
+
+/**
+ * @export
+ * @param {number} index 索引值.
+ */
+ui.Table.prototype.entryOut = function(index) {
+    var id = this.getSubentryId(index);
+    baidu.removeClass(id, this.getClass('subentry-hover'));
+    baidu.removeClass(id, this.getClass('subentry-opened-hover'));
+};
+
+
+/**
+ * @export
+ * @param {number} index 索引值.
+ */
+ui.Table.prototype.entryOver = function(index) {
+    var el = baidu.g(this.getSubentryId(index)),
+        opened = /subentry-opened/.test(el.className),
+        classBase = 'subentry-hover';
+
+    if (opened) {
+        classBase = 'subentry-opened-hover';
+    }
+
+    baidu.addClass(el, this.getClass(classBase));
+};
+
+
+/**
+ * 表格头单元格鼠标移入的事件handler
+ * @export
+ * @param {HTMLElement} cell 移出的单元格.
+ */
+ui.Table.prototype.titleOverHandler = function(cell) {
+    if (this.isDraging || this.dragReady) {
+        return;
+    }
+
+    this.sortReady = 1;
+    baidu.addClass(cell.firstChild, this.getClass('thcntr-hover'));
+};
+
+
+/**
+ * 表格头单元格鼠标移出的事件handler
+ * @export
+ * @param {HTMLElement} cell 移出的单元格.
+ */
+ui.Table.prototype.titleOutHandler = function(cell) {
+    this.sortReady = 0;
+    baidu.removeClass(cell.firstChild, this.getClass('thcntr-hover'));
+};
+
+/**
+ * 表格头单元格点击的事件handler
+ * @export
+ * @param {HTMLElement} cell 点击的单元格.
+ */
+ui.Table.prototype.titleClickHandler = function(cell) {
+    if (this.sortReady) { // 避免拖拽触发排序行为
+        var me = this,
+            field = me._fields[cell.getAttribute('index')],
+            orderBy = me.orderBy,
+            order = me.order;
+
+        if (orderBy == field.field) {
+            order = (!order || order == 'asc') ? 'desc' : 'asc';
+        } else {
+            order = 'desc';
+        }
+
+        me.onsort.call(me, field, order);
+        me.order = order;
+        me.orderBy = field.field;
+        me.renderHead();
+
+        me.renderBody();
+    }
+};
+
 baidu.inherits(ui.Table, ui.Control);

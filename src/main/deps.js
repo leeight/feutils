@@ -17,7 +17,7 @@ goog.addDependency("base/ParamAdapter.js", ['base.IParamAdapter', 'base.OneToMan
 goog.addDependency("base/BaseModel.js", ['base.BaseModel'], ['baidu', 'base', 'base.PropertyChangeNotifier']);
 goog.addDependency("base/ListDataSource.js", ['base.ListDataSource', 'base.RemoteListDataSource'], ['base.DataSource']);
 goog.addDependency("base/Converter.js", ['base.DateRangeConverter', 'base.IConverter', 'base.UrlPrefixConverter', 'base.dateRangeConverter'], ['baidu', 'base']);
-goog.addDependency("base/Worker.js", ['base.AbstractWorker', 'base.LocalWorker', 'base.RequestWorker', 'base.FuncWorker', 'base.TimeoutWorker', 'base.ParallelWorkerManager', 'base.SerialWorkerManager'], ['base.EventDispatcher']);
+goog.addDependency("base/Worker.js", ['base.AbstractWorker', 'base.LocalWorker', 'base.FuncWorker', 'base.TimeoutWorker', 'base.ParallelWorkerManager', 'base.SerialWorkerManager'], ['base.EventDispatcher']);
 goog.addDependency("base/PropertyChangeNotifier.js", ['base.PropertyChangeNotifier'], ['baidu', 'base', 'base.EventDispatcher']);
 goog.addDependency("base/EventDispatcher.js", ['base.EventDispatcher'], ['baidu', 'base.Object']);
 goog.addDependency("base/DataSource.js", ['base.DataSource'], ['base']);

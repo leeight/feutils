@@ -1443,6 +1443,10 @@ goog.scope = function(fn) {
  */
 goog.asyncResource = [];
 
+if (COMPILED) {
+  goog.asyncResource = ['tpl.html'];
+}
+
 /**
  * 引入ui控件的css或者模版文件
  * 当然，也支持引入action的css或者模版文件
