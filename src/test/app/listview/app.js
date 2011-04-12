@@ -16,9 +16,10 @@
  **/
 
 
+goog.require('app.Launch');
 goog.require('ui.util');
 goog.require('ui.Page');
-goog.require('ui.ComboBox');
+goog.require('ui.ListView');
 
 window.onload = function(){
   // hook
@@ -43,15 +44,25 @@ window.onload = function(){
     return page;
   }
 
-  var page = GetPage({
-    value : 'baidu',
-    datasource : [
-      { text : 'google', value : 'google' },
-      { text : 'baidu', value : 'baidu' }
-    ]
-  });
-  // var btn = /** @type {ui.Button} */ (page.getChild("button"));
-  // alert(btn.getLabel());
+  function main() {
+    var page = GetPage({
+      datasource : [
+        { 'name' : 'google' },
+        { 'name' : 'baidu' },
+        { 'name' : 'sina' }
+      ],
+      fields : [
+        {
+          'title' : '生活圈名称',
+          'field' : 'name',
+          'content' : function(item) {
+            return item['name']
+          }
+        }
+      ]
+    });
+  }
+  app.Launch(main);
 };
 
 
