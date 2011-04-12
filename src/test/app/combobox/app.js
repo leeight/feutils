@@ -15,7 +15,7 @@
  *  
  **/
 
-
+goog.require('app.Launch');
 goog.require('ui.util');
 goog.require('ui.Page');
 goog.require('ui.ComboBox');
@@ -43,13 +43,16 @@ window.onload = function(){
     return page;
   }
 
-  var page = GetPage({
-    value : 'baidu',
-    datasource : [
-      { text : 'google', value : 'google' },
-      { text : 'baidu', value : 'baidu' }
-    ]
-  });
+  function main() {
+    var page = GetPage({
+      value : 'baidu',
+      datasource : [
+        { text : 'google', value : 'google' },
+        { text : 'baidu', value : 'baidu' }
+      ]
+    });
+  }
+  app.Launch(main);
   // var btn = /** @type {ui.Button} */ (page.getChild("button"));
   // alert(btn.getLabel());
 };
