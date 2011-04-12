@@ -59,5 +59,7 @@
         <!--arg line='-f "\-\-formatting=PRETTY_PRINT"' /-->
       </extraflags>
     </calcdeps>
+    <dirname property="inputfile.dir" file="${inputfile}" />
+    <copy file="${inputfile.dir}/app.html" tofile="${build.dir}/app.html" />
   </target>
 </project>
