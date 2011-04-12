@@ -47,9 +47,12 @@ ui.ListView = function(options) {
      */
     this.fields = null;
 
-    this.view = 'ListViewer';
-    
     ui.Control.call(this, options);
+    
+    /**
+     * @type {string}
+     */
+    this.view = 'ListViewer';
 
     /**
      * @type {string}
