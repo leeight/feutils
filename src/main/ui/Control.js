@@ -106,7 +106,6 @@ ui.Control.prototype.domId = '';
 /**
  * 控件的状态，例如readonly, disabled之类的.
  * @private
- * @noalias
  * @type {Object}
  */
 ui.Control.prototype.state;

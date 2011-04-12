@@ -56,7 +56,7 @@
       <extraflags>
         <arg line='-f "--jscomp_warning=checkTypes"' />
         <arg line='-f "--externs=ui/externs.js"' />
-        <!--arg line='-f "\-\-formatting=PRETTY_PRINT"' /-->
+        <arg line='-f "--formatting=PRETTY_PRINT"' />
       </extraflags>
     </calcdeps>
     <dirname property="inputfile.dir" file="${inputfile}" />
