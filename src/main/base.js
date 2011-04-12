@@ -1462,7 +1462,7 @@ goog.include = function(path) {
       styleElt.setAttribute('rel', 'stylesheet');
       styleElt.setAttribute('href', goog.basePath + '/' + path);
       doc.getElementsByTagName('head')[0].appendChild(styleElt);
-    } else if (/\.html/.test(path)) {
+    } else if (/\.html?$/.test(path)) {
       // TODO 判断重复的URL
       goog.asyncResource.push(goog.basePath + '/' + path);
     } else {
