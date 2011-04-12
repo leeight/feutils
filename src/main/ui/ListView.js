@@ -8,18 +8,52 @@
  * date:    $Date$
  */
 
+goog.require('ui.Control');
+goog.require('ui.Label');
+goog.require('ui.Button');
+goog.require('ui.Table');
+
+goog.include('ui/ListView.html');
+goog.include('css/ui-richsel.css');
+
+goog.provide('ui.ListView');
+
 /**
  * ui.ListView
  * @constructor
  * @extends {ui.Control}
+ * @export
  */
 ui.ListView = function(options) {
+    /**
+     * @type {string}
+     * @noalias
+     */
+    this.title = '';
+
+    /**
+     * @type {boolean}
+     * @noalias
+     */
+    this.withModifyButton = true;
+
+    /**
+     * @noalias
+     */
+    this.datasource = null;
+
+    /**
+     * @noalias
+     */
+    this.fields = null;
+
+    this.view = 'ListViewer';
+    
     ui.Control.call(this, options);
 
-    this.title = '';
-    this.withModifyButton = true;
-    this.datasource = null;
-    this.view = 'ListViewer';
+    /**
+     * @type {string}
+     */
     this.type = 'richsel';
 };
 ui.ListView.prototype = function() {

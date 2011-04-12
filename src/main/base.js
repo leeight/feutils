@@ -28,7 +28,6 @@
  */
 var COMPILED = false;
 
-
 /**
  * Base namespace for the Closure library.  Checks to see goog is
  * already defined in the current scope before assigning to prevent
@@ -1439,6 +1438,10 @@ goog.scope = function(fn) {
   fn.call(goog.global);
 };
 
+/**
+ * @type {Array.<string>}
+ */
+goog.asyncResource = [];
 
 /**
  * 引入ui控件的css或者模版文件
@@ -1456,25 +1459,8 @@ goog.include = function(path) {
       styleElt.setAttribute('href', goog.basePath + '/' + path);
       doc.getElementsByTagName('head')[0].appendChild(styleElt);
     } else if (/\.html/.test(path)) {
-      // TODO goog是不知道er的存在的，但是解析模版内容的时候，的确需要er的呀???
-      var xhr = window.ActiveXObject ?
-                new window.ActiveXObject('Microsoft.XMLHTTP') :
-                new XMLHttpRequest();
-      /**
-       * @this {XMLHttpRequest}
-       */
-      xhr.onreadystatechange = function() {
-        if (this.readyState == 4) {
-          var status = this.status;
-          if ((status >= 200 && status < 300) ||
-              status == 304 ||
-              status == 1223) {
-            alert(this.responseText);
-          }
-        }
-      }
-      xhr.open('GET', goog.basePath + '/' + path, true);
-      xhr.send(null);
+      // TODO 判断重复的URL
+      goog.asyncResource.push(goog.basePath + '/' + path);
     } else {
       throw 'unsupported resource format';
     }

@@ -19,6 +19,7 @@ goog.provide('ui.Label');
  * @constructor
  * @extends {ui.Control}
  * @param {Object} options 控件初始化参数.
+ * @export
  */
 ui.Label = function(options) {
   ui.Control.call(this, options);

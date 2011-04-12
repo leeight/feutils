@@ -55,7 +55,8 @@
               compilerjarfile="${gcc.trunk.jar}">
       <extraflags>
         <arg line='-f "--jscomp_warning=checkTypes"' />
-        <!--arg line='-f "\-\-formatting=PRINT_INPUT_DELIMITER"' /-->
+        <arg line='-f "--externs=ui/externs.js"' />
+        <arg line='-f "--formatting=PRETTY_PRINT"' />
       </extraflags>
     </calcdeps>
   </target>

@@ -11,6 +11,8 @@
 goog.require('ui.Control');
 goog.require('ui.ToolTip');
 
+goog.include('css/ui-table.css');
+
 goog.provide('ui.Table');
 
 /**
@@ -18,6 +20,7 @@ goog.provide('ui.Table');
  * @constructor
  * @extends {ui.Control}
  * @param {Object} options 控件初始化参数.
+ * @export
  */
 ui.Table = function(options) {
     ui.Control.call(this, options);
@@ -31,9 +34,15 @@ ui.Table = function(options) {
     /**
      * 表格的字段.
      * @private
-     * @type {Array.<Object>}
+     * @type {Array.<UITableField>}
      */
     this.fields;
+
+    /**
+     * @private;
+     * @type {Array.<UITableField>}
+     */
+    this._fields;
 
     /**
      * @private
@@ -317,7 +326,7 @@ ui.Table.prototype = {
      * 初始化表格的字段
      *
      * @protected
-     * @param {Array.<Object>} fields 字段数组.
+     * @param {Array.<UITableField>} fields 字段数组.
      */
     setFields: function(fields) {
         if (!fields) {
