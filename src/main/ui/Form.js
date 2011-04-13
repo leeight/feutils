@@ -8,8 +8,8 @@
  * date:    $Date$
  */
 
-goog.require('ui.Control');
 goog.require('ui.BaseBox');
+goog.require('ui.Control');
 goog.require('ui.InputControl');
 
 goog.provide('ui.Form');

@@ -15,8 +15,8 @@
  * ui控件的基类
  **/
 
-goog.require('base.EventDispatcher');
 goog.require('base.BaseModel');
+goog.require('base.EventDispatcher');
 goog.require('er.template');
 goog.require('ui.lifeCycle');
 

@@ -798,7 +798,7 @@ er.FormAction.prototype = function() {
         /**
          * 后端返回数据的错误处理函数
          * @protected
-         * @param {Object} data 后端返回的数据结构
+         * @param {Object} data 后端返回的数据结构.
          */
         onSubmitFail: function(data) {
             if (this.btnSubmit) {

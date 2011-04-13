@@ -23,7 +23,7 @@ goog.provide('ui.Table');
  * @export
  */
 ui.Table = function(options) {
-    
+
     /**
      * @type {Array.<Object>}
      * @noalias
@@ -103,7 +103,7 @@ ui.Table = function(options) {
      * @noalias
      */
     this.sortable;
-    
+
     ui.Control.call(this, options);
 };
 

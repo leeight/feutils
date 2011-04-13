@@ -135,7 +135,7 @@ ui.TextInput.prototype.render = function(opt_main) {
     } else {
         me.main.value = me.value;
     }
-}
+};
 
 /**
  * 获焦事件处理函数
@@ -149,9 +149,9 @@ ui.TextInput.prototype._focusHandler = function() {
     if ((virtualValue && me.getValue() == virtualValue) ||
         me.autoSelect) {
         // XXX: Fix Chrome select bug.
-        setTimeout(function() { main.select(); }, 0); 
+        setTimeout(function() { main.select(); }, 0);
     }
-}
+};
 
 /**
  * 失焦事件处理函数

@@ -65,10 +65,10 @@ ui.ComboBox.prototype = {
         var me = this;
 
         var textWidth = me.width - 20;
-        if(this.skin == 'select-menu') {
+        if (this.skin == 'select-menu') {
            textWidth -= 10;
-        } 
-        
+        }
+
         return baidu.format(me.tplMain,
                             me.getId('cur'),
                             me.getClass('cur'),
@@ -201,12 +201,12 @@ ui.ComboBox.prototype = {
             var itemWidth = me.width;
 
             if (this.skin == 'select-menu') {
-                itemWidth =  itemWidth - 16;
+                itemWidth = itemWidth - 16;
             } else if (this.skin == 'select-button') {
-                itemWidth =  itemWidth - 10;
+                itemWidth = itemWidth - 10;
             }
 
-            html.push (
+            html.push(
                 baidu.format(me.tplItem,
                     me.getId('item') + i,
                     itemClass,
@@ -504,7 +504,7 @@ ui.ComboBox.prototype.itemOverHandler = function(item) {
 
   var index = item.getAttribute('index');
   baidu.addClass(this.getId('item') + index, this.getClass('item') + '-hover');
-}
+};
 
 /**
  * 选项移开事件
@@ -514,6 +514,6 @@ ui.ComboBox.prototype.itemOverHandler = function(item) {
 ui.ComboBox.prototype.itemOutHandler = function(item) {
   var index = item.getAttribute('index');
   baidu.removeClass(this.getId('item') + index, this.getClass('item') + '-hover');
-}
+};
 
 baidu.inherits(ui.ComboBox, ui.InputControl);

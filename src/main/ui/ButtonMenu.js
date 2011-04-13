@@ -48,7 +48,7 @@ ui.ButtonMenu.prototype.render = function(opt_main) {
 
         me.isRender = true;
     }
-}
+};
 
 /**
  * 获取主区域的html
@@ -66,7 +66,7 @@ ui.ButtonMenu.prototype.getMainHtml = function() {
         me.getId('label'),
         me.getClass('icon')
     );
-}
+};
 
 /**
  * 初始化控件行为
@@ -79,7 +79,7 @@ ui.ButtonMenu.prototype.initBehavior = function() {
     me.main.onclick = me.getMainClickHandler();
     me.docClick = me.getDocClickHandler();
     baidu.on(document, 'click', me.docClick);
-}
+};
 
 /**
  * 初始化浮动层
@@ -123,7 +123,7 @@ initLayer: function() {
 
     layer.innerHTML = html.join('');
     document.body.appendChild(layer);
-},
+};,
 
 /*
   * @itemValue itemValue
@@ -141,14 +141,14 @@ hideItem: function(itemValue,hidden) {
             hidden ? baidu.hide(item) : baidu.show(item);
         }
     }
-},
+};,
 itemOver: function(dom) {
     baidu.addClass(dom, 'item-hover');
-},
+};,
 
 itemOut: function(dom) {
     baidu.removeClass(dom, 'item-hover');
-},
+};,
 
 /**
   * 显示浮动层
@@ -162,7 +162,7 @@ showLayer: function() {
     this.setState('active');
     layer.style.left = mainPos.left - 5 + 'px';
     layer.style.top = mainPos.top + 21 + 'px';
-},
+};,
 
 /**
   * 隐藏浮动层
@@ -174,7 +174,7 @@ hideLayer: function() {
 
     this.removeState('active');
     baidu.g(layerId).style.left = '-10000px';
-},
+};,
 
 /**
   * 显示/隐藏 浮动层
@@ -187,7 +187,7 @@ toggleLayer: function() {
     } else {
         this.showLayer();
     }
-},
+};,
 
 /**
   * 获取主元素点击的处理函数
@@ -206,7 +206,7 @@ getMainClickHandler: function() {
             me.toggleLayer();
         }
     };
-},
+};,
 
 /**
   * 获取document点击的处理函数
@@ -243,7 +243,7 @@ getDocClickHandler: function() {
         // 隐藏浮动层
         me.hideLayer();
     };
-},
+};,
 
 /**
   * 事件声明，容错
@@ -261,4 +261,4 @@ ui.ButtonMenu.prototype.dispose = function() {
     baidu.dom.remove(this.getId('layer'));
 
     ui.ButtonMenu.superClass.dispose.call(this);
-}
+};

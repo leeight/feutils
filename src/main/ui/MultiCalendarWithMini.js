@@ -46,8 +46,8 @@
  */
 
 goog.require('baidu');
-goog.require('ui.InputControl');
 goog.require('ui.Button');
+goog.require('ui.InputControl');
 goog.require('ui.MonthView');
 
 goog.provide('ui.MultiCalendarWithMini');
@@ -140,11 +140,11 @@ ui.MultiCalendarWithMini.prototype = {
      */
     tplYearMonth: '<table><tbody><tr><td align="left" width="40">{0}</td><td align="left" width="70">{1}</td><td align="left" width="60">{2}</td><td align="right" width="40">{3}</td></tr></tbody></table>',
 
-    
+
 
     /**
      * 获取显示年份，以2001年为起点的40年
-     */ 
+     */
     getYearsContainer: function() {
         var begin_year = 2001;
         var _yearContainer = [];

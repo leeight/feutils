@@ -128,7 +128,7 @@ ui.Dialog.alert = function(args) {
       onok = args.onok,
       type = args.type || 'warning',
       tpl = '<div class="ui-dialog-icon ui-dialog-icon-{0}"></div><div class="ui-dialog-text">{1}</div>';
-      
+
   dialog.show(title, baidu.format(tpl, type, content));
   dialog.setOkHandler(onok);
 };

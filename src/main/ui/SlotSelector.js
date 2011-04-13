@@ -66,7 +66,7 @@ ui.SlotSelector = function(options) {
         };
 
     //用于刷新生活圈右列表后，回到初始收缩状态
-    this.cacheCommunityId = null;    
+    this.cacheCommunityId = null;
 };
 
 ui.SlotSelector.prototype = (function() {
@@ -112,7 +112,7 @@ ui.SlotSelector.prototype = (function() {
      */
 	function onOK() {
 		slotHelper.clearInternalError.call(this);
-		if(true !== this.hideBudget){
+		if (true !== this.hideBudget) {
 		    setBudget.call(this);
 		}
 		if (!this.validateBudget()) {
@@ -408,7 +408,7 @@ ui.SlotSelector.prototype = (function() {
 					'&' + this.customConfig.defaultSlotlistParam_typejoin;
 
 		this.slotlistRequester(param, function(data) {
-			tbl.refer = {datasource:'datasource'};
+			tbl.refer = {datasource: 'datasource'};
 			tbl.rebindModel({
 	            datasource: data.page.result
 	        });
@@ -1217,7 +1217,7 @@ ui.SlotSelector.prototype = (function() {
 	  		subrowTable, mainTable = this.c('tblMultiSitesLeft'),
     		comboBox, txtInput;
 
-		param = 'type='+ me.productType +
+		param = 'type=' + me.productType +
 				'&' + this.customConfig.defaultSlotlistParam_typejoin +
 				'&' + me.customConfig.defaultCommunitylistParam_status +
 				'&' + me.customConfig.defaultCommunitySlotlistParam_status;
@@ -1235,7 +1235,7 @@ ui.SlotSelector.prototype = (function() {
 
 	  			//rebind 列表
 	  			subrowTable = mainTable.c(SUBTABLE_IDPREFIX_LEFT + i);
-	  			subrowTable.refer = {datasource:'datasource'};
+	  			subrowTable.refer = {datasource: 'datasource'};
 				subrowTable.rebindModel({
 					datasource: slotlist ? slotlist.slotlist.slice(0) : []
 				});
@@ -1245,7 +1245,7 @@ ui.SlotSelector.prototype = (function() {
 
 	    		//rebind combobox
 	    		comboBox = mainTable.c('cBox' + i);
-	    		comboBox.refer = {datasource:'datasource'};
+	    		comboBox.refer = {datasource: 'datasource'};
 	    		if (comboBox) comboBox.rebindModel({
 	    			datasource: me.datasourceSlotStatus
 	    		});
@@ -1275,7 +1275,7 @@ ui.SlotSelector.prototype = (function() {
     			datasource: data.page.result
     		});
     	});
-    	me.c('comboSearchStatus').refer = {datasource:'datasource'};
+    	me.c('comboSearchStatus').refer = {datasource: 'datasource'};
     	me.c('comboSearchStatus').rebindModel({
     		datasource: me.datasourceSlotStatus
     	});
@@ -1345,12 +1345,12 @@ ui.SlotSelector.prototype = (function() {
 	return {
 
         bindModel: function(model) {
-            if('true' === this.hideBudget) this.hideBudget = true;
+            if ('true' === this.hideBudget) this.hideBudget = true;
             ui.SlotSelector.superClass.bindModel.call(this, model);
             var tpl4fields = {
                     deleteSingleSiteTpl: '<span onclick="{1}" class="ui-orient-sel-listentry">{0}</span>'
             };
-           
+
             /**
              * 字段配置
              */
@@ -1407,7 +1407,7 @@ ui.SlotSelector.prototype = (function() {
                             field: 'status',
                             content: function(item) {
                                 // FIXME 不应该和slot.config有关系的呀
-                                return dn.util.getStatusHtml(er.context.get('slotStatusMap')[item['status']], 
+                                return dn.util.getStatusHtml(er.context.get('slotStatusMap')[item['status']],
                                   slot.config.statusClassMap);
                             }
                         }
@@ -1431,10 +1431,10 @@ ui.SlotSelector.prototype = (function() {
                             stable: true,
                             field: '',
                             content: function(item) {
-                                if(true === this.parent.hideBudget){
+                                if (true === this.parent.hideBudget) {
                                     return '';
                                 }
-                                else{
+                                else {
                                     var v = '';
                                     baidu.array.each(this.parent.viewValue['budget'].multiSites, function(citem,i) {
                                         if (citem.id == item.id) {
@@ -1442,7 +1442,7 @@ ui.SlotSelector.prototype = (function() {
                                             return false;
                                         }
                                     });
-                                    return '预算：<input type="text" value="' + v + '" style="background: none repeat scroll 0 0 #FFFFFF;border: 1px solid #7E9DB9;padding: 1px 2px;text-align: left;width:70px;" name="budget" id="budget" /> 元';                                
+                                    return '预算：<input type="text" value="' + v + '" style="background: none repeat scroll 0 0 #FFFFFF;border: 1px solid #7E9DB9;padding: 1px 2px;text-align: left;width:70px;" name="budget" id="budget" /> 元';
                                 }
                             }
                         },
@@ -1533,10 +1533,10 @@ ui.SlotSelector.prototype = (function() {
                             stable: false,
                             field: '',
                             content: function(item) {
-                                if(true === this.parent.hideBudget){
+                                if (true === this.parent.hideBudget) {
                                     return '';
                                 }
-                                else{
+                                else {
                                     var v = '';
                                     baidu.array.each(this.parent.viewValue['budget'].multiSites, function(citem,i) {
                                         if (citem.id == item.id) {
@@ -1652,10 +1652,10 @@ ui.SlotSelector.prototype = (function() {
                             stable: false,
                             field: '',
                             content: function(item) {
-                                if(true === this.parent.hideBudget){
+                                if (true === this.parent.hideBudget) {
                                     return '';
                                 }
-                                else{
+                                else {
                                     var v = '';
                                     baidu.array.each(this.parent.viewValue['budget'].singleSite, function(citem,i) {
                                         if (citem.id == item.id) {
@@ -1720,10 +1720,10 @@ ui.SlotSelector.prototype = (function() {
                             stable: false,
                             field: '',
                             content: function(item) {
-                                if(true === this.parent.hideBudget){
+                                if (true === this.parent.hideBudget) {
                                     return '';
                                 }
-                                else{
+                                else {
                                     var v = '';
                                     baidu.array.each(this.parent.viewValue['budget'].singleSite, function(citem,i) {
                                         if (citem.id == item.id) {
@@ -1740,17 +1740,17 @@ ui.SlotSelector.prototype = (function() {
             };
 
             //没有预算后列表宽度的处理
-            if(true === this.hideBudget){
-                this.fields.singleSiteRight.splice(2,1);
+            if (true === this.hideBudget) {
+                this.fields.singleSiteRight.splice(2, 1);
                 this.fields.singleSiteRight[0].width += 40;
                 this.fields.singleSiteRight[1].width += 40;
-                
-                this.fields.singleSiteResult.splice(3,1);
+
+                this.fields.singleSiteResult.splice(3, 1);
                 this.fields.singleSiteResult[0].width += 65;
                 this.fields.singleSiteResult[1].width += 65;
-                
+
             }
-            
+
             this.c('tblMultiSitesLeft').bindModel({
                 datasource: this.datasourceMultiSitesLeft,
                 fields: this.fields.multiSitesLeft,
@@ -1822,7 +1822,7 @@ ui.SlotSelector.prototype = (function() {
 		  		param, slotlist, i,
 		  		me = this;
 
-        	param = 'type='+ me.productType +
+        	param = 'type=' + me.productType +
 					'&' + me.customConfig.defaultSlotlistParam_typejoin +
 					'&' + me.customConfig.defaultCommunitylistParam_status +
 					'&' + me.customConfig.defaultCommunitySlotlistParam_status;
@@ -1834,7 +1834,7 @@ ui.SlotSelector.prototype = (function() {
         		for (i = 0; i < communityList.length; i++) {
         		    if (communityList[i].slotlist.length > 0) me.model.AllSlotList = me.model.AllSlotList.concat(communityList[i].slotlist);
         		}
-        		if(me.model.noCommunitySlotlist && me.model.noCommunitySlotlist.length > 0) me.model.AllSlotList = me.model.AllSlotList.concat(me.model.noCommunitySlotlist);
+        		if (me.model.noCommunitySlotlist && me.model.noCommunitySlotlist.length > 0) me.model.AllSlotList = me.model.AllSlotList.concat(me.model.noCommunitySlotlist);
 
         		for (i = 0; i < dataCommunityLen; i++) {
     	  			slotlist = baidu.array.find(communityList, function(item,index) {
@@ -1870,14 +1870,14 @@ ui.SlotSelector.prototype = (function() {
             this.c('tblMultiSitesRight').onsubrowclose = baidu.fn.bind(syncCollapse, this, 'left', 'close');
             this.c('tblMultiSitesLeft').onsubrowopen = baidu.fn.bind(syncCollapse, this, 'right', 'open');
             this.c('tblMultiSitesLeft').onsubrowclose = baidu.fn.bind(syncCollapse, this, 'right', 'close');
-           
+
         },
 
         /**
          * 验证预算合法性
          */
         validateBudget: function() {
-            if(true === this.hideBudget){
+            if (true === this.hideBudget) {
                 return true;
             }
     		var rtn = true;
@@ -1945,9 +1945,9 @@ ui.SlotSelector.prototype = (function() {
         		budget = this.viewValue['budget'].singleSite.slice(0);
         	}
 
-        	if(true === this.hideBudget){
+        	if (true === this.hideBudget) {
         	    if (slotType.MULTISITES == result.orient_community) {
-        	        var tmpList; 
+        	        var tmpList;
                     //赋广告位ID值
                     baidu.array.each(slot.mainList, function(item,index) {
                         arr_slot = [];
@@ -1959,14 +1959,14 @@ ui.SlotSelector.prototype = (function() {
                     });
                     result.budget_role_ids = arr_budget_role_ids.join(',');
         	    }
-        	    else{
-        	        baidu.array.each(slot,function(item,i){
+        	    else {
+        	        baidu.array.each(slot, function(item,i) {
         	            arr_budget_role_ids.push(item.id);
         	        });
         	        result.budget_role_ids = arr_budget_role_ids.join(',');
         	    }
         	}
-        	else{
+        	else {
             	if (slotType.MULTISITES == result.orient_community) {
             		var tmp_arr_budget_role_ids = [], tmpList;
             		//赋预算值
@@ -1975,7 +1975,7 @@ ui.SlotSelector.prototype = (function() {
                 		arr_budget_role_values.push(item.budget);
                 	});
                 	result.budget_role_values = arr_budget_role_values.join(',');
-    
+
                 	//赋广告位ID值
         	        baidu.array.each(tmp_arr_budget_role_ids, function(id,index) {
         	        	arr_slot = [];
@@ -1986,7 +1986,7 @@ ui.SlotSelector.prototype = (function() {
         	        	arr_budget_role_ids.push(id + '^' + arr_slot.join('~'));
         	        });
         	        result.budget_role_ids = arr_budget_role_ids.join(',');
-    
+
             	}
             	else {
             		//赋网站的预算值 和 广告位ID值
@@ -1997,7 +1997,7 @@ ui.SlotSelector.prototype = (function() {
                 	result.budget_role_values = arr_budget_role_values.join(',');
                 	result.budget_role_ids = arr_budget_role_ids.join(',');
             	}
-    
+
             	baidu.array.each(budget, function(item,i) {
             		result.budget_num += parseFloat(item.budget);
             	});

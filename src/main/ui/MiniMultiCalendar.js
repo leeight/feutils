@@ -207,11 +207,11 @@ ui.MiniMultiCalendar.prototype = {
 
     /**
      * 获取当前快捷方式的名称
-     * 
+     *
      * @public
      * @return {string}
      */
-    getName: function () {
+    getName: function() {
         return this._currentName;
     }
 };

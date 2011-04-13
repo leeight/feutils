@@ -8,9 +8,9 @@
  * date:    $Date$
  */
 
-goog.require("base");
+goog.require('base');
 
-goog.provide("base.DataSource");
+goog.provide('base.DataSource');
 
 /**
  * DataSource接口定义

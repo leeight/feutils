@@ -8,8 +8,8 @@
  * date:    $Date$
  */
 
-goog.require('ui.Control');
 goog.require('er.template');
+goog.require('ui.Control');
 
 goog.provide('ui.ToolTip');
 

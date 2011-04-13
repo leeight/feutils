@@ -12,12 +12,12 @@ ui.PagableListWithBorderPager = function(options) {
      * @type {?base.DataSource}
      */
     this.datasource = null;
-    
+
     /**
      * @type {Array.<Object>}
      */
     this.fields = null;
-    
+
     /**
      * @type {number}
      */
@@ -27,37 +27,37 @@ ui.PagableListWithBorderPager = function(options) {
      * @type {number}
      */
     this.pageSize = 15;
-    
+
     /**
      * @type {number}
      */
     this.pagerCount = 5;
-    
+
     /**
      * @type {string}
      */
     this.orderBy = '';
-    
+
     /**
      * @type {string}
      */
     this.order = '';
-    
+
     /**
      * @type {boolean}
      */
     this.subrow = false;
-    
+
     /**
      * @type {string}
      */
     this.select = 'multi';
-    
-    
+
+
     this.skin = null;
 
     ui.Control.call(this, options);
-    
+
     /**
      * @type {string}
      */

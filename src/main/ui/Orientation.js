@@ -139,7 +139,7 @@ ui.Orientation.prototype = (function() {
 
         for (i = 0; i < len; i++) {
             if (value[i].length != 0) {
-                str.push(encodeURIComponent(value[i].replace(/,|;|:|"|'/g,'')));
+                str.push(encodeURIComponent(value[i].replace(/,|;|:|"|'/g, '')));
             }
         }
 
@@ -159,7 +159,7 @@ ui.Orientation.prototype = (function() {
 
         for (i = 0; i < len; i++) {
             if (value[i].length != 0) {
-                html.push(baidu.string.encodeHTML(value[i].replace(/,|;|:|"|'/g,'')));
+                html.push(baidu.string.encodeHTML(value[i].replace(/,|;|:|"|'/g, '')));
             }
         }
 
@@ -210,23 +210,23 @@ ui.Orientation.prototype = (function() {
                     modValue = control.viewValue[modName],
                     leftId = control.getId('selectorLList' + modName),
                     rightId = control.getId('selectorRList' + modName),
-                    data,len,i,
-                    defaultAll = control.defaultValue == "all"? true:false;
+                    data, len, i,
+                    defaultAll = control.defaultValue == 'all'? true : false;
 
                 // 初始化视图的值
                 if (!modValue) {
-                    control.viewValue[modName] = {};                    
-                    if(defaultAll){
+                    control.viewValue[modName] = {};
+                    if (defaultAll) {
 	                    data = this.getData().province;
 	                    len = data.length;
-	
+
 		                for (i = 0; i < len; i++) {
 		                	control.selSelectProvince(data[i].v, modName, true);
 		                }
-	                
+
 		                control.value[modName] = baidu.object.clone(control.viewValue[modName]);
                     }
-	                
+
                 }
                 // 填入html骨架
                 main.innerHTML = baidu.format(
@@ -550,8 +550,8 @@ ui.Orientation.prototype = (function() {
                         }
                     }
                 }
-                
-                if(allSelected && html.length == 36) prifix = '全国：';
+
+                if (allSelected && html.length == 36) prifix = '全国：';
 
                 return prifix + html.join(', ');
             },
@@ -919,11 +919,11 @@ ui.Orientation.prototype = (function() {
                     modValue = control.viewValue[modName],
                     defaultValue = [],
                     lineValue, i, j, v,
-                    defaultAll = control.defaultValue == "all"? true:false;
-                
+                    defaultAll = control.defaultValue == 'all'? true : false;
+
                 // 初始化视图的值
                 if (!modValue) {
-                	v = defaultAll? 1:0;
+                	v = defaultAll ? 1 : 0;
                     for (i = 0; i < 7; i++) {
                         lineValue = [];
                         defaultValue.push(lineValue);
@@ -934,7 +934,7 @@ ui.Orientation.prototype = (function() {
                     }
 
                     control.viewValue[modName] = defaultValue;
-                    if(defaultAll) control.value[modName] = baidu.object.clone(control.viewValue[modName]);
+                    if (defaultAll) control.value[modName] = baidu.object.clone(control.viewValue[modName]);
                 }
 
                 main.innerHTML = baidu.format(
@@ -1134,11 +1134,11 @@ ui.Orientation.prototype = (function() {
                 // 刷新选中日期数状态
                 baidu.g(control.getId('WeektimeCount')).innerHTML = count;
             },
-            
-            clearViewValue:function(control){
+
+            clearViewValue: function(control) {
             	var modName = this.name;
                 control.viewValue[modName] = [];
-                for(var i = 0;i<7;i++){
+                for (var i = 0; i < 7; i++) {
                 	control.viewValue[modName].push([]);
                 }
             },
@@ -1526,10 +1526,10 @@ ui.Orientation.prototype = (function() {
      * TBD：是否打开取决于是否有值
      */
     var resultPanel = {
-    		OPEN:1,
-    		CLOSE:2,
-    		TBD:3
-    }
+    		OPEN: 1,
+    		CLOSE: 2,
+    		TBD: 3
+    };
 
     // 返回控件的prototype对象
     return {
@@ -1547,15 +1547,15 @@ ui.Orientation.prototype = (function() {
          */
         render: function(main) {
             var me = this;
-            
+
             ui.Orientation.superClass.render.call(me, main);
 
             if (!me.isRender) {
                 me.renderResultPanel();
-                if(true === this.showEntryButton){
-                	me.renderEntry();                	
+                if (true === this.showEntryButton) {
+                	me.renderEntry();
                 }
-                
+
                 me.renderSelector();
                 me.isRender = true;
             }
@@ -1684,7 +1684,7 @@ ui.Orientation.prototype = (function() {
             var me = this;
             return function() {
                 me.closeSelector();
-                if(true !== this.showEntryButton){
+                if (true !== this.showEntryButton) {
                 	me.bindResultData();
                 	me.openResultPanel();
                 }
@@ -1758,7 +1758,7 @@ ui.Orientation.prototype = (function() {
                 this.openSelector();
             }
         },
-        
+
         /**
          * 显示ResultPanel
          */
@@ -1809,7 +1809,7 @@ ui.Orientation.prototype = (function() {
 
             me.main.appendChild(div);
             me.initSelectorModules();
-            
+
             me.instChildrenFromMain();
 
             me.getChild(idMgr.btnOrientOK).onclick = me.getSelectorDone();
@@ -1843,8 +1843,8 @@ ui.Orientation.prototype = (function() {
         },
 
         onselect: new Function(),
-        
-        bindResultData: function(){
+
+        bindResultData: function() {
         	var panel = baidu.g(this.getId('result')),
 	            selectorList = this.selectorList, selector,
 	            len = selectorList.length, i,
@@ -1857,19 +1857,19 @@ ui.Orientation.prototype = (function() {
 	            key, item,
 	            relativeMap = {'eq': '=', 'ne': '≠'},
 	            me = this;
-	
-	
+
+
 	        for (i = 0; i < len; i++) {
 	            selector = selectorList[i];
 	            key = selector.name;
 	            item = value[key];
-	
-	            if (item && item.length!=0) {
+
+	            if (item && item.length != 0) {
 	                hasValue = true;
 	                html.push(
 	                    baidu.format(
 	                        tpl,
-	                        me.resultTextTitle?me.resultTextTitle:selector.text,
+	                        me.resultTextTitle ? me.resultTextTitle : selector.text,
 	                        relativeMap[relative[key]],
 	                        selector.getValueString(item),
 	                        this.getStrCall('alterSelectorModule', key),
@@ -1879,8 +1879,8 @@ ui.Orientation.prototype = (function() {
 	                    ));
 	            }
 	        }
-	
-	        if(0 === html.length){
+
+	        if (0 === html.length) {
 	        	html.push(
 	                    baidu.format(
 	                        tplNull,
@@ -1891,23 +1891,23 @@ ui.Orientation.prototype = (function() {
 	                        this.getId('NoneItemDelete')
 	                    ));
 	        }
-	        
+
 	        panel.innerHTML = html.join('');
-	        
+
 	        return hasValue;
         },
 
         /**
          * 刷新结果面板的视图
          * @note 新增的两个参数opt_panel和opt_tpl是在delivery.model.js里面使用的
-         * @param flag true:根据hasValue判断是否显示结果区
+         * @param flag true:根据hasValue判断是否显示结果区.
          *
          * @private
          */
         refreshResultPanel: function(openFlag) {
             var panel = baidu.g(this.getId('result')),
             	hasValue = this.bindResultData();
-            switch(openFlag){
+            switch (openFlag) {
 	            case resultPanel.OPEN:
 	            	panel.style.display = '';
 	            	break;
@@ -1916,26 +1916,26 @@ ui.Orientation.prototype = (function() {
 	            	break;
 	            case resultPanel.TBD:
 	            	panel.style.display = (hasValue ? '' : 'none');
-	            	break;            	
+	            	break;
             }
-            
-            
-            if(!hasValue){
+
+
+            if (!hasValue) {
             	this.openSelector();
             }
-            
+
         },
 
         deleteValue: function(modName) {
             delete this.value[modName];
-            
+
             this.bindResultData();
             //this.closeSelector();
             var mod = this.getSelectorModule(modName);
-            if(mod.clearViewValue){
+            if (mod.clearViewValue) {
             	mod.clearViewValue(this);
             }
-            else{
+            else {
                 this.viewValue[modName] = [];
             }
             mod.refresh(this);
@@ -1958,7 +1958,7 @@ ui.Orientation.prototype = (function() {
             div.className = className;
             body.appendChild(div);
             mod.init(div, me);
-            if('all' === me.defaultValue){
+            if ('all' === me.defaultValue) {
             	me.closeSelector();
                 me.refreshResultPanel(resultPanel.OPEN);
             }
@@ -2173,7 +2173,7 @@ ui.Orientation.prototype = (function() {
             me.selectorList = null;
 
             // dispose控件本身特殊需要释放的东西
-            if(me.c(entryId)){
+            if (me.c(entryId)) {
             	me.c(entryId).onclick = null;
             }
 

@@ -313,7 +313,7 @@ goog.provide('baidu');
      */
     baidu.browser = baidu.browser || {};
 
-    (function(){
+    (function() {
     var match = null;
     /**
      * 判断是否为safari浏览器
@@ -1389,7 +1389,7 @@ goog.provide('baidu');
     * @param {string} className 类名标识.
     * 使subClass继承superClass的prototype，因此subClass的实例能够使用superClass的prototype中定义的所有属性和方法。
     * 这个函数实际上是建立了subClass和superClass的原型链集成，并对subClass进行了constructor修正。
-    * 注意：如果要继承构造函数，需要在subClass里面call一下，具体见下面的demo例子
+    * 注意：如果要继承构造函数，需要在subClass里面call一下，具体见下面的demo例子.
     * @see baidu.lang.Class
     */
     baidu.lang.inherits = function(subClass, superClass, className) {
@@ -2048,7 +2048,7 @@ goog.provide('baidu');
     * 遍历数组中所有元素
     * @param {Array} source 需要遍历的数组.
     * @param {Function} iterator 对每个数组元素进行调用的函数，该函数有两个参数，第一个为数组元素，第二个为数组索引值，function (item, index)。.
-    * each方法不支持对Object的遍历,对Object的遍历使用baidu.object.each 。
+    * each方法不支持对Object的遍历,对Object的遍历使用baidu.object.each 。.
     *
     * @return {Array} 遍历的数组.
     */
@@ -2153,7 +2153,7 @@ goog.provide('baidu');
      * @param {Array} source 需要移除项的数组.
      * @param {*|function(*):boolean=} condition 要移除的项或移除匹配函数.
      * condition如果是Function类型，则会按function (item, index)方式调用判断，
-     * 函数需要返回true或false。如果要移除Function类型的项，请传入自定义的判断函数。
+     * 函数需要返回true或false。如果要移除Function类型的项，请传入自定义的判断函数。.
      * @see baidu.array.removeAt
      *
      * @return {Array} 移除后的数组.

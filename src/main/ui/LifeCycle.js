@@ -1,6 +1,6 @@
-goog.require("ui");
+goog.require('ui');
 
-goog.provide("ui.lifeCycle");
+goog.provide('ui.lifeCycle');
 
 /**
  * ui的生命周期定义

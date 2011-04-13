@@ -8,8 +8,8 @@
  * date:    $Date$
  */
 
-goog.require('ui');
 goog.require('baidu');
+goog.require('ui');
 
 goog.provide('ui.Mask');
 

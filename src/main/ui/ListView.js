@@ -8,9 +8,9 @@
  * date:    $Date$
  */
 
+goog.require('ui.Button');
 goog.require('ui.Control');
 goog.require('ui.Label');
-goog.require('ui.Button');
 goog.require('ui.Table');
 
 goog.include('ui/ListView.html');
@@ -48,7 +48,7 @@ ui.ListView = function(options) {
     this.fields = null;
 
     ui.Control.call(this, options);
-    
+
     /**
      * @type {string}
      */

@@ -1,9 +1,9 @@
 goog.require('base.DataSource');
-goog.require('ui.Control');
-goog.require('ui.Table');
-goog.require('ui.Pager');
-goog.require('ui.ListInfo');
 goog.require('ui.ComboBox');
+goog.require('ui.Control');
+goog.require('ui.ListInfo');
+goog.require('ui.Pager');
+goog.require('ui.Table');
 
 goog.provide('ui.PagableList');
 
@@ -17,12 +17,12 @@ ui.PagableList = function(options) {
      * @type {?base.DataSource}
      */
     this.datasource = null;
-    
+
     /**
      * @type {Array.<Object>}
      */
     this.fields = null;
-    
+
     /**
      * @type {number}
      */
@@ -32,34 +32,34 @@ ui.PagableList = function(options) {
      * @type {number}
      */
     this.pageSize = 15;
-    
+
     /**
      * @type {number}
      */
     this.pagerCount = 5;
-    
+
     /**
      * @type {string}
      */
     this.orderBy = '';
-    
+
     /**
      * @type {string}
      */
     this.order = '';
-    
+
     /**
      * @type {boolean}
      */
     this.subrow = false;
-    
+
     /**
      * @type {string}
      */
     this.select = 'multi';
 
     ui.Control.call(this, options);
-    
+
     /**
      * @type {string}
      */

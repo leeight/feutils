@@ -11,11 +11,11 @@
 goog.require('base.EventDispatcher');
 
 goog.provide('base.AbstractWorker');
-goog.provide('base.LocalWorker');
 goog.provide('base.FuncWorker');
-goog.provide('base.TimeoutWorker');
+goog.provide('base.LocalWorker');
 goog.provide('base.ParallelWorkerManager');
 goog.provide('base.SerialWorkerManager');
+goog.provide('base.TimeoutWorker');
 
 /**
  * @constructor

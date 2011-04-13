@@ -1,15 +1,15 @@
 /*
  * dn-web
  * Copyright 2011 Baidu Inc. All rights reserved.
- * 
+ *
  * path:    ui/Hidden.js
  * desc:    隐藏的输入型表单控件
  * author:  yuanhongliang
  * date:    $Date$
  */
-goog.require("ui.Control");
+goog.require('ui.Control');
 
-goog.provide("ui.Hidden");
+goog.provide('ui.Hidden');
 
 /**
  * 隐藏输入型表单控件类
@@ -29,7 +29,7 @@ ui.Hidden.prototype = function() {
 
             baidu.hide(this.main);
         },
-        
+
         /**
          * @inheritDoc
          */

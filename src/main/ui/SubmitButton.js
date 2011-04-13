@@ -8,8 +8,8 @@
  * date:    $Date$
  */
 
-goog.require('ui.Form');
 goog.require('ui.Button');
+goog.require('ui.Form');
 
 goog.provide('ui.SubmitButton');
 

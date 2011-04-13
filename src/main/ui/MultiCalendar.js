@@ -46,8 +46,8 @@
  */
 
 goog.require('baidu');
-goog.require('ui.InputControl');
 goog.require('ui.Button');
+goog.require('ui.InputControl');
 goog.require('ui.MonthView');
 
 goog.provide('ui.MultiCalendar');

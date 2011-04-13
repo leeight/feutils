@@ -8,9 +8,9 @@
  * date:    $Date$
  */
 
+goog.require('er.template');
 goog.require('ui.Uploader');
 goog.require('ui.events');
-goog.require('er.template');
 goog.include('ui/MediaUploader.html');
 goog.include();
 
@@ -126,7 +126,7 @@ ui.MediaUploader.prototype.validate = function() {
   } else {
     return ui.MediaUploader.superClass.validate.call(this);
   }
-}
+};
 
 /** @inheritDoc */
 ui.MediaUploader.prototype.bindEvent = function() {

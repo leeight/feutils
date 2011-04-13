@@ -40,9 +40,9 @@ ui.List.prototype = function() {
 
     function getDataCallback(data) {
         var page = data.page;
-        
+
         this.ongetdata(data.page.result);
-        
+
         this.getChild('listTable').rebindModel({
             listFields: this.fields,
             result: page.result,
@@ -85,7 +85,7 @@ ui.List.prototype = function() {
         onsubrowopen: function(container, item) {},
 
         onstatechange: function(pagableList) {},
-        
+
         ongetdata: function(data) {},
 
         getState: function() {

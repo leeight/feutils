@@ -15,9 +15,9 @@
  *
  **/
 
-goog.require('ui.util');
 goog.require('app.Worker');
 goog.require('base.ParallelWorkerManager');
+goog.require('ui.util');
 
 goog.provide('app.Init');
 goog.provide('app.Launch');
