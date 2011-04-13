@@ -31,7 +31,7 @@
         <!-- Double-quote file arguments in case they contain spaces. -->
         <arg line='-i "@{inputfile}"' />
         <arg line='-p "."' />
-        <arg line='-p "${gcl.dir}"' />
+        <!-- arg line='-p "${gcl.dir}"' /-->
         <arg line='-o "@{outputmode}"' />
         <arg line='-c "@{compilerjarfile}"' />
         <arg line='-f "--compilation_level=@{compilationlevel}"' />
