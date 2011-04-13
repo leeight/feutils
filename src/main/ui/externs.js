@@ -14,6 +14,7 @@
  * @description
  * 这里面定义在prototype上面的属性，说明是需要在模版中
  * 使用的，通过定义在externs中，避免被编译器rename
+ * @externs
  **/
 
 /**
