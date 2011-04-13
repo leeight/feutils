@@ -1454,17 +1454,18 @@ if (COMPILED) {
  */
 goog.include = function(path) {
   if (!COMPILED) {
+    var absPath = goog.basePath + path;
     // 当COMPILED的时候，goog.include函数就被移除掉了.
     if (/\.css$/.test(path)) {
       var doc = goog.global.document;
       var styleElt = doc.createElement('LINK');
       styleElt.setAttribute('type', 'text/css');
       styleElt.setAttribute('rel', 'stylesheet');
-      styleElt.setAttribute('href', goog.basePath + '/' + path);
+      styleElt.setAttribute('href', absPath);
       doc.getElementsByTagName('head')[0].appendChild(styleElt);
     } else if (/\.html?$/.test(path)) {
       // TODO 判断重复的URL
-      goog.asyncResource.push(goog.basePath + '/' + path);
+      goog.asyncResource.push(absPath);
     } else {
       throw 'unsupported resource format';
     }
