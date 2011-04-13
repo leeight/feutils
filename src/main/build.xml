@@ -51,8 +51,7 @@
 
   <target name="build" depends="clean">
     <calcdeps inputfile="${inputfile}" 
-              compilationlevel="ADVANCED_OPTIMIZATIONS"
-              compilerjarfile="${gcc.trunk.jar}">
+              compilationlevel="ADVANCED_OPTIMIZATIONS">
       <extraflags>
         <arg line='-f "--jscomp_warning=checkTypes"' />
         <arg line='-f "--externs=ui/externs.js"' />
