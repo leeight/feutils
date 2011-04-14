@@ -228,18 +228,18 @@ ui.Pager.prototype = /** @lends {ui.Pager.prototype} */ {
 };
 
 /**
- * @param {Element} item 页码元素
+ * @param {Element} item 页码元素.
  * @export
  */
 ui.Pager.prototype.itemOverHandler = function(item) {
     baidu.addClass(item, this.getClass('hover'));
-}
+};
 
 /**
- * @param {Element} item 页码元素
+ * @param {Element} item 页码元素.
  * @export
  */
 ui.Pager.prototype.itemOutHandler = function(item) {
     baidu.removeClass(item, this.getClass('hover'));
-}
+};
 baidu.inherits(ui.Pager, ui.Control);

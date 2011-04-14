@@ -211,7 +211,7 @@ ui.Orientation.prototype = (function() {
                     leftId = control.getId('selectorLList' + modName),
                     rightId = control.getId('selectorRList' + modName),
                     data, len, i,
-                    defaultAll = control.defaultValue == 'all'? true : false;
+                    defaultAll = control.defaultValue == 'all' ? true : false;
 
                 // 初始化视图的值
                 if (!modValue) {
@@ -919,7 +919,7 @@ ui.Orientation.prototype = (function() {
                     modValue = control.viewValue[modName],
                     defaultValue = [],
                     lineValue, i, j, v,
-                    defaultAll = control.defaultValue == 'all'? true : false;
+                    defaultAll = control.defaultValue == 'all' ? true : false;
 
                 // 初始化视图的值
                 if (!modValue) {

@@ -80,7 +80,7 @@ goog.provide('baidu');
     baidu.ajax.get = function(url, onsuccess) {
         return baidu.ajax.request(url, {
             'onsuccess': onsuccess,
-            'method' : 'GET'    
+            'method' : 'GET'
         });
     };
 

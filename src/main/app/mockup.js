@@ -10,7 +10,7 @@
 /**
  * @author leeight(liyubei@baidu.com)
  * @version $Revision$
- * @description 
+ * @description
  * 接管baidu.ajax.request请求，针对某些
  * 特定的请求，直接返回内容
  *

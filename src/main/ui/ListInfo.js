@@ -25,19 +25,19 @@ ui.ListInfo = function(options) {
      * @noalias
      */
     this.start = 0;
-    
+
     /**
      * @type {number}
      * @noalias
      */
     this.end = 0;
-    
+
     /**
      * @type {number}
      * @noalias
      */
     this.total = 0;
-    
+
     ui.Control.call(this, options);
 
     /**
