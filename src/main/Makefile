@@ -30,7 +30,7 @@ stat:
 	@find src -name "*.js" -o -name "*.css" | xargs wc -l | sort -k 1 -n -r
 
 deps:
-	@python ../../tools/lib/calcdeps.py -o deps -p . --output_file=deps.js
+	@python ../../tools/lib/calcdeps.py -o deps -p . -p ../test/app --output_file=deps.js
 
 docs:
 	@echo "jsdoc-toolkit"

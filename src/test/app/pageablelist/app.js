@@ -30,120 +30,20 @@ goog.include('../test/app/pageablelist/tpl.html');
 
 // mockup
 goog.require('baidu.Mockup');
+goog.require('app.mockup');
+goog.require('app.config');
 
 // 用window.onload保证所有js脚本加载完了
 window.onload = function() {
   var mockup = new baidu.Mockup();
   mockup.init();
-  mockup.register('/community/list', {
-      "success" : "true",
-      "message" : {},
-      "page" : {
-          "pageNo":1, 
-          "pageSize":120, 
-          "orderBy":"", 
-          "order":"desc", 
-          "totalCount":4, 
-          "result" : [
-              {
-                "id": 1,
-                "name": "生活圈1",
-                "status" : 1,
-                "sale_price" : {
-                  "1" : 1000,
-                  "2" : 2000,
-                  "3" : 3000,
-                  "4" : 4000,
-                  "5" : 5000,
-                  "6" : 6000
-                }
-              },
-              {
-                  "id": 2,
-                  "name": "生活圈2",
-                  "status" : 1,
-                  "sale_price" : {
-                    "1" : 1000,
-                    "2" : 2000,
-                    "3" : 3000,
-                    "4" : 4000,
-                    "5" : 5000,
-                    "6" : 6000
-                  }
-              },
-              {
-                  "id": 3,
-                  "name": "生活圈3",
-                  "status" : 1,
-                  "sale_price" : {
-                    "1" : 1000,
-                    "2" : 2000,
-                    "3" : 3000,
-                    "4" : 4000,
-                    "5" : 5000,
-                    "6" : 6000
-                  }
-              },
-              {
-                  "id": 4,
-                  "name": "生活圈4",
-                  "status" : 2,
-                  "sale_price" : {
-                    "1" : 1000,
-                    "2" : 2000,
-                    "3" : 3000,
-                    "4" : 4000,
-                    "5" : 5000,
-                    "6" : 6000
-                  }
-              }
-          ]
-      }
-  });
+  mockup.register('/community/list', app.mockup.community.list);
 
   // app.Launch用来保证所有的tpl.html加载完了
   app.Launch(function(){
-    var listFields = [
-      {
-        'width' : 200,
-        'title' : '生活圈名称',
-        'field' : 'name',
-        'subEntry' : false,
-        'content' : function(item) {
-          return item['name'];
-        }
-      },
-      {
-        'width' : 50,
-        'title' : '状态',
-        'field' : 'status',
-        'subEntry' : false,
-        'content' : function(item) {
-          return item['status'];
-        }
-      },
-      {
-        'width' : 300,
-        'title' : '刊例价',
-        'field' : 'sale_price',
-        'breakLine' : true,
-        'content' : function(item) {
-          return item['sale_price'];
-        }
-      },
-      {
-        'width' : 100,
-        'title' : '操作',
-        'content' : function(item) {
-          return baidu.format('<a href="#/community/update~id={0}">修改</a>',
-              item['id']);
-        }
-      }
-    ]
-
     // model
     var model = {
-      'fields' : listFields
+      'fields' : app.config.listFields
     }
 
     // 初始化ui.Page
