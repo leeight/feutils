@@ -14,7 +14,7 @@
 ### 原因
 
 1. 默认Flash只能播放GIF动画的第一帧，Flash只需加载该文件内容，此种方式可以正常请求gif图片，无需跨域文件。
-2. 如果GIF动画第一帧为空，使用上述方法调用的话，亦无法正常显示
+2. 如果GIF动画第一帧为空，使用上述方法调用的话，亦无法正常显示。
 2. 如果使用GIFPlayer等第三方库来实现播放GIF的整个动画，需要将GIF文件内容作为数据使用，此种情况下跨域访问无法请求gif图片。
 
 ### 解决方案
@@ -23,4 +23,4 @@
 2. 不用GIF动画，而使用swf动画
 	* 如果GIF本身就是Flash CS导出的，可以再导出一个swf
 	* 使用gif转swf的工具将gif转为flash文件，例如GIF2SWF
-		http://www.cf91.com/soft/5855.html
+		[example](http://www.cf91.com/soft/5855.html)
