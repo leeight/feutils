@@ -22,5 +22,4 @@
 1. 在系统中使用远程地址的图片，将图片放在网站本地服务器，避免跨域访问的问题
 2. 不用GIF动画，而使用swf动画
 	* 如果GIF本身就是Flash CS导出的，可以再导出一个swf
-	* 使用gif转swf的工具将gif转为flash文件，例如GIF2SWF
-		[example](http://www.cf91.com/soft/5855.html)
+	* 使用gif转swf的工具将gif转为flash文件，例如[GIF2SWF](http://www.cf91.com/soft/5855.html)
