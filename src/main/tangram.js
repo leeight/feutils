@@ -78,7 +78,10 @@ goog.provide('baidu');
      * @return {XMLHttpRequest} 发送请求的xhr对象.
      */
     baidu.ajax.get = function(url, onsuccess) {
-        return baidu.ajax.request(url, {'onsuccess': onsuccess});
+        return baidu.ajax.request(url, {
+            'onsuccess': onsuccess,
+            'method' : 'GET'    
+        });
     };
 
     /**

@@ -10,6 +10,8 @@
 
 goog.require('ui.Control');
 
+goog.include('css/ui-pager.css');
+
 goog.provide('ui.Pager');
 
 /**
@@ -17,6 +19,7 @@ goog.provide('ui.Pager');
  * @constructor
  * @extends {ui.Control}
  * @param {Object} options 控件初始化参数.
+ * @export
  */
 ui.Pager = function(options) {
     ui.Control.call(this, options);
@@ -49,23 +52,26 @@ ui.Pager = function(options) {
     /**
      * 显示多少个页码.
      * @type {number}
+     * @noalias
      */
     this.showCount = parseInt(this.showCount, 10) || 5;
 
     /**
      * 总的页数
      * @type {number}
+     * @noalias
      */
     this.total = 0;
 
     /**
      * 当前页
      * @type {number}
+     * @noalias
      */
     this.page = 1;
 };
 
-ui.Pager.prototype = {
+ui.Pager.prototype = /** @lends {ui.Pager.prototype} */ {
     /**
      * 获取文本输入框的值
      *
@@ -218,14 +224,22 @@ ui.Pager.prototype = {
             this.page = page;
             this.renderPages();
         }
-    },
-
-    itemOverHandler: function(item) {
-        baidu.addClass(item, this.getClass('hover'));
-    },
-
-    itemOutHandler: function(item) {
-        baidu.removeClass(item, this.getClass('hover'));
     }
 };
+
+/**
+ * @param {Element} item 页码元素
+ * @export
+ */
+ui.Pager.prototype.itemOverHandler = function(item) {
+    baidu.addClass(item, this.getClass('hover'));
+}
+
+/**
+ * @param {Element} item 页码元素
+ * @export
+ */
+ui.Pager.prototype.itemOutHandler = function(item) {
+    baidu.removeClass(item, this.getClass('hover'));
+}
 baidu.inherits(ui.Pager, ui.Control);

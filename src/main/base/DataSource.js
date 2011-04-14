@@ -8,7 +8,8 @@
  * date:    $Date$
  */
 
-goog.require('base');
+goog.require('baidu');
+goog.require('base.Object');
 
 goog.provide('base.DataSource');
 

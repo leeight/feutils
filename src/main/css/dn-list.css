@@ -233,9 +233,10 @@
     display:inline;
     margin-right:40px;
 }
-.list-links-item-disabled:hover{
+.list-links-item-disabled:hover {
     color:#ccc;
 }
+
 .list-links-item span, .list-links-item-disabled span {
     float:left;
     display:inline;

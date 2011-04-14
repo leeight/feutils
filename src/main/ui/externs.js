@@ -80,8 +80,60 @@ UITableField.prototype.subEntry;
 UITableField.prototype.isSubEntryShow;
 
 
+/**
+ * @constructor
+ */
+function ListDataType() {}
 
+/**
+ * @type {string}
+ */
+ListDataType.prototype.success;
 
+/**
+ * @type {Object}
+ */
+ListDataType.prototype.message;
+
+/**
+ * @type {ListDataPageType}
+ */
+ListDataType.prototype.page;
+
+/**
+ * @constructor
+ */
+function ListDataPageType() {}
+
+/**
+ * @type {number}
+ */
+ListDataPageType.prototype.pageNo;
+
+/**
+ * @type {number}
+ */
+ListDataPageType.prototype.pageSize;
+
+/**
+ * @type {string}
+ */
+ListDataPageType.prototype.orderBy;
+
+/**
+ * @type {string}
+ */
+ListDataPageType.prototype.order;
+
+/**
+ * @type {number}
+ */
+ListDataPageType.prototype.totalCount;
+
+/**
+ * @type {Array.<*>}
+ */
+ListDataPageType.prototype.result;
 
 
 

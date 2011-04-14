@@ -1,3 +1,13 @@
+/*
+ * dn-web
+ * Copyright 2011 Baidu Inc. All rights reserved.
+ *
+ * path:    ui/PagableList.js
+ * desc:    按钮控件
+ * author:  yuanhongliang
+ * date:    $Date$
+ */
+
 goog.require('base.DataSource');
 goog.require('ui.ComboBox');
 goog.require('ui.Control');
@@ -5,21 +15,26 @@ goog.require('ui.ListInfo');
 goog.require('ui.Pager');
 goog.require('ui.Table');
 
+goog.include('ui/PagableList.html');
+
 goog.provide('ui.PagableList');
 
 /**
  * @constructor
  * @extends {ui.Control}
  * @param {Object} options 控件初始化参数.
+ * @export
  */
 ui.PagableList = function(options) {
     /**
      * @type {?base.DataSource}
+     * @noalias
      */
     this.datasource = null;
 
     /**
      * @type {Array.<Object>}
+     * @noalias
      */
     this.fields = null;
 
@@ -68,6 +83,9 @@ ui.PagableList = function(options) {
 
 ui.PagableList.prototype = function() {
 
+    /**
+     * @type {ListDataType} data 后端返回的数据列表.
+     */
     function getDataCallback(data) {
         var page = data.page,
             totalCount = page.totalCount,
@@ -82,25 +100,25 @@ ui.PagableList.prototype = function() {
         endIndex = Math.min(endIndex, totalCount);
 
         this.getChild('listTable').rebindModel({
-            listFields: this.fields,
-            result: page.result,
-            order: page.order,
-            orderBy: page.orderBy,
-            subrow: this.subrow,
-            select: this.select
+            'listFields': this.fields,
+            'result': page.result,
+            'order': page.order,
+            'orderBy': page.orderBy,
+            'subrow': this.subrow,
+            'select': this.select
         });
         this.getChild('listPager').rebindModel({
-            pagerCount: this.pagerCount,
-            page: pageNo,
-            totalPage: totalPage
+            'pagerCount': this.pagerCount,
+            'page': pageNo,
+            'totalPage': totalPage
         });
         this.getChild('listInfo').rebindModel({
-            startIndex: startIndex,
-            endIndex: endIndex,
-            totalCount: totalCount
+            'startIndex': startIndex,
+            'endIndex': endIndex,
+            'totalCount': totalCount
         });
         this.getChild('pageSize').rebindModel({
-            pageSize: pageSize
+            'pageSize': pageSize
         });
     }
 

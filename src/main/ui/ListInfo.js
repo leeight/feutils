@@ -17,15 +17,41 @@ goog.provide('ui.ListInfo');
  * @constructor
  * @extends {ui.Control}
  * @param {Object} options 控件初始化参数.
+ * @export
  */
 ui.ListInfo = function(options) {
+    /**
+     * @type {number}
+     * @noalias
+     */
+    this.start = 0;
+    
+    /**
+     * @type {number}
+     * @noalias
+     */
+    this.end = 0;
+    
+    /**
+     * @type {number}
+     * @noalias
+     */
+    this.total = 0;
+    
     ui.Control.call(this, options);
 
+    /**
+     * @type {string}
+     */
     this.type = 'listInfo';
+
+    /**
+     * @type {boolean}
+     */
     this.autoState = false;
 };
 
-ui.ListInfo.prototype = {
+ui.ListInfo.prototype = /** @lends {ui.ListInfo.prototype} */ {
     /**
      * @inheritDoc
      */
