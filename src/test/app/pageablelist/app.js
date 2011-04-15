@@ -29,17 +29,11 @@ goog.include('css/dn-list.css');
 goog.include('../test/app/pageablelist/tpl.html');
 
 // mockup
-goog.require('baidu.Mockup');
 goog.require('app.mockup');
 goog.require('app.config');
+
+// init
 goog.require('app.init');
-
-// 用window.onload保证所有js脚本加载完了
-// window.onload = function() {
-
-// }
-
-
 
 
 

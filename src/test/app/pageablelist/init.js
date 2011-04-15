@@ -15,11 +15,9 @@
  *  
  **/
 
-goog.provide('app.init');
+goog.require('app.mockup');
 
-var mockup = new baidu.Mockup();
-mockup.init();
-mockup.register('/community/list', app.mockup.community.list);
+goog.provide('app.init');
 
 // app.Launch用来保证所有的tpl.html加载完了
 app.Launch(function(){
@@ -30,6 +28,9 @@ app.Launch(function(){
 
   // 初始化ui.Page
   app.Init('MAIN_PAGE', baidu.g('Main'), model);
+
+  // 打桩
+  app.mockup();
 
   // 初始化PageableList
   var list = ui.util.get('list');
