@@ -85,7 +85,7 @@ goog.json.parse = function(s) {
   if (goog.json.isValid_(o)) {
     /** @preserveTry */
     try {
-      return eval('(' + o + ')');
+      return (new Function("return (" + o + ")"))();
     } catch (ex) {
     }
   }

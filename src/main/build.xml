@@ -6,7 +6,7 @@
   <property name="build.dir" value="${basedir}/build" />
   <property name="classes.dir" value="${build.dir}/classes" />
   <property name="gcc.trunk.jar" value="/home/leeight/dev/closure-compiler/build/compiler.jar" />
-  <property name="outputwrapper" value='"// Copyright 2010&#10;(function(){%output%})();"' />
+  <property name="outputwrapper" value='"// Copyright 2010 (function(){%output%})();"' />
 
   <macrodef name="calcdeps">
     <attribute name="inputfile" />
@@ -31,7 +31,6 @@
         <!-- Double-quote file arguments in case they contain spaces. -->
         <arg line='-i "@{inputfile}"' />
         <arg line='-p "."' />
-        <arg line='-p "../test/app"' />
         <!-- arg line='-p "${gcl.dir}"' /-->
         <arg line='-o "@{outputmode}"' />
         <arg line='-c "@{compilerjarfile}"' />
@@ -41,8 +40,22 @@
         <arg line='-f "--warning_level=VERBOSE"' />
         <arg line='-f "--css_output_file=@{cssoutputfile}"' />
         <arg line='-f "--tpl_output_file=@{tploutputfile}"' />
+        <arg line='-f "--output_wrapper=(function(){%output%})();"' />
         <extraflags />
       </exec>
+      <!--
+      <exec executable="python"
+            failonerror="true"
+            logError="true"
+            output="@{outputfile}">
+        <arg value="${tools.dir}/lib/calcdeps.py" />
+        <arg line='-i "@{outputfile}"' />
+        <arg line='-o "@{outputmode}"' />
+        <arg line='-c "@{compilerjarfile}"' />
+        <arg line='-f "\-\-compilation_level=SIMPLE_OPTIMIZATIONS"' />
+        <arg line='-f "\-\-warning_level=VERBOSE"' />
+      </exec>
+      -->
     </sequential>
   </macrodef>
 
@@ -57,6 +70,7 @@
         <arg line='-f "--jscomp_warning=checkTypes"' />
         <arg line='-f "--externs=ui/externs.js"' />
         <arg line='-f "--formatting=PRETTY_PRINT"' />
+        <arg line='-p "../test/app"' />
       </extraflags>
     </calcdeps>
     <dirname property="inputfile.dir" file="${inputfile}" />
