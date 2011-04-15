@@ -8,29 +8,29 @@
  
  
 /**
- * init.js ~ ${app.create.time}
- * @author ${app.user.name}(${app.user.email})
+ * init.js ~ %(app.create.time)s
+ * @author %(app.user.email)s (%(app.user.name)s)
  * @version $Revision$ 
  * @description 
  *  
  **/
 
-goog.require('${app}.mockup');
+goog.require('%(app)s.mockup');
 
-goog.provide('${app}.init');
+goog.provide('%(app)s.init');
 
 // app.Launch用来保证所有的tpl.html加载完了
 app.Launch(function(){
   // model
   var model = {
-    'fields' : ${app}.config.listFields
+    'fields' : %(app)s.config.listFields
   }
 
   // 初始化ui.Page
   app.Init('MAIN_PAGE', baidu.g('Main'), model);
 
   // 打桩
-  ${app}.mockup();
+  %(app)s.mockup();
 
   // 初始化PageableList
   var list = ui.util.get('list');

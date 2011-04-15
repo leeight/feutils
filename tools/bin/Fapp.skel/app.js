@@ -8,8 +8,8 @@
  
  
 /**
- * app.js ~ ${app.create.time}
- * @author ${app.user.name}(${app.user.email})
+ * app.js ~ %(app.create.time)s
+ * @author %(app.user.email)s (%(app.user.name)s)
  * @version $Revision$ 
  * @description 
  *  
@@ -26,14 +26,14 @@ goog.require('app.Launch');
 // include的路径是相对于base.js的
 // goog.include('css/base.css');
 // goog.include('css/dn-list.css');
-goog.include('${app.tpl.href}');
+goog.include('%(app.tpl.href)s');
 
 // mockup
-goog.require('${app}.mockup');
+goog.require('%(app)s.mockup');
 
 // init
-goog.require('${app}.config');
-goog.require('${app}.init');
+goog.require('%(app)s.config');
+goog.require('%(app)s.init');
 
 
 

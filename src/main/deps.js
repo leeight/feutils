@@ -92,6 +92,10 @@ goog.addDependency("../test/app/app.js", [], ['app.Launch', 'ui.util', 'ui.Page'
 goog.addDependency("../test/app/demo/app.js", [], ['ui.Button', 'app.Init', 'app.Launch']);
 goog.addDependency("../test/app/demo/build/app.js", [], []);
 goog.addDependency("../test/app/build/app.js", [], []);
+goog.addDependency("../test/app/google/init.js", ['google.init'], ['google.mockup']);
+goog.addDependency("../test/app/google/config.js", ['google.config'], []);
+goog.addDependency("../test/app/google/app.js", [], ['ui.PagableList', 'base.RemoteListDataSource', 'app.Init', 'app.Launch', 'google.mockup', 'google.config', 'google.init']);
+goog.addDependency("../test/app/google/mockup.js", ['google.mockup'], ['baidu.Mockup']);
 goog.addDependency("../test/app/listview/app.js", [], ['app.Launch', 'ui.util', 'ui.Page', 'ui.ListView']);
 goog.addDependency("../test/app/listview/build/app.js", [], []);
 goog.addDependency("../test/app/pageablelist/init.js", ['app.init'], ['app.mockup']);

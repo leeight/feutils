@@ -8,20 +8,20 @@
  
  
 /**
- * config.js ~ ${app.create.time}
- * @author ${app.user.name}(${app.user.email})
+ * config.js ~ %(app.create.time)s
+ * @author %(app.user.email)s (%(app.user.name)s)
  * @version $Revision$ 
  * @description 
  *  
  **/
 
-goog.provide('${app}.config');
+goog.provide('%(app)s.config');
 
 /**
  * @type {Object}
  * @const
  */
-${app}.config = {
+%(app)s.config = {
   listFields : [
     {
       'width' : 200,

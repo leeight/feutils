@@ -8,8 +8,8 @@
  
  
 /**
- * mockup.js ~ ${app.create.time}
- * @author ${app.user.name}(${app.user.email})
+ * mockup.js ~ %(app.create.time)s
+ * @author %(app.user.email)s (%(app.user.name)s)
  * @version $Revision$ 
  * @description 
  *  
@@ -17,7 +17,7 @@
 
 goog.require('baidu.Mockup');
 
-goog.provide('${app}.mockup');
+goog.provide('%(app)s.mockup');
 
 (function(){
 
@@ -87,7 +87,7 @@ var community_list = {
     }
 }
 
-${app}.mockup = function() {
+%(app)s.mockup = function() {
   var mockup = new baidu.Mockup();
   mockup.init();
   mockup.register('/community/list', community_list);
