@@ -24,8 +24,8 @@ goog.require('app.Init');
 goog.require('app.Launch');
 
 // include的路径是相对于base.js的
-// goog.include('css/base.css');
-// goog.include('css/dn-list.css');
+goog.include('css/base.css');
+goog.include('css/dn-list.css');
 goog.include('%(app.tpl.href)s');
 
 // mockup
