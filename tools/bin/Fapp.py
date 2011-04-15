@@ -117,8 +117,8 @@ def get_href_info(options):
   tpl_href = os.path.normpath(os.path.join(options.dir, options.name, 'tpl.html'))
 
   return {
-    "app.base.href" : base_href,
-    "app.tpl.href" : tpl_href,
+    "app.base.href" : base_href.replace(os.path.sep, '/'),
+    "app.tpl.href" : tpl_href.replace(os.path.sep, '/'),
     "app.create.time" : datetime.now().strftime('%Y/%m/%d %H:%M:%S')
   }
 
