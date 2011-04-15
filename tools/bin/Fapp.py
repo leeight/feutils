@@ -13,9 +13,9 @@
 import os
 import sys
 import logging
-import shutil
 import itertools
 import ConfigParser
+from shutil import copytree, ignore_patterns
 from string import Template
 from datetime import datetime
 from optparse import OptionParser
@@ -150,7 +150,7 @@ def generate_app(options, app_cfg):
   else:
     if not os.path.exists(options.dir):
       os.makedirs(options.dir)
-    shutil.copytree(FAPP_SKEL_DIR, dest_dir)
+    copytree(FAPP_SKEL_DIR, dest_dir, ignore=ignore_patterns('.svn'))
     
     for root, dirs, files in os.walk(dest_dir):
       if 'CVS' in dirs:
