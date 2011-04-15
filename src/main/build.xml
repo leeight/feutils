@@ -20,18 +20,13 @@
     <element name="extraflags" optional="yes" />
     <sequential>
       <mkdir dir="${build.dir}" />
-      <!--
-      <copy file="${gcc.trunk.jar}" tofile="${tools.dir}/lib/google-closure-compiler.jar" failonerror="false" />
-      -->
       <exec executable="python"
             failonerror="true"
             logError="true"
             output="@{outputfile}">
         <arg value="${tools.dir}/lib/calcdeps.py" />
-        <!-- Double-quote file arguments in case they contain spaces. -->
         <arg line='-i "@{inputfile}"' />
         <arg line='-p "."' />
-        <!-- arg line='-p "${gcl.dir}"' /-->
         <arg line='-o "@{outputmode}"' />
         <arg line='-c "@{compilerjarfile}"' />
         <arg line='-f "--compilation_level=@{compilationlevel}"' />
@@ -43,19 +38,6 @@
         <arg line='-f "--output_wrapper=(function(){%output%})();"' />
         <extraflags />
       </exec>
-      <!--
-      <exec executable="python"
-            failonerror="true"
-            logError="true"
-            output="@{outputfile}">
-        <arg value="${tools.dir}/lib/calcdeps.py" />
-        <arg line='-i "@{outputfile}"' />
-        <arg line='-o "@{outputmode}"' />
-        <arg line='-c "@{compilerjarfile}"' />
-        <arg line='-f "\-\-compilation_level=SIMPLE_OPTIMIZATIONS"' />
-        <arg line='-f "\-\-warning_level=VERBOSE"' />
-      </exec>
-      -->
     </sequential>
   </macrodef>
 
@@ -73,6 +55,14 @@
         <arg line='-p "../test/app"' />
       </extraflags>
     </calcdeps>
+    <java jar="${tools.dir}/lib/yui-compressor.jar"
+          fork="true"
+          failonerror="true"
+          maxmemory="128m">
+      <arg line="--line-break 800" />
+      <arg line="-o ${build.dir}/app.compiled.js" />
+      <arg line="${build.dir}/app.js" />
+    </java>
     <dirname property="inputfile.dir" file="${inputfile}" />
     <copy file="${inputfile.dir}/app.html" tofile="${build.dir}/app.html" />
   </target>

@@ -90,16 +90,10 @@ goog.addDependency("ui/VideoUploader.js", ['ui.VideoUploader'], ['ui.MediaUpload
 goog.addDependency("ui/ButtonMenu.js", [], []);
 goog.addDependency("../test/app/app.js", [], ['app.Launch', 'ui.util', 'ui.Page', 'ui.Button', 'ui.ComboBox', 'ui.ListView']);
 goog.addDependency("../test/app/demo/app.js", [], ['ui.Button', 'app.Init', 'app.Launch']);
-goog.addDependency("../test/app/demo/build/app.js", [], []);
-goog.addDependency("../test/app/build/app.js", [], []);
 goog.addDependency("../test/app/listview/app.js", [], ['app.Launch', 'ui.util', 'ui.Page', 'ui.ListView']);
-goog.addDependency("../test/app/listview/build/app.js", [], []);
 goog.addDependency("../test/app/pageablelist/init.js", ['app.init'], ['app.mockup']);
 goog.addDependency("../test/app/pageablelist/config.js", ['app.config'], []);
 goog.addDependency("../test/app/pageablelist/app.js", [], ['ui.PagableList', 'base.RemoteListDataSource', 'app.Init', 'app.Launch', 'app.mockup', 'app.config', 'app.init']);
 goog.addDependency("../test/app/pageablelist/mockup.js", ['app.mockup'], ['baidu.Mockup']);
-goog.addDependency("../test/app/pageablelist/build/app.js", [], []);
 goog.addDependency("../test/app/combobox/app.js", [], ['app.Launch', 'ui.util', 'ui.Page', 'ui.ComboBox']);
-goog.addDependency("../test/app/combobox/build/app.js", [], []);
 goog.addDependency("../test/app/button/app.js", [], ['app.Launch', 'ui.util', 'ui.Page', 'ui.Button']);
-goog.addDependency("../test/app/button/build/app.js", [], []);
