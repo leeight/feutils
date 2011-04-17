@@ -1,8 +1,7 @@
-<project name="closure-experiments" basedir=".">
+<project name="closure" basedir=".">
   <property name="src.dir" value="${basedir}" />
   <property name="tools.dir" value="${basedir}/../../tools" />
   <property name="gcl.dir" value="/home/leeight/dev/closure-library/closure/goog/" />
-  <property name="yuicompressor.dir" value="${basedir}/../yuicompressor-2.4.2" />
   <property name="build.dir" value="${basedir}/build" />
   <property name="classes.dir" value="${build.dir}/classes" />
   <property name="gcc.trunk.jar" value="/home/leeight/dev/closure-compiler/build/compiler.jar" />
@@ -41,6 +40,21 @@
     </sequential>
   </macrodef>
 
+  <macrodef name="yui">
+    <attribute name="input" />
+    <attribute name="output" />
+    <sequential>
+      <java jar="${tools.dir}/lib/yui-compressor.jar"
+            fork="true"
+            failonerror="true"
+            maxmemory="128m">
+        <arg line="--line-break 800" />
+        <arg line="-o @{output}" />
+        <arg line="@{input}" />
+      </java>
+    </sequential>
+  </macrodef>
+
   <target name="clean" description="delete generated files">
     <delete dir="${build.dir}" />
   </target>
@@ -55,15 +69,72 @@
         <arg line='-p "../test/app"' />
       </extraflags>
     </calcdeps>
-    <java jar="${tools.dir}/lib/yui-compressor.jar"
+    
+    <yui input="${build.dir}/app.js" 
+         output="${build.dir}/app.yui.compiled.js" />
+    <yui input="${build.dir}/app.css" 
+         output="${build.dir}/app.yui.compiled.css" />
+
+    <!--
+    <java jar="${tools.dir}/lib/google-closure-compiler.jar"
           fork="true"
           failonerror="true"
           maxmemory="128m">
-      <arg line="--line-break 800" />
-      <arg line="-o ${build.dir}/app.compiled.js" />
-      <arg line="${build.dir}/app.js" />
+      <arg line="\-\-js_output_file ${build.dir}/app.gcc.compiled.js" />
+      <arg line="\-\-js ${build.dir}/app.yui.compiled.js" />
     </java>
+    -->
     <dirname property="inputfile.dir" file="${inputfile}" />
     <copy file="${inputfile.dir}/app.html" tofile="${build.dir}/app.html" />
+  </target>
+
+  <target name="checksum">
+    <script language="javascript">
+    <![CDATA[
+      function _(name) {
+        return self.getProject().getProperty(name);
+      }
+
+      function createTask(name) {
+        return self.getProject().createTask(name);
+      }
+
+      function gen_checksum(inputfile) {
+        var file = new java.io.File(inputfile);
+        if (!file.exists()) {
+          return;
+        }
+
+        var checksum = createTask("checksum");
+        checksum.setFile(file);
+        checksum.setProperty(inputfile);
+        checksum.perform();
+
+        var destfile = "",
+            last_dot_pos = inputfile.lastIndexOf(".");
+        if (last_dot_pos == -1) {
+          destfile = inputfile + '-' + _(inputfile);
+        } else {
+          destfile = inputfile.substring(0, last_dot_pos) + '-' + 
+                      _(inputfile) + inputfile.substring(last_dot_pos);
+        }
+
+        var echo = createTask("echo");
+        echo.setMessage(file.getName() + " -> " + _(inputfile));
+        echo.perform();
+
+        var copy = createTask("copy");
+        copy.setFile(new java.io.File(inputfile));
+        copy.setTofile(new java.io.File(destfile));
+        copy.perform();
+      }
+      var build_dir = _("build.dir");
+      var file_list = ["app.js", "app.gcc.compiled.js", "app.yui.compiled.js",
+                       "app.css", "app.yui.compiled.css", "app.html"];
+      for (var i = 0; i < file_list.length; i ++) {
+        gen_checksum(build_dir + "/" + file_list[i]);
+      }
+    ]]>
+    </script>
   </target>
 </project>

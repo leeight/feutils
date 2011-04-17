@@ -52,6 +52,8 @@ class DocFlag(object):
   # The list of standard jsdoc tags is from
   STANDARD_DOC = frozenset([
       'author',
+      'version',
+      'description',
       'bug',
       'const',
       'constructor',
