@@ -19,7 +19,6 @@ __date__ = '2011/04/17 10:39:46'
 __revision = '$Revision$'
 
 FHELP_PY_PATH = os.path.dirname(os.path.abspath(__file__))
-print FHELP_PY_PATH
 
 def main():
   commands = []
