@@ -2,6 +2,9 @@
 
 . `dirname $0`/Futils.inc
 
+java -jar ${LIB_HOME}/js.jar
+exit 0
+
 # define command-line options
 DEFINE_string 'in' '' 'input file'
 DEFINE_string 'engine' 'v8' 'which engine to use, only support v8, spidermonkey'
@@ -18,11 +21,9 @@ case ${engine} in
   '') die ;;
   
   v8)
-    echo "launch v8 engine"
     ;;
 
   spidermonkey)
-    echo "launch spidermonkey engine"
     ;;
 
   *) die "can't support such engine (${engine})";

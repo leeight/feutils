@@ -30,23 +30,19 @@
 
     $ Fhelp 
     Available commands:
-      Fdoc
       Fapp
-      Flint
-      Fcompressor
-      Foptipng
-      Fformat
-      Foutline
+      Fhelp
       Fcodereview
       Ffixjsstyle
       Fgjslint
-      Fjs
-      Fhelp
       Fws
-
-#### Fapp
-
-创建一个简单的app
+      Fformat
+      Fdoc
+      Flint
+      Fcompressor
+      Foptipng
+      Foutline
+      Fjs
 
 #### Fws
 
@@ -54,6 +50,40 @@
 参数即可，例如：
 
     Fws 8080 # 启动Web Server，端口是8080
+
+
+#### Fapp
+
+创建一个简单的app，可以通过添加`-h`参数查看使用方式。这里需要注意的一个地方是，执行这个命令的时候，
+需要保证当前目录存在`base.js`。这个文件在`DAN`,`CLB`,`COUP`项目里面都是存在的。
+
+一般的用法是：
+
+    Fapp -n news
+
+就会在当前目录下面生成一个`news`目录，里面有如下几个文件：
+
+    app.html  app.js  config.js  init.js  mockup.js  tpl.html
+
+可以根据名字了解它们的角色。如果想查看效果的话，需要额外的一个步骤，切换到`base.js`所在的目录，执行命令
+  
+    make deps
+
+然后启动Fws，用浏览器打开`http://localhost:8000/news/app.html`即可。
+
+如果是第一次执行这个命令，会提示你输入`用户名`和`邮箱`，这两个信息是用来生成代码的时候自动添加内容使用的。
+
+#### Fcodereview
+
+请参考[这篇文章](codereview.text)
+
+#### Fgjslint & Ffixjsstyle
+
+就是`google closure linter`里面`gjslint`和`fixjsstyle`，只是名字不同而已。
+
+#### Fformat
+
+TODO
 
 ### 更新
 
