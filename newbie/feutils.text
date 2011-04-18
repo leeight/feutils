@@ -58,7 +58,8 @@ Fformat,Fdoc,Flint,Fcompressor,Foptipng,Foutline这几个在Windows下面还无�
 #### Fapp
 
 创建一个简单的app，可以通过添加`-h`参数查看使用方式。这里需要注意的一个地方是，执行这个命令的时候，
-需要保证当前目录存在`base.js`。这个文件在`DAN`,`CLB`,`COUP`项目里面都是存在的。
+需要保证当前目录存在`base.js`。这个文件在`DAN`,`CLB`,`COUP`项目里面都是存在的。对于sdcfe这个repos，
+我们切换到`sdcfe/src/main`目录即可使用这个命令。
 
 一般的用法是：
 
@@ -72,7 +73,7 @@ Fformat,Fdoc,Flint,Fcompressor,Foptipng,Foutline这几个在Windows下面还无�
   
     make deps
 
-然后启动Fws，用浏览器打开`http://localhost:8000/news/app.html`即可。
+然后在当前目录执行`Fws`，再用浏览器打开`http://localhost:8000/news/app.html`即可看到效果。
 
 如果是第一次执行这个命令，会提示你输入`用户名`和`邮箱`，这两个信息是用来生成代码的时候自动添加内容使用的。
 
