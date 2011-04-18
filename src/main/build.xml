@@ -40,21 +40,6 @@
     </sequential>
   </macrodef>
 
-  <macrodef name="yui">
-    <attribute name="input" />
-    <attribute name="output" />
-    <sequential>
-      <java jar="${tools.dir}/lib/yui-compressor.jar"
-            fork="true"
-            failonerror="true"
-            maxmemory="128m">
-        <arg line="--line-break 800" />
-        <arg line="-o @{output}" />
-        <arg line="@{input}" />
-      </java>
-    </sequential>
-  </macrodef>
-
   <target name="clean" description="delete generated files">
     <delete dir="${build.dir}" />
   </target>
@@ -70,10 +55,12 @@
       </extraflags>
     </calcdeps>
     
-    <yui input="${build.dir}/app.js" 
-         output="${build.dir}/app.yui.compiled.js" />
-    <yui input="${build.dir}/app.css" 
-         output="${build.dir}/app.yui.compiled.css" />
+    <script language="javascript" src="app/ant.lib.js">
+    <![CDATA[
+      yui(_("build.dir") + "/app.js", _("build.dir") + "/app.yui.compiled.js");
+      yui(_("build.dir") + "/app.css", _("build.dir") + "/app.yui.compiled.css");
+    ]]>
+    </script>
 
     <!--
     <java jar="${tools.dir}/lib/google-closure-compiler.jar"
@@ -89,51 +76,22 @@
   </target>
 
   <target name="checksum">
-    <script language="javascript">
+    <script language="javascript" src="app/ant.lib.js">
     <![CDATA[
-      function _(name) {
-        return self.getProject().getProperty(name);
-      }
-
-      function createTask(name) {
-        return self.getProject().createTask(name);
-      }
-
-      function gen_checksum(inputfile) {
-        var file = new java.io.File(inputfile);
-        if (!file.exists()) {
-          return;
-        }
-
-        var checksum = createTask("checksum");
-        checksum.setFile(file);
-        checksum.setProperty(inputfile);
-        checksum.perform();
-
-        var destfile = "",
-            last_dot_pos = inputfile.lastIndexOf(".");
-        if (last_dot_pos == -1) {
-          destfile = inputfile + '-' + _(inputfile);
-        } else {
-          destfile = inputfile.substring(0, last_dot_pos) + '-' + 
-                      _(inputfile) + inputfile.substring(last_dot_pos);
-        }
-
-        var echo = createTask("echo");
-        echo.setMessage(file.getName() + " -> " + _(inputfile));
-        echo.perform();
-
-        var copy = createTask("copy");
-        copy.setFile(new java.io.File(inputfile));
-        copy.setTofile(new java.io.File(destfile));
-        copy.perform();
-      }
       var build_dir = _("build.dir");
       var file_list = ["app.js", "app.gcc.compiled.js", "app.yui.compiled.js",
                        "app.css", "app.yui.compiled.css", "app.html"];
       for (var i = 0; i < file_list.length; i ++) {
         gen_checksum(build_dir + "/" + file_list[i]);
       }
+    ]]>
+    </script>
+  </target>
+
+  <target name="test">
+    <script language="javascript" src="app/ant.lib.js">
+    <![CDATA[
+      yui("base.js", "a.js");
     ]]>
     </script>
   </target>
