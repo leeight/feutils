@@ -46,6 +46,12 @@ er.Locator = function() {
    * @type {string}
    */
   this.currentQuery = '';
+
+  /**
+   * @private
+   * @type {string}
+   */
+  this.referer = '';
 };
 
 /**
@@ -106,8 +112,12 @@ er.Locator.prototype.redirect = function(loc, preventDefault) {
         er.base.g(er.config.CONTROL_IFRAME_ID).src =
           er.config.CONTROL_IFRAME_URL + '?' + loc;
     }
-    er.controller.forward(this.currentPath,
-      this.currentQuery, loc, preventDefault);
+
+    if (!preventDefault) {
+        er.controller.forward(this.currentPath,
+          this.parseQuery(this.currentQuery), this.referer);
+    }
+    this.referer = loc;
 };
 
 /**

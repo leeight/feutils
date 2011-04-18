@@ -49,24 +49,6 @@ er.Controller = function() {
   this.modules = [];
 
   /**
-   * @type {string}
-   * @private
-   */
-  this.currentPath = '';
-
-  /**
-   * @type {string}
-   * @private
-   */
-  this.currentLocation = '';
-
-  /**
-   * @private
-   * @type {?er.Controller.ActionConfigType}
-   */
-  this.currentActionConfig = null;
-
-  /**
    * @private
    * @type {?er.Action}
    */
@@ -89,39 +71,23 @@ er.Controller.ActionConfigType;
  * 跳转视图
  *
  * @param {string} path 路径.
- * @param {string} query 查询条件.
- * @param {string} loc 定位器.
- * @param {boolean} preventDefault 不进入action的enter.
+ * @param {object} paramMap 查询条件.
+ * @param {string} referer 定位器.
  */
-er.Controller.prototype.forward = function(path, query, loc, preventDefault) {
-  // location相同时不做forward
-  if (loc === this.currentLocation) {
-      return;
-  }
-
+er.Controller.prototype.forward = function(path, paramMap, referer) {
   // 组合所需的argument对象
   var argMap = {
     type: 'main',
-    referer: this.currentLocation,
-    paramMap: er.locator.parseQuery(query),
+    referer: referer,
+    paramMap: paramMap,
     path: path,
     domId: er.config.MAIN_ELEMENT_ID
   };
 
-  // 记录当前的locator
-  this.currentLocation = loc;
-
-  if (preventDefault) {
-      return;
-  }
-
   this.reset();
 
-  this.currentActionConfig = this.container[path];  // 记录当前的action
-  this.currentPath = path;             // 记录当前的path
-
   // 进入action
-  this.currentAction = this.enterAction(this.currentActionConfig, argMap);
+  this.currentAction = this.enterAction(this.container[path], argMap);
 };
 
 /**

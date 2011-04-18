@@ -72,19 +72,19 @@ er.Action.prototype = function() {
                 if (me.onafterinitmodel) {
                     me.onafterinitmodel();
                 }
-                me.render();
+                me.initView();
             }
 
             me.initModel(argMap, callback);
         },
 
         /**
-         * 绘制当前action的显示
+         * 初始化视图
          *
          * @protected
          * @this {er.Action}
          */
-        render: function() {
+        initView: function() {
             var me = this,
                 dom = baidu.g(me.argMap.domId),
                 view = me.getView(),

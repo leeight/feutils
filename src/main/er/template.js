@@ -97,18 +97,6 @@ er.Template.prototype.getMerged = function(view) {
 };
 
 /**
- * 合并模板与数据
- *
- * @param {Element} output  要输出到的容器元素.
- * @param {string} view  视图模板.
- */
-er.Template.prototype.merge = function(output, view) {
-  if (output) {
-    output.innerHTML = this.getMerged(view);
-  }
-};
-
-/**
  * 解析模板
  *
  * @param {string} source 模板源.
