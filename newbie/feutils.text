@@ -36,13 +36,16 @@
       Ffixjsstyle
       Fgjslint
       Fws
+      Fjs
       Fformat
       Fdoc
       Flint
       Fcompressor
       Foptipng
       Foutline
-      Fjs
+
+*提醒*  
+Fformat,Fdoc,Flint,Fcompressor,Foptipng,Foutline这几个在Windows下面还无法使用，后续会升级。
 
 #### Fws
 
