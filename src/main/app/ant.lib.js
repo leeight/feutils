@@ -227,6 +227,25 @@ function calcdeps(input, opt_options) {
   sequential.perform();
 }
 
+/**
+ * @param {string} command 要执行的命令.
+ * @param {Array.<string>=} opt_args 命令参数，可选.
+ */
+function exec(command, opt_args) {
+  var task = createTask('exec');
+  task.setExecutable(command);
+  task.setFailonerror(true);
+  task.setLogError(true);
+
+  if (Object.prototype.toString.call(opt_args) == "[object Array]") {
+    for(var i = 0, j = opt_args.length; i < j; i ++) {
+      task.createArg().setLine(opt_args[i]);
+    } 
+  }
+
+  task.perform();
+}
+
 
 
 
