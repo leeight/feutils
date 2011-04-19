@@ -73,6 +73,20 @@ function dirname(file) {
 }
 
 /**
+ * @return {string} 获取一个临时的文件路径.
+ */
+function tempfile() {
+  var property = uuid();
+
+  var task = createTask('tempfile');
+  task.setProperty(property);
+  task.setDeleteOnExit(true);
+  task.perform();
+  
+  return _(property);
+}
+
+/**
  * 从一个路径中获取文件的名字.
  *
  * @param {string} path 输入的路径.
@@ -152,8 +166,9 @@ function yui(input, output, opt_jar) {
  * @param {string|Array.<string>} input 输入文件，可以是一个，也可以是一个数组.
  * @param {string} output 输出文件.
  * @param {string=} opt_jar gcc的jar文件.
+ * @param {Array.<string>=} opt_extraflags 命令行参数.
  */
-function gcc(input, output, opt_jar) {
+function gcc(input, output, opt_jar, opt_extraflags) {
   var task = createTask('java'),
       jar = opt_jar || (_('tools.dir') + '/lib/google-closure-compiler.jar');
 
@@ -171,6 +186,14 @@ function gcc(input, output, opt_jar) {
       task.createArg().setLine('--js ' + input[i]);
     }
   }
+
+  var extraflags = opt_extraflags || [];
+  if (extraflags.length) {
+    for (var i = 0, j = extraflags.length; i < j; i++) {
+      task.createArg().setLine(extraflags[i]);
+    }
+  }
+
   task.perform();
 }
 
@@ -339,7 +362,19 @@ function merge_js(input) {
  * @param {string} input 输入文件.
  */
 function compile_js(input) {
+  echo("compiling " + input + " ...");
+  var extraflags = [
+    '--define=\'dn.COMPILED="true"\'',
+    '--warning_level=VERBOSE'
+  ];
 
+  if (_("env.USER") != "scmpf") {
+    extraflags.push('--formatting PRETTY_PRINT');
+  }
+
+  var output = tempfile();
+  gcc(input, output, null, extraflags);
+  copy(output, input);
 }
 
 /**
