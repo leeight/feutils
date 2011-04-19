@@ -3,76 +3,33 @@
   <property name="tools.dir" value="${basedir}/../../tools" />
   <property name="gcl.dir" value="/home/leeight/dev/closure-library/closure/goog/" />
   <property name="build.dir" value="${basedir}/build" />
-  <property name="classes.dir" value="${build.dir}/classes" />
   <property name="gcc.trunk.jar" value="/home/leeight/dev/closure-compiler/build/compiler.jar" />
-  <property name="outputwrapper" value='"// Copyright 2010 (function(){%output%})();"' />
-
-  <macrodef name="calcdeps">
-    <attribute name="inputfile" />
-    <attribute name="outputfile" default="${build.dir}/app.js" />
-    <attribute name="compilerjarfile" default="${tools.dir}/lib/google-closure-compiler.jar" />
-    <attribute name="compilationlevel" default="ADVANCED_OPTIMIZATIONS" />
-    <attribute name="outputmode" default="compiled" />
-    <attribute name="formatting" default="PRETTY_PRINT" />
-    <attribute name="cssoutputfile" default="${build.dir}/app.css" />
-    <attribute name="tploutputfile" default="${build.dir}/tpl.html" />
-    <element name="extraflags" optional="yes" />
-    <sequential>
-      <mkdir dir="${build.dir}" />
-      <exec executable="python"
-            failonerror="true"
-            logError="true"
-            output="@{outputfile}">
-        <arg value="${tools.dir}/lib/calcdeps.py" />
-        <arg line='-i "@{inputfile}"' />
-        <arg line='-p "."' />
-        <arg line='-o "@{outputmode}"' />
-        <arg line='-c "@{compilerjarfile}"' />
-        <arg line='-f "--compilation_level=@{compilationlevel}"' />
-        <arg line='-f "--summary_detail_level=3"' />
-        <arg line='-f "--generate_exports"' />
-        <arg line='-f "--warning_level=VERBOSE"' />
-        <arg line='-f "--css_output_file=@{cssoutputfile}"' />
-        <arg line='-f "--tpl_output_file=@{tploutputfile}"' />
-        <arg line='-f "--output_wrapper=(function(){%output%})();"' />
-        <extraflags />
-      </exec>
-    </sequential>
-  </macrodef>
 
   <target name="clean" description="delete generated files">
     <delete dir="${build.dir}" />
   </target>
 
   <target name="build" depends="clean">
-    <calcdeps inputfile="${inputfile}" 
-              compilationlevel="ADVANCED_OPTIMIZATIONS">
-      <extraflags>
-        <arg line='-f "--jscomp_warning=checkTypes"' />
-        <arg line='-f "--externs=ui/externs.js"' />
-        <arg line='-f "--formatting=PRETTY_PRINT"' />
-        <arg line='-p "../test/app"' />
-      </extraflags>
-    </calcdeps>
-    
     <script language="javascript" src="app/ant.lib.js">
     <![CDATA[
-      yui(_("build.dir") + "/app.js", _("build.dir") + "/app.yui.compiled.js");
-      yui(_("build.dir") + "/app.css", _("build.dir") + "/app.yui.compiled.css");
+      calcdeps(_("inputfile"), {
+        "level" : "ADVANCED_OPTIMIZATIONS",
+        "extraflags" : [
+          '-f "--jscomp_warning=checkTypes"',
+          '-f "--externs=ui/externs.js"',
+          '-f "--formatting=PRETTY_PRINT"',
+          '-p "../test/app"'
+        ]
+      });
+      
+      var build_dir = _("build.dir");
+
+      yui(build_dir + "/app.js", build_dir + "/app.yui.compiled.js");
+      yui(build_dir + "/app.css", build_dir + "/app.yui.compiled.css");
+
+      copy(dirname(_("inputfile")) + '/app.html', build_dir + '/app.html');
     ]]>
     </script>
-
-    <!--
-    <java jar="${tools.dir}/lib/google-closure-compiler.jar"
-          fork="true"
-          failonerror="true"
-          maxmemory="128m">
-      <arg line="\-\-js_output_file ${build.dir}/app.gcc.compiled.js" />
-      <arg line="\-\-js ${build.dir}/app.yui.compiled.js" />
-    </java>
-    -->
-    <dirname property="inputfile.dir" file="${inputfile}" />
-    <copy file="${inputfile.dir}/app.html" tofile="${build.dir}/app.html" />
   </target>
 
   <target name="checksum">
@@ -91,7 +48,7 @@
   <target name="test">
     <script language="javascript" src="app/ant.lib.js">
     <![CDATA[
-      yui("base.js", "a.js");
+      gcc("base.js", "a.js");
     ]]>
     </script>
   </target>
