@@ -277,7 +277,7 @@ function readFile(input) {
     return '';
   }
 
-  var scanner = new java.util.Scanner(file).useDelimiter("\\Z");
+  var scanner = new java.util.Scanner(file, "utf-8").useDelimiter("\\Z");
   var content = scanner.next();
   scanner.close();
 
