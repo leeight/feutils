@@ -272,7 +272,7 @@ function exec(command, opt_args) {
  * @return {string} 文件的内容.
  */
 function readFile(input) {
-  var file = new java.io.File(input);
+  var file = new java.io.File(getPath(input));
   if (!file.exists()) {
     return '';
   }
@@ -297,6 +297,14 @@ function writeFile(input, content) {
   var writer = new java.io.BufferedWriter(new java.io.FileWriter(file));
   writer.write(content);
   writer.close();
+}
+
+/**
+ * @param {string} input 归一化文件的路径.
+ * @return {string} 归一化之后的路径.
+ */
+function getPath(input) {
+  return input.replace('/', java.io.File.separator);
 }
 
 /**
