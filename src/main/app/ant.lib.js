@@ -73,6 +73,23 @@ function dirname(file) {
 }
 
 /**
+ * 从一个路径中获取文件的名字.
+ *
+ * @param {string} path 输入的路径.
+ * @param {string} 文件名称.
+ */
+function basename(path) {
+  var property = uuid();
+
+  var task = createTask('basename');
+  task.setFile(new java.io.File(path));
+  task.setProperty(property);
+  task.perform();
+
+  return _(property);
+}
+
+/**
  * @param {string} from 源文件.
  * @param {string} to 目标文件.
  */
@@ -246,6 +263,109 @@ function exec(command, opt_args) {
   task.perform();
 }
 
+// -- 下面的函数是在DAN/CLB里面用到的 --
+
+// document.write('<script type="text/javascript" src="/src/tangram.js"></script>');
+
+/**
+ * @param {string} input 输入文件.
+ * @return {string} 文件的内容.
+ */
+function readFile(input) {
+  var file = new java.io.File(input);
+  if (!file.exists()) {
+    return '';
+  }
+
+  var scanner = new java.util.Scanner(file).useDelimiter("\\Z");
+  var content = scanner.next();
+  scanner.close();
+
+  return content.toString();
+}
+
+/**
+ * @param {java.io.File|string} input 要写入的文件.
+ * @param {string} content 内容.
+ */
+function writeFile(input, content) {
+  var file = input;
+  if (Object.prototype.toString.call(input) == '[object String]') {
+    file = new java.io.File(input);
+  }
+  
+  var writer = new java.io.BufferedWriter(new java.io.FileWriter(file));
+  writer.write(content);
+  writer.close();
+}
+
+/**
+ * @param {string} input 输入文件
+ */
+function merge_js(input) {
+  var lines = readFile(input).split("\n");
+  if (lines.length > 0) {
+    var line,
+        match,
+        merged = [],
+        pattern = /src="\/([^"]+)"/;
+    for (var i = 0, j = lines.length; i < j; i ++) {
+      line = lines[i];
+      if (line.indexOf('document.write') != 0) {
+        continue;
+      }
+      match = pattern.exec(line);
+      if (match) {
+        merged.push(readFile(match[1]));
+      }
+    }
+
+    var tmp = java.io.File.createTempFile("merged.js", ".tmp");
+    writeFile(tmp, merged.join('\n'));
+
+    copy(tmp.getAbsolutePath(), _("build.dir") + '/' + input);
+  }
+}
+
+/**
+ * @param {string} input 输入文件.
+ */
+function compile_js(input) {
+
+}
+
+/**
+ * @import '../../src/css/base.css';
+ * @param {string} input 输入文件.
+ */
+function merge_css(input) {
+  var lines = readFile(input).split('\n');
+  if (lines.length > 0) {
+    var line,
+        match,
+        merged = [],
+        pattern = /@import\s+'\.\.\/\.\.\/([^']+)'/;
+
+    for (var i = 0, j = lines.length; i < j; i ++) {
+      line = lines[i];
+      if (line.indexOf('@import') != 0) {
+        continue;
+      }
+
+      match = pattern.exec(line);
+      if (match) {
+        merged.push(readFile(match[1]));
+      }
+    }
+
+    var tmp = java.io.File.createTempFile("merged.css", ".tmp");
+    writeFile(tmp, merged.join(';'));
+    
+    copy(tmp.getAbsolutePath(), _("build.dir") + '/' + input);
+  }
+}
+
+// -- END
 
 
 
