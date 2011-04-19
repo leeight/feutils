@@ -82,7 +82,7 @@ function tempfile() {
   task.setProperty(property);
   task.setDeleteOnExit(true);
   task.perform();
-  
+
   return _(property);
 }
 
@@ -106,11 +106,15 @@ function basename(path) {
 /**
  * @param {string} from 源文件.
  * @param {string} to 目标文件.
+ * @param {boolean=} opt_overwrite 是否覆盖.
  */
-function copy(from, to) {
+function copy(from, to, opt_overwrite) {
   var task = createTask('copy');
   task.setFile(new java.io.File(from));
   task.setTofile(new java.io.File(to));
+  if (opt_overwrite) {
+    task.setOverwrite(true);
+  }
   task.perform();
 }
 
@@ -277,10 +281,10 @@ function exec(command, opt_args) {
   task.setFailonerror(true);
   task.setLogError(true);
 
-  if (Object.prototype.toString.call(opt_args) == "[object Array]") {
-    for(var i = 0, j = opt_args.length; i < j; i ++) {
+  if (Object.prototype.toString.call(opt_args) == '[object Array]') {
+    for (var i = 0, j = opt_args.length; i < j; i++) {
       task.createArg().setLine(opt_args[i]);
-    } 
+    }
   }
 
   task.perform();
@@ -300,7 +304,7 @@ function readFile(input) {
     return '';
   }
 
-  var scanner = new java.util.Scanner(file, "utf-8").useDelimiter("\\Z");
+  var scanner = new java.util.Scanner(file, 'utf-8').useDelimiter('\\Z');
   var content = scanner.next();
   scanner.close();
 
@@ -316,7 +320,7 @@ function writeFile(input, content) {
   if (Object.prototype.toString.call(input) == '[object String]') {
     file = new java.io.File(input);
   }
-  
+
   var writer = new java.io.BufferedWriter(new java.io.FileWriter(file));
   writer.write(content);
   writer.close();
@@ -331,16 +335,16 @@ function getPath(input) {
 }
 
 /**
- * @param {string} input 输入文件
+ * @param {string} input 输入文件.
  */
 function merge_js(input) {
-  var lines = readFile(input).split("\n");
+  var lines = readFile(input).split('\n');
   if (lines.length > 0) {
     var line,
         match,
         merged = [],
         pattern = /src="\/([^"]+)"/;
-    for (var i = 0, j = lines.length; i < j; i ++) {
+    for (var i = 0, j = lines.length; i < j; i++) {
       line = lines[i];
       if (line.indexOf('document.write') != 0) {
         continue;
@@ -351,10 +355,10 @@ function merge_js(input) {
       }
     }
 
-    var tmp = java.io.File.createTempFile("merged.js", ".tmp");
+    var tmp = java.io.File.createTempFile('merged.js', '.tmp');
     writeFile(tmp, merged.join('\n'));
 
-    copy(tmp.getAbsolutePath(), _("build.dir") + '/' + input);
+    copy(tmp.getAbsolutePath(), _('build.dir') + '/' + input);
   }
 }
 
@@ -362,19 +366,30 @@ function merge_js(input) {
  * @param {string} input 输入文件.
  */
 function compile_js(input) {
-  echo("compiling " + input + " ...");
+  echo('compiling ' + input + ' ...');
   var extraflags = [
     '--define=\'dn.COMPILED="true"\'',
     '--warning_level=VERBOSE'
   ];
 
-  if (_("env.USER") != "scmpf") {
+  if (_('env.USER') != 'scmpf') {
     extraflags.push('--formatting PRETTY_PRINT');
   }
 
   var output = tempfile();
   gcc(input, output, null, extraflags);
-  copy(output, input);
+  copy(output, input, true);
+}
+
+/**
+ * @param {string} input 输入文件.
+ */
+function compile_css(input) {
+  echo('compiling ' + input + ' ...');
+
+  var output = tempfile();
+  yui(input, output);
+  copy(output, input, true);
 }
 
 /**
@@ -389,7 +404,7 @@ function merge_css(input) {
         merged = [],
         pattern = /@import\s+'\.\.\/\.\.\/([^']+)'/;
 
-    for (var i = 0, j = lines.length; i < j; i ++) {
+    for (var i = 0, j = lines.length; i < j; i++) {
       line = lines[i];
       if (line.indexOf('@import') != 0) {
         continue;
@@ -401,10 +416,10 @@ function merge_css(input) {
       }
     }
 
-    var tmp = java.io.File.createTempFile("merged.css", ".tmp");
+    var tmp = java.io.File.createTempFile('merged.css', '.tmp');
     writeFile(tmp, merged.join(';'));
-    
-    copy(tmp.getAbsolutePath(), _("build.dir") + '/' + input);
+
+    copy(tmp.getAbsolutePath(), _('build.dir') + '/' + input);
   }
 }
 
