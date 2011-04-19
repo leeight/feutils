@@ -93,7 +93,6 @@ goog.addDependency("ui/ButtonMenu.js", [], []);
 goog.addDependency("../test/app/app.js", [], ['app.Launch', 'ui.util', 'ui.Page', 'ui.Button', 'ui.ComboBox', 'ui.ListView']);
 goog.addDependency("../test/app/demo/app.js", [], ['ui.Button', 'app.Init', 'app.Launch']);
 goog.addDependency("../test/app/listview/app.js", [], ['app.Launch', 'ui.util', 'ui.Page', 'ui.ListView']);
-goog.addDependency("../test/app/listview/build/app.js", [], []);
 goog.addDependency("../test/app/pageablelist/init.js", ['app.init'], ['app.mockup']);
 goog.addDependency("../test/app/pageablelist/config.js", ['app.config'], []);
 goog.addDependency("../test/app/pageablelist/app.js", [], ['ui.PagableList', 'base.RemoteListDataSource', 'app.Init', 'app.Launch', 'app.mockup', 'app.config', 'app.init']);
