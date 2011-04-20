@@ -488,7 +488,8 @@ function getLastCommitter(input) {
 function mail(from, to, title, body, opt_headers) {
   logger.debug(from + '/' + to + '/' + title + '/' + body.length());
   var args = [
-    '-a "From: ' + from + '"',
+    // test02上面不支持-a参数...
+    // '-a "From: ' + from + '"',
     '-s "' + title + '"',
     to
   ];
