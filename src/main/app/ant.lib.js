@@ -90,7 +90,7 @@ function tempfile() {
  * 从一个路径中获取文件的名字.
  *
  * @param {string} path 输入的路径.
- * @param {string} 文件名称.
+ * @return {string} 文件名称.
  */
 function basename(path) {
   var property = uuid();
@@ -198,7 +198,23 @@ function gcc(input, output, opt_jar, opt_extraflags) {
     }
   }
 
-  task.perform();
+  try {
+    task.perform();
+  } catch (e) {
+    echo('gcc failed');
+  }
+}
+
+
+/**
+ * 判断目标参数是否Array对象
+ *
+ * @param {*} source 目标参数.
+ * @return {boolean} 类型判断结果.
+ */
+function isArray(source) {
+  return '[object Array]' == Object.prototype.toString.call(
+                             /** @type {Object}*/ (source));
 }
 
 /**
@@ -292,8 +308,6 @@ function exec(command, opt_args) {
 
 // -- 下面的函数是在DAN/CLB里面用到的 --
 
-// document.write('<script type="text/javascript" src="/src/tangram.js"></script>');
-
 /**
  * @param {string} input 输入文件.
  * @return {string} 文件的内容.
@@ -304,11 +318,14 @@ function readFile(input) {
     return '';
   }
 
+  var content = '';
   var scanner = new java.util.Scanner(file, 'utf-8').useDelimiter('\\Z');
-  var content = scanner.next();
+  if (scanner.hasNext()) {
+    content = scanner.next();
+  }
   scanner.close();
 
-  return content.toString();
+  return content;
 }
 
 /**
@@ -335,9 +352,11 @@ function getPath(input) {
 }
 
 /**
- * @param {string} input 输入文件.
+ * 获取文件的内容
+ * @param {string} input 输入的js文件.
+ * @return {string} 文件的内容.
  */
-function merge_js(input) {
+function getFileContent(input) {
   var lines = readFile(input).split('\n');
   if (lines.length > 0) {
     var line,
@@ -355,11 +374,33 @@ function merge_js(input) {
       }
     }
 
-    var tmp = java.io.File.createTempFile('merged.js', '.tmp');
-    writeFile(tmp, merged.join('\n'));
-
-    copy(tmp.getAbsolutePath(), _('build.dir') + '/' + input);
+    return merged.join('\n');
   }
+
+  return '';
+}
+
+/**
+ * @param {Array.<string>|string} input 输入文件.
+ * @param {string=} opt_output 输出文件，会添加_("build.dir")前缀的.
+ */
+function merge_js(input, opt_output) {
+  var content = [],
+      dest;
+  if (isArray(input)) {
+    for (var i = 0, j = input.length; i < j; i++) {
+      content.push(getFileContent(input[i]));
+    }
+    dest = opt_output || input[input.length - 1]; // 默认是数组的最后一个.
+  } else {
+    content.push(getFileContent(input));
+    dest = opt_output || input;           // 需要保存的文件名
+  }
+
+  var tmp = java.io.File.createTempFile('merged.js', '.tmp');
+  writeFile(tmp, content.join('\n'));
+
+  copy(tmp.getAbsolutePath(), _('build.dir') + '/' + dest);
 }
 
 /**
@@ -393,7 +434,6 @@ function compile_css(input) {
 }
 
 /**
- * @import '../../src/css/base.css';
  * @param {string} input 输入文件.
  */
 function merge_css(input) {
