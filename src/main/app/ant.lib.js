@@ -41,6 +41,33 @@ function echo(msg) {
 }
 
 /**
+ * 打印出一些环境变量的信息，供调试使用.
+ */
+function echo_env() {
+  echo('== ENV ==');
+  if (_('env.OS') == 'Windows_NT') {
+    echo(_('env.Path'));
+  } else {
+    echo(_('env.PATH'));
+  }
+  exec('java', ['-version']);
+  echo('== END ==');
+}
+
+/**
+ * 需要在ant脚本里面添加这句话
+ * <property environment="env" />
+ * @return {string} null device.
+ */
+function getNullDevice() {
+  if (_('env.OS') == 'Windows_NT') {
+    return 'NUL:';
+  } else {
+    return '/dev/null';
+  }
+}
+
+/**
  * @param {string} dir 需要创建的目录.
  */
 function mkdir(dir) {
@@ -176,16 +203,14 @@ function gcc(input, output, opt_jar, opt_extraflags) {
   var task = createTask('java'),
       jar = opt_jar || (_('tools.dir') + '/lib/google-closure-compiler.jar');
 
-  var type = Object.prototype.toString.call(input);
-
   task.setJar(new java.io.File(jar));
   task.setFork(true);
   task.setFailonerror(true);
   task.setMaxmemory('128m');
   task.createArg().setLine('--js_output_file ' + output);
-  if (type == '[object String]') {
+  if (isString(input)) {
     task.createArg().setLine('--js ' + input);
-  } else if (type == '[object Array]') {
+  } else if (isArray(input)) {
     for (var i = 0, j = input.length; i < j; i++) {
       task.createArg().setLine('--js ' + input[i]);
     }
@@ -215,6 +240,17 @@ function gcc(input, output, opt_jar, opt_extraflags) {
 function isArray(source) {
   return '[object Array]' == Object.prototype.toString.call(
                              /** @type {Object}*/ (source));
+}
+
+/**
+ * 判断目标参数是否string类型或String对象
+ *
+ * @param {*} source 目标参数.
+ * @return {boolean} 类型判断结果.
+ */
+function isString(source) {
+  return '[object String]' == Object.prototype.toString.call(
+                              /** @type {Object}*/ (source));
 }
 
 /**
@@ -297,7 +333,7 @@ function exec(command, opt_args) {
   task.setFailonerror(true);
   task.setLogError(true);
 
-  if (Object.prototype.toString.call(opt_args) == '[object Array]') {
+  if (isArray(opt_args)) {
     for (var i = 0, j = opt_args.length; i < j; i++) {
       task.createArg().setLine(opt_args[i]);
     }
@@ -334,7 +370,7 @@ function readFile(input) {
  */
 function writeFile(input, content) {
   var file = input;
-  if (Object.prototype.toString.call(input) == '[object String]') {
+  if (isString(input)) {
     file = new java.io.File(input);
   }
 
@@ -352,16 +388,16 @@ function getPath(input) {
 }
 
 /**
- * 获取文件的内容
- * @param {string} input 输入的js文件.
- * @return {string} 文件的内容.
+ * @param {string} input 输入的文件.
+ * @return {Array.<string>} 需要加载的文件列表.
  */
-function getFileContent(input) {
+function getFileSet(input) {
+  var fileset = [];
+
   var lines = readFile(input).split('\n');
   if (lines.length > 0) {
     var line,
         match,
-        merged = [],
         pattern = /src="\/([^"]+)"/;
     for (var i = 0, j = lines.length; i < j; i++) {
       line = lines[i];
@@ -370,14 +406,54 @@ function getFileContent(input) {
       }
       match = pattern.exec(line);
       if (match) {
-        merged.push(readFile(match[1]));
+        fileset.push(match[1]);
       }
     }
-
-    return merged.join('\n');
   }
 
-  return '';
+  return fileset;
+}
+
+/**
+ * 获取文件的内容
+ * @param {string} input 输入的js文件.
+ * @return {string} 文件的内容.
+ */
+function getFileContent(input) {
+  var fileset = getFileSet(input);
+  if (fileset.length > 0) {
+    var merged = [];
+    for (var i = 0, j = fileset.length; i < j; i++) {
+      merged.push(readFile(fileset[i]));
+    }
+    return merged.join('\n');
+  } else {
+    return '';
+  }
+}
+
+/**
+ * 用gcc来检测文件的错误，编译的时候给出的错误太粗略了，不能
+ * 确定是哪个文件里面的。
+ * @param {Array.<string>|string} input 输入文件.
+ */
+function gcc_lint(input) {
+  var fileset = [];
+  if (isString(input)) {
+    fileset = getFileSet(input);
+  } else if (isArray(input)) {
+    for (var i = 0, j = input.length; i < j; i++) {
+      fileset = fileset.concat(getFileSet(input[i]));
+    }
+  } else {
+    // ignore
+    return;
+  }
+
+  var extraflags = [
+    '--warning_level=VERBOSE'
+  ];
+  gcc(fileset, getNullDevice(), null, extraflags);
 }
 
 /**
