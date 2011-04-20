@@ -587,7 +587,7 @@ function gjslint(dir) {
   }
 
   for (var author in authors) {
-    mail('gcl-noreply@baidu.com', 'liyubei@baidu.com',
+    mail('gcl-noreply@baidu.com', author + '@baidu.com',
       '[DN-LINT]:Google Closure Linter Check Result', readFile(dir + '/' + author));
   }
   rmdir(dir);
