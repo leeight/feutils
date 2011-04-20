@@ -373,6 +373,7 @@ function writeFile(input, content) {
   if (isString(input)) {
     file = new java.io.File(input);
   }
+  file.getParentFile().mkdirs();
 
   var writer = new java.io.BufferedWriter(new java.io.FileWriter(file));
   writer.write(content);
@@ -389,20 +390,27 @@ function getPath(input) {
 
 /**
  * @param {string} input 输入的文件.
+ * @param {RegExp=} opt_pattern 正则.
+ * @param {function(string):boolean=} opt_callback 验证的回调函数.
  * @return {Array.<string>} 需要加载的文件列表.
  */
-function getFileSet(input) {
+function getFileSet(input, opt_pattern, opt_callback) {
   var fileset = [];
+
+  function defaultCallback(line) {
+    return line.indexOf('document.write') == 0;
+  }
 
   var lines = readFile(input).split('\n');
   if (lines.length > 0) {
     var line,
         match,
         file,
-        pattern = /src="\/([^"]+)"/;
+        pattern = opt_pattern || /src="\/([^"]+)"/,
+        callback = opt_callback || defaultCallback;
     for (var i = 0, j = lines.length; i < j; i++) {
       line = lines[i];
-      if (line.indexOf('document.write') != 0) {
+      if (!callback(line)) {
         continue;
       }
       match = pattern.exec(line);
@@ -477,10 +485,7 @@ function merge_js(input, opt_output) {
     dest = opt_output || input;           // 需要保存的文件名
   }
 
-  var tmp = java.io.File.createTempFile('merged.js', '.tmp');
-  writeFile(tmp, content.join('\n'));
-
-  copy(tmp.getAbsolutePath(), _('build.dir') + '/' + dest);
+  writeFile(_('build.dir') + '/' + dest, content.join('\n'));
 }
 
 /**
@@ -536,11 +541,23 @@ function merge_css(input) {
       }
     }
 
-    var tmp = java.io.File.createTempFile('merged.css', '.tmp');
-    writeFile(tmp, merged.join(';'));
-
-    copy(tmp.getAbsolutePath(), _('build.dir') + '/' + input);
+    writeFile(_('build.dir') + '/' + input, merged.join(';'));
   }
+}
+
+
+/**
+ * @param {string} input 输入文件.
+ */
+function merge_tpl(input) {
+  var pattern = /^\s*'\/([^']+)'/;
+  var fileset = getFileSet(input, pattern, function(line) { return true; });
+  var content = [];
+  for (var i = 0, j = fileset.length; i < j; i++) {
+    content.push(readFile(fileset[i]));
+  }
+
+  writeFile(_('build.dir') + '/assets/tpl.html', content.join('\n'));
 }
 
 // -- END
