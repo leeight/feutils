@@ -9,4 +9,4 @@ if [ "${OSTYPE}" = "cygwin" -a "${TERM}" != "xterm" ]; then
 fi
 
 export PYTHONPATH="${lib_dir}"
-exec python "${lib_dir}/closure_linter/gjslint.py" "$@"
+exec python -S "${lib_dir}/closure_linter/gjslint.py" "$@"
