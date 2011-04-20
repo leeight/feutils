@@ -398,6 +398,7 @@ function getFileSet(input) {
   if (lines.length > 0) {
     var line,
         match,
+        file,
         pattern = /src="\/([^"]+)"/;
     for (var i = 0, j = lines.length; i < j; i++) {
       line = lines[i];
@@ -406,7 +407,10 @@ function getFileSet(input) {
       }
       match = pattern.exec(line);
       if (match) {
-        fileset.push(match[1]);
+        file = new java.io.File(match[1]);
+        if (file.exists()) {
+          fileset.push(match[1]);
+        }
       }
     }
   }
