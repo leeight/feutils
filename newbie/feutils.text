@@ -9,6 +9,8 @@
 ### 安装
 
 首先系统上确保你的系统上已经安装了`svn`相关的工具，以及`python`和`java`这两个编程环境。
+环境的安装步骤请<b>[参考这里](env.text)</b>  
+
 我们假设这次的工作目录是`WORK_DIR`，对于Windows平台用户，我们创建目录`c:\work`，对于NIX
 平台用户，我们创建目录`$HOME\work`。
 
@@ -46,6 +48,11 @@
 
 *提醒*  
 Fformat,Fdoc,Flint,Fcompressor,Foptipng,Foutline这几个在Windows下面还无法使用，后续会升级。
+
+#### ant
+
+关于`apache ant`的基本概念，可以google一下，此外`sdcfe/src/main/build.xml`里面提供了一些项目
+中很常用的用法，可以了解一下。
 
 #### Fws
 
