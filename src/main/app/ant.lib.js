@@ -15,6 +15,66 @@
  * self是关键字
  **/
 
+if (!Array.prototype.filter) {
+  // @see https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Array/filter
+  Array.prototype.filter = function(fun /*, thisp */) {
+    'use strict';
+
+    if (this === void 0 || this === null) {
+      throw new TypeError();
+    }
+
+    var t = Object(this);
+    var len = t.length >>> 0;
+    if (typeof fun !== 'function') {
+      throw new TypeError();
+    }
+
+    var res = [];
+    var thisp = arguments[1];
+    for (var i = 0; i < len; i++) {
+      if (i in t) {
+        var val = t[i]; // in case fun mutates this
+        if (fun.call(thisp, val, i, t)) {
+          res.push(val);
+        }
+      }
+    }
+
+    return res;
+  };
+}
+
+/**
+ * @type {Object}
+ * @const
+ */
+var logger = {};
+
+/**
+ * 打印warning信息.
+ * @param {string} msg 要打印的信息.
+ */
+logger.warning = function(msg) {
+  self.log('WARNING:' + msg);
+};
+
+/**
+ * 打印error信息.
+ * @param {string} msg 要打印的信息.
+ */
+logger.error = function(msg) {
+  self.log('ERROR:' + msg);
+};
+
+/**
+ * 打印debug信息.
+ * @param {string} msg 要打印的信息.
+ */
+logger.debug = function(msg) {
+  self.log('DEBUG:' + msg);
+};
+
 /**
  * @param {string} name 属性的名字.
  * @return {string} 环境变量的值.
@@ -37,6 +97,36 @@ function createTask(name) {
 function echo(msg) {
   var task = createTask('echo');
   task.setMessage(msg);
+  task.perform();
+}
+
+/**
+ * @param {Array.<string>|string} input 要删除的目录.
+ */
+function rmdir(input) {
+  var task = createTask('delete');
+  if (isString(input)) {
+    task.setDir(new java.io.File(input));
+  } else if (isArray(input)) {
+    for (var i = 0, j = input.length; i < j; i++) {
+      task.setDir(new java.io.File(input[i]));
+    }
+  }
+  task.perform();
+}
+
+/**
+ * @param {Array.<string>|string} input 要删除的文件.
+ */
+function rm(input) {
+  var task = createTask('delete');
+  if (isString(input)) {
+    task.setFile(new java.io.File(input));
+  } else if (isArray(input)) {
+    for (var i = 0, j = input.length; i < j; i++) {
+      task.setFile(new java.io.File(input[i]));
+    }
+  }
   task.perform();
 }
 
@@ -100,17 +190,32 @@ function dirname(file) {
 }
 
 /**
+ * @param {boolean=} opt_deleteOnExit jvm退出的时候是否删掉文件，默认是true.
  * @return {string} 获取一个临时的文件路径.
  */
-function tempfile() {
+function tempfile(opt_deleteOnExit) {
   var property = uuid();
 
   var task = createTask('tempfile');
   task.setProperty(property);
-  task.setDeleteOnExit(true);
+  if (opt_deleteOnExit !== false) {
+    task.setDeleteOnExit(true);
+  }
   task.perform();
 
   return _(property);
+}
+
+/**
+ * 创建一个临时目录
+ * @return {string} 目录的路径.
+ */
+function tempdir() {
+  var tmp = tempfile(false);
+  var file = new java.io.File(tmp);
+  file.mkdirs();
+
+  return '' + file.getAbsolutePath();
 }
 
 /**
@@ -326,12 +431,17 @@ function calcdeps(input, opt_options) {
 /**
  * @param {string} command 要执行的命令.
  * @param {Array.<string>=} opt_args 命令参数，可选.
+ * @param {java.io.File=} opt_output 日志输出的文件，可选.
  */
-function exec(command, opt_args) {
+function exec(command, opt_args, opt_output) {
   var task = createTask('exec');
-  task.setExecutable(command);
+  task.setExecutable(getPath(command));
   task.setFailonerror(true);
   task.setLogError(true);
+
+  if (opt_output) {
+    task.setOutput(opt_output);
+  }
 
   if (isArray(opt_args)) {
     for (var i = 0, j = opt_args.length; i < j; i++) {
@@ -339,7 +449,147 @@ function exec(command, opt_args) {
     }
   }
 
-  task.perform();
+  try {
+    task.perform();
+  } catch (e) {
+    logger.warning(command + ' failed.');
+    logger.warning(e);
+  }
+}
+
+/**
+ * @param {string} input 输入文件.
+ * @return {string} 最后一次提交人.
+ */
+function getLastCommitter(input) {
+  var tmp = tempfile();
+  exec('svn', ['info', input], new java.io.File(tmp));
+
+  // Last Changed Author: zhoulianjie
+  var lca_prefix = 'Last Changed Author: ';
+  var lines = readFile(tmp).split('\n').filter(function(line) {
+    return line.indexOf(lca_prefix) == 0;
+  });
+
+  if (lines.length == 1) {
+    return lines[0].substring(lca_prefix.length);
+  }
+
+  return '';
+}
+
+/**
+ * @param {string} from 发件人.
+ * @param {string} to 收件人.
+ * @param {string} title 标题.
+ * @param {string} body 邮件内容.
+ * @param {Array.<string>=} opt_headers 额外的头部信息.
+ */
+function mail(from, to, title, body, opt_headers) {
+  logger.debug(from + '/' + to + '/' + title + '/' + body.length());
+  var args = [
+    '-a "From: ' + from + '"',
+    '-s "' + title + '"',
+    to
+  ];
+  if (opt_headers) {
+    for (var i = 0, j = opt_headers.length; i < j; i++) {
+      args.push('-a "' + opt_headers[i] + '"');
+    }
+  }
+
+  var task = createTask('exec');
+  task.setExecutable('mail');
+  task.setFailonerror(true);
+  task.setLogError(true);
+  task.setInputString(body);
+
+  for (var i = 0, j = args.length; i < j; i++) {
+    task.createArg().setLine(args[i]);
+  }
+
+  try {
+    task.perform();
+  } catch (e) {
+    logger.warning('mail failed.');
+    logger.warning(e);
+  }
+}
+
+/**
+ * @param {string} dir 输入的文件目录.
+ */
+function gjslint(dir) {
+  if (_('env.OS') == 'Windows_NT') {
+    logger.warning('gjslint target was not supported on Windows');
+    return;
+  }
+
+  var tmp = tempfile();
+  exec(_('tools.dir') + '/bin/Fgjslint', ['-r', dir], new java.io.File(tmp));
+
+  var file_prefix = '----- FILE',
+      line_prefix = 'Line ';
+  var lines = readFile(tmp).split('\n').filter(function(line) {
+    return line.indexOf(file_prefix) == 0 ||
+           line.indexOf(line_prefix) == 0;
+  });
+
+  // ----- FILE  :  /home/leeight/work/svn/app/ecom/jn-core-trunk/webapp/src/er/Action.js -----
+  var errors = {},
+      line = null,
+      current = null,
+      match = null,
+      pattern = /\s*([\-]+)\s*FILE\s*:\s*([\S]+)\s*([\-]+)/;
+  for (var i = 0, j = lines.length; i < j; i++) {
+    line = lines[i];
+    if (line.indexOf(file_prefix) == 0) {
+      match = pattern.exec(line);
+      if (match) {
+        current = match[2];
+      }
+    } else if (line.indexOf(line_prefix) == 0) {
+      if (line == null) {
+        continue;
+      }
+
+      // collect error message now.
+      if (!isArray(errors[current])) {
+        errors[current] = [];
+      }
+      errors[current].push(line);
+    }
+  }
+
+  var dir = tempdir();
+
+  var author,
+      destfile,
+      authors = {};
+  for (var file in errors) {
+    author = getLastCommitter(file);
+    if (author) {
+      authors[author] = true;
+
+      destfile = new java.io.File(dir + '/' + author);
+      if (!destfile.exists()) {
+        writeFile(destfile, [
+          'Q:How to fix these issues?',
+          'A:Please see this page http://fe.baidu.com/doc/display-ads/linter.text'
+        ].join('\n') + '\n\n');
+      }
+
+      writeFile(destfile, file + '\n', true);
+      writeFile(destfile, errors[file].join('\n'), true);
+      writeFile(destfile, '\n\n', true);
+    }
+  }
+
+  for (var author in authors) {
+    mail('gcl-noreply@baidu.com', 'liyubei@baidu.com',
+      '[DN-LINT]:Google Closure Linter Check Result', readFile(dir + '/' + author));
+  }
+  rmdir(dir);
 }
 
 // -- 下面的函数是在DAN/CLB里面用到的 --
@@ -367,15 +617,17 @@ function readFile(input) {
 /**
  * @param {java.io.File|string} input 要写入的文件.
  * @param {string} content 内容.
+ * @param {boolean=} opt_append 是否追加内容.
  */
-function writeFile(input, content) {
+function writeFile(input, content, opt_append) {
   var file = input;
   if (isString(input)) {
     file = new java.io.File(input);
   }
   file.getParentFile().mkdirs();
 
-  var writer = new java.io.BufferedWriter(new java.io.FileWriter(file));
+  var writer = new java.io.BufferedWriter(
+    new java.io.FileWriter(file, opt_append === true));
   writer.write(content);
   writer.close();
 }
