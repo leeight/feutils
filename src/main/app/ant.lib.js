@@ -748,6 +748,10 @@ function compile_js(input) {
   echo('compiling ' + input + ' ...');
   var extraflags = [
     '--define=\'dn.COMPILED="true"\'',
+    '--css_directory_in=src',
+    '--css_output_file=' + getPath(_('build.dir') + '/app.css'),
+    '--tpl_directory_in=src',
+    '--tpl_output_file=' + getPath(_('build.dir') + '/tpl.html'),
     '--warning_level=VERBOSE'
   ];
 

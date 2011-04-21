@@ -17,9 +17,12 @@
 
 goog.require('app.Worker');
 goog.require('base.ParallelWorkerManager');
+goog.require('er.template');
+goog.require('ui.Page');
 goog.require('ui.util');
 
 goog.provide('app.Init');
+goog.provide('app.InitFromElement');
 goog.provide('app.Launch');
 
 /**
@@ -39,6 +42,8 @@ app.Launch = function(main) {
  * @param {Element} main page所处的根节点.
  * @param {Object=} opt_model 当前页面的DataModel.
  * @param {boolean=} opt_isPopup 是否是popup状态，默认false.
+ *
+ * @return {ui.Page}
  */
 app.Init = function(view, main, opt_model, opt_isPopup) {
   var model = opt_model || {},
@@ -49,6 +54,23 @@ app.Init = function(view, main, opt_model, opt_isPopup) {
   page.bindModel(model);
   page.render();
   page.bindEvent();
+
+  return page;
+};
+
+/**
+ * @param {Element} main page所处的根节点.
+ * @param {Object=} opt_model 当前页面的DataModel.
+ * @param {boolean=} opt_isPopup 是否是popup状态，默认false.
+ *
+ * @return {ui.Page}
+ */
+app.InitFromElement = function(main, opt_model, opt_isPopup) {
+  var view = 'MAIN_PAGE_' + new Date().getTime();
+  var source = '<!--target:' + view + '-->\n' + main.innerHTML;
+  er.template.parse(source);
+
+  return app.Init(view, main, opt_model, opt_isPopup);
 };
 
 
