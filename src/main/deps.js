@@ -14,7 +14,7 @@ goog.addDependency("er/base.js", ['er.base'], []);
 goog.addDependency("app/json.js", ['goog.json', 'goog.json.Serializer'], []);
 goog.addDependency("app/worker.js", ['app.Worker'], ['baidu', 'base.AbstractWorker', 'er.template']);
 goog.addDependency("app/log.js", ['app.log'], []);
-goog.addDependency("app/app.js", ['app.Init', 'app.Launch'], ['app.Worker', 'base.ParallelWorkerManager', 'ui.util']);
+goog.addDependency("app/app.js", ['app.Init', 'app.InitFromElement', 'app.Launch'], ['app.Worker', 'base.ParallelWorkerManager', 'er.template', 'ui.Page', 'ui.util']);
 goog.addDependency("app/mockup.js", ['baidu.Mockup'], ['goog.json']);
 goog.addDependency("app/ant.lib.js", [], []);
 goog.addDependency("base/ParamAdapter.js", ['base.IParamAdapter', 'base.OneToManyParamAdapter'], ['base', 'base.Object']);
