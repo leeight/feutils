@@ -479,6 +479,28 @@ function getLastCommitter(input) {
 }
 
 /**
+ * 使用javamail发送邮件
+ * @param {string} from 发件人.
+ * @param {string} to 收件人.
+ * @param {string} subject 标题.
+ * @param {string} message 邮件内容.
+ */
+function javamail(from, to, subject, message) {
+  var task = createTask('mail');
+  task.setSubject(subject);
+  task.setFrom(from);
+  task.setToList(to);
+  task.setCharset('utf-8');
+  task.setMessage(message);
+  try {
+    task.perform();
+  } catch(e) {
+    logger.warning('mail failed.');
+    logger.warning(e);
+  }
+}
+
+/**
  * @param {string} from 发件人.
  * @param {string} to 收件人.
  * @param {string} title 标题.
