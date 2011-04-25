@@ -4,6 +4,7 @@ goog.addDependency("deps.js", [], []);
 goog.addDependency("tangram.js", ['baidu'], []);
 goog.addDependency("plovr-config.js", [], []);
 goog.addDependency("base.js", [], []);
+goog.addDependency("test-yui.js", [], []);
 goog.addDependency("er/locator.js", ['er.locator'], ['er.base', 'er.config']);
 goog.addDependency("er/context.js", ['er.context'], []);
 goog.addDependency("er/Action.js", ['er.AbstractFormAction', 'er.Action', 'er.FormAction', 'er.ListAction'], ['base.BaseModel', 'base.IParamAdapter', 'base.RemoteListDataSource', 'er']);
