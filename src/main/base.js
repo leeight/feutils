@@ -300,7 +300,7 @@ goog.require = function(rule) {
         goog.global.console['error'](errorMessage);
       }
 
-        throw Error(errorMessage);
+      throw Error(errorMessage);
     }
   }
 };
@@ -550,7 +550,11 @@ if (!COMPILED) {
 
     for (var i = 0; i < scripts.length; i++) {
       if (scripts[i]) {
-        goog.importScript_(goog.basePath + scripts[i]);
+        if (/^https?:\/\//.test(scripts[i])) {
+          goog.importScript_(scripts[i]);
+        } else {
+          goog.importScript_(goog.basePath + scripts[i]);
+        }
       } else {
         throw Error('Undefined script input');
       }
@@ -1466,12 +1470,17 @@ if (COMPILED) {
 }
 
 /**
+ * @define {boolean}
+ */
+goog.ENABLE_DEBUG = false;
+
+/**
  * 引入ui控件的css或者模版文件
  * 当然，也支持引入action的css或者模版文件
  * @param {string} path 需要引入的文件路径，相对于base.js.
  */
 goog.include = function(path) {
-  if (!COMPILED) {
+  if (!COMPILED && goog.ENABLE_DEBUG) {
     var absPath = goog.basePath + path;
     // 当COMPILED的时候，goog.include函数就被移除掉了.
     if (/\.css$/.test(path)) {
