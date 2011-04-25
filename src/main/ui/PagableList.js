@@ -28,13 +28,11 @@ goog.provide('ui.PagableList');
 ui.PagableList = function(options) {
     /**
      * @type {?base.DataSource}
-     * @noalias
      */
     this.datasource = null;
 
     /**
      * @type {Array.<Object>}
-     * @noalias
      */
     this.fields = null;
 
@@ -73,12 +71,12 @@ ui.PagableList = function(options) {
      */
     this.select = 'multi';
 
-    ui.Control.call(this, options);
-
     /**
      * @type {string}
      */
     this.view = 'PagableList';
+    
+    ui.Control.call(this, options);
 };
 
 ui.PagableList.prototype = function() {

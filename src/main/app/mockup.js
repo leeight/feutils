@@ -54,7 +54,7 @@ baidu.Mockup.prototype.init = function() {
         for (var k in me.maps_) {
             if (url.indexOf(k) == 0) {
                 if (typeof console == 'object' && typeof console.log == 'function') {
-                    console.log('[MOCKUP]' + options.method.toUpperCase() + ' ' + url + ' ' + options.data);
+                    console.log('[MOCKUP]' + (options.method || 'get').toUpperCase() + ' ' + url + ' ' + (options.data || ''));
                     console.log(me.maps_[k]);
                 }
 
