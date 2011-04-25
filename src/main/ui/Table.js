@@ -1459,6 +1459,7 @@ ui.Table.prototype.toggleSelectAll = function() {
 
 /**
  * 行的checkbox点击时间处理函数
+ * @param {number} index 点击的行索引.
  * @export
  */
 ui.Table.prototype.rowCheckboxClick = function(index) {

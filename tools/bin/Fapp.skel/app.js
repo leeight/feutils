@@ -33,8 +33,39 @@ goog.require('%(app)s.mockup');
 
 // init
 goog.require('%(app)s.config');
-goog.require('%(app)s.init');
 
+// google app module
+goog.require('app.module.ModuleManager');
+
+goog.provide('%(app)s.app.start');
+
+/**
+ * %(app)s.app.start
+ * @export
+ */
+%(app)s.app.start = function() {
+  // app.Launch用来保证所有的tpl.html加载完了
+  app.Launch(function(){
+    // model
+    var model = {
+      'fields' : %(app)s.config.listFields
+    }
+
+    // 初始化ui.Page
+    app.Init('MAIN_PAGE_%(app)s', baidu.g('Main'), model);
+
+    // 初始化PageableList
+    var list = ui.util.get('%(app)s-list');
+    list.datasource = new base.RemoteListDataSource(function(params, callback){
+      baidu.ajax.get('/%(app)s/list', function(xhr){
+        callback(app.json.parse(xhr.responseText));
+      });
+    });
+    list.getData();
+  });
+  app.module.ModuleManager.getInstance().setLoaded('%(app)s');
+};
+goog.run(%(app)s.app.start);
 
 
 

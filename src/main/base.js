@@ -28,6 +28,7 @@
  */
 var COMPILED = false;
 
+
 /**
  * Base namespace for the Closure library.  Checks to see goog is
  * already defined in the current scope before assigning to prevent
@@ -100,17 +101,33 @@ goog.provide = function(name) {
     // declaration. And when JSCompiler transforms goog.provide into a real
     // variable declaration, the compiled JS should work the same as the raw
     // JS--even when the raw JS uses goog.provide incorrectly.
-    if (goog.getObjectByName(name) && !goog.implicitNamespaces_[name]) {
+    if (goog.isProvided_(name)) {
       throw Error('Namespace "' + name + '" already declared.');
     }
+    delete goog.implicitNamespaces_[name];
 
     var namespace = name;
     while ((namespace = namespace.substring(0, namespace.lastIndexOf('.')))) {
+      if (goog.getObjectByName(namespace)) {
+        break;
+      }
       goog.implicitNamespaces_[namespace] = true;
     }
   }
 
   goog.exportPath_(name);
+};
+
+
+/**
+ * Check if the given name has been goog.provided. This will return false for
+ * names that are available only as implicit namespaces.
+ * @param {string} name name of the object to look for.
+ * @return {boolean} Whether the name has been provided.
+ * @private
+ */
+goog.isProvided_ = function(name) {
+  return !goog.implicitNamespaces_[name] && !!goog.getObjectByName(name);
 };
 
 
@@ -283,7 +300,7 @@ goog.require = function(rule) {
         goog.global.console['error'](errorMessage);
       }
 
-      throw Error(errorMessage);
+        throw Error(errorMessage);
     }
   }
 };
@@ -507,13 +524,14 @@ if (!COMPILED) {
 
       if (path in deps.requires) {
         for (var requireName in deps.requires[path]) {
-          if (requireName in deps.nameToPath) {
-            visitNode(deps.nameToPath[requireName]);
-          } else if (!goog.getObjectByName(requireName)) {
-            // If the required name is defined, we assume that this
-            // dependency was bootstapped by other means. Otherwise,
-            // throw an exception.
-            throw Error('Undefined nameToPath for ' + requireName);
+          // If the required name is defined, we assume that it was already
+          // bootstrapped by other means.
+          if (!goog.isProvided_(requireName)) {
+            if (requireName in deps.nameToPath) {
+              visitNode(deps.nameToPath[requireName]);
+            } else {
+              throw Error('Undefined nameToPath for ' + requireName);
+            }
           }
         }
       }
@@ -1468,6 +1486,19 @@ goog.include = function(path) {
       goog.asyncResource.push(absPath);
     } else {
       throw 'unsupported resource format';
+    }
+  }
+};
+
+/**
+ * @param {Function} callback 需要延迟执行的函数.
+ */
+goog.run = function(callback) {
+  if (!COMPILED) {
+    if (goog.global.addEventListener) {
+      goog.global.addEventListener('load', callback, false);
+    } else {
+      goog.global.attachEvent('onload', callback);
     }
   }
 };

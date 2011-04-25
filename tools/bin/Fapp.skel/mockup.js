@@ -15,13 +15,13 @@
  *  
  **/
 
-goog.require('baidu.Mockup');
+goog.require('baidu.mockup.register');
 
 goog.provide('%(app)s.mockup');
 
 (function(){
 
-var community_list = {
+var %(app)s_list = {
     "success" : "true",
     "message" : {},
     "page" : {
@@ -87,11 +87,7 @@ var community_list = {
     }
 }
 
-%(app)s.mockup = function() {
-  var mockup = new baidu.Mockup();
-  mockup.init();
-  mockup.register('/community/list', community_list);
-}
+baidu.mockup.register('/%(app)s/list', %(app)s_list);
 
 })();
 

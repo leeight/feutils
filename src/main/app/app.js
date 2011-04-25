@@ -33,7 +33,10 @@ app.Launch = function(main) {
   if (goog.asyncResource.length > 0) {
     pwm.addWorker(new app.Worker(goog.asyncResource));
   }
-  pwm.addDoneListener(main);
+  pwm.addDoneListener(function() {
+    goog.asyncResource = [];
+    main();
+  });
   pwm.start();
 };
 

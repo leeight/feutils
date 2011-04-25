@@ -16,9 +16,10 @@
  *
  **/
 
-goog.require('goog.json');
+goog.require('baidu');
+goog.require('app.json');
 
-goog.provide('baidu.Mockup');
+goog.provide('baidu.mockup.register');
 
 /**
  * baidu.Mockup构造函数
@@ -26,7 +27,9 @@ goog.provide('baidu.Mockup');
  * @constructor
 **/
 baidu.Mockup = function() {
+  this.init();
 };
+baidu.addSingletonGetter(baidu.Mockup);
 
 /**
  * @private
@@ -58,7 +61,7 @@ baidu.Mockup.prototype.init = function() {
                 // 如果是这个URL的话，那么就...
                 var fn = options['onsuccess'];
                 if (typeof fn == 'function') {
-                    var text = goog.json.serialize(me.maps_[k]);
+                    var text = app.json.serialize(me.maps_[k]);
                     var xhr = {
                         'responseText' : text
                     };
@@ -114,3 +117,14 @@ baidu.Mockup.prototype.register_once = function(url, rv) {
     this.register(url, rv);
     this.maps_once_[url] = true;
 };
+
+/**
+ * 针对一些URL注册一些直接返回的内容
+ *
+ * @param {string} url 请求的开始内容.
+ * @param {Object} rv 直接返回的内容.
+ */
+baidu.mockup.register = function(url, rv) {
+  var mockup = baidu.Mockup.getInstance();
+  mockup.register(url, rv);
+}

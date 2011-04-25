@@ -52,4 +52,16 @@
     ]]>
     </script>
   </target>
+
+  <target name="plovr">
+    <script language="javascript" src="app/ant.lib.js">
+    <![CDATA[
+      exec('java', [
+        '-jar ' + getPath(_('tools.dir') + '/lib/plovr.jar'),
+        'build',
+        'plovr-config.js'
+      ]);
+    ]]>
+    </script>
+  </target>
 </project>

@@ -17,8 +17,8 @@
  */
 
 
-goog.provide('goog.json');
-goog.provide('goog.json.Serializer');
+goog.provide('app.json');
+goog.provide('app.json.Serializer');
 
 
 /**
@@ -28,7 +28,7 @@ goog.provide('goog.json.Serializer');
  * @return {boolean} True if the input is a valid JSON string.
  * @private
  */
-goog.json.isValid_ = function(s) {
+app.json.isValid_ = function(s) {
   // All empty whitespace is not valid.
   if (/^\s*$/.test(s)) {
     return false;
@@ -80,9 +80,9 @@ goog.json.isValid_ = function(s) {
  * @param {*} s The JSON string to parse.
  * @return {Object} The object generated from the JSON string.
  */
-goog.json.parse = function(s) {
+app.json.parse = function(s) {
   var o = String(s);
-  if (goog.json.isValid_(o)) {
+  if (app.json.isValid_(o)) {
     /** @preserveTry */
     try {
       return (new Function("return (" + o + ")"))();
@@ -100,7 +100,7 @@ goog.json.parse = function(s) {
  * @param {string} s The JSON string to parse.
  * @return {Object} The object generated from the JSON string.
  */
-goog.json.unsafeParse = function(s) {
+app.json.unsafeParse = function(s) {
   return eval('(' + s + ')');
 };
 
@@ -112,8 +112,8 @@ goog.json.unsafeParse = function(s) {
  * @throws Error if there are loops in the object graph.
  * @return {string} A JSON string representation of the input.
  */
-goog.json.serialize = function(object) {
-  return new goog.json.Serializer().serialize(object);
+app.json.serialize = function(object) {
+  return new app.json.Serializer().serialize(object);
 };
 
 
@@ -122,7 +122,7 @@ goog.json.serialize = function(object) {
  * Class that is used to serialize JSON objects to a string.
  * @constructor
  */
-goog.json.Serializer = function() {
+app.json.Serializer = function() {
 };
 
 
@@ -133,7 +133,7 @@ goog.json.Serializer = function() {
  * @throws Error if there are loops in the object graph.
  * @return {string} A JSON string representation of the input.
  */
-goog.json.Serializer.prototype.serialize = function(object) {
+app.json.Serializer.prototype.serialize = function(object) {
   var sb = [];
   this.serialize_(object, sb);
   return sb.join('');
@@ -147,7 +147,7 @@ goog.json.Serializer.prototype.serialize = function(object) {
  * @param {Array} sb Array used as a string builder.
  * @throws Error if there are loops in the object graph.
  */
-goog.json.Serializer.prototype.serialize_ = function(object, sb) {
+app.json.Serializer.prototype.serialize_ = function(object, sb) {
   switch (typeof object) {
     case 'string':
       this.serializeString_((/** @type {string} */ object), sb);
@@ -190,7 +190,7 @@ goog.json.Serializer.prototype.serialize_ = function(object, sb) {
  * @private
  * @type {Object}
  */
-goog.json.Serializer.charToJsonCharCache_ = {
+app.json.Serializer.charToJsonCharCache_ = {
   '\"': '\\"',
   '\\': '\\\\',
   '/': '\\/',
@@ -212,7 +212,7 @@ goog.json.Serializer.charToJsonCharCache_ = {
  * @private
  * @type {RegExp}
  */
-goog.json.Serializer.charsToReplace_ = /\uffff/.test('\uffff') ?
+app.json.Serializer.charsToReplace_ = /\uffff/.test('\uffff') ?
     /[\\\"\x00-\x1f\x7f-\uffff]/g : /[\\\"\x00-\x1f\x7f-\xff]/g;
 
 
@@ -222,13 +222,13 @@ goog.json.Serializer.charsToReplace_ = /\uffff/.test('\uffff') ?
  * @param {string} s The string to serialize.
  * @param {Array} sb Array used as a string builder.
  */
-goog.json.Serializer.prototype.serializeString_ = function(s, sb) {
+app.json.Serializer.prototype.serializeString_ = function(s, sb) {
   // The official JSON implementation does not work with international
   // characters.
-  sb.push('"', s.replace(goog.json.Serializer.charsToReplace_, function(c) {
+  sb.push('"', s.replace(app.json.Serializer.charsToReplace_, function(c) {
     // caching the result improves performance by a factor 2-3
-    if (c in goog.json.Serializer.charToJsonCharCache_) {
-      return goog.json.Serializer.charToJsonCharCache_[c];
+    if (c in app.json.Serializer.charToJsonCharCache_) {
+      return app.json.Serializer.charToJsonCharCache_[c];
     }
 
     var cc = c.charCodeAt(0);
@@ -240,7 +240,7 @@ goog.json.Serializer.prototype.serializeString_ = function(s, sb) {
     } else if (cc < 4096) { // \u1000
       rv += '0';
     }
-    return goog.json.Serializer.charToJsonCharCache_[c] = rv + cc.toString(16);
+    return app.json.Serializer.charToJsonCharCache_[c] = rv + cc.toString(16);
   }), '"');
 };
 
@@ -251,7 +251,7 @@ goog.json.Serializer.prototype.serializeString_ = function(s, sb) {
  * @param {number} n The number to serialize.
  * @param {Array} sb Array used as a string builder.
  */
-goog.json.Serializer.prototype.serializeNumber_ = function(n, sb) {
+app.json.Serializer.prototype.serializeNumber_ = function(n, sb) {
   sb.push(isFinite(n) && !isNaN(n) ? n : 'null');
 };
 
@@ -262,7 +262,7 @@ goog.json.Serializer.prototype.serializeNumber_ = function(n, sb) {
  * @param {Array} arr The array to serialize.
  * @param {Array} sb Array used as a string builder.
  */
-goog.json.Serializer.prototype.serializeArray_ = function(arr, sb) {
+app.json.Serializer.prototype.serializeArray_ = function(arr, sb) {
   var l = arr.length;
   sb.push('[');
   var sep = '';
@@ -281,7 +281,7 @@ goog.json.Serializer.prototype.serializeArray_ = function(arr, sb) {
  * @param {Object} obj The object to serialize.
  * @param {Array} sb Array used as a string builder.
  */
-goog.json.Serializer.prototype.serializeObject_ = function(obj, sb) {
+app.json.Serializer.prototype.serializeObject_ = function(obj, sb) {
   sb.push('{');
   var sep = '';
   for (var key in obj) {

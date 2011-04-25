@@ -54,7 +54,7 @@ goog.provide('%(app)s.config');
       'width' : 100,
       'title' : '操作',
       'content' : function(item) {
-        return baidu.format('<a href="#/community/update~id={0}">修改</a>',
+        return baidu.format('<a href="#/%(app)s/update~id={0}">修改</a>',
             item['id']);
       }
     }
