@@ -15,7 +15,7 @@
  *  
  **/
 
-goog.ENABLE_DEBUG = true;
+// goog.ENABLE_DEBUG = true;
 
 // 依赖的控件，依次列出来
 goog.require('ui.PagableList');
