@@ -241,11 +241,13 @@ ui.PagableList.prototype = function() {
                 listPager = this.getChild('listPager'),
                 pageSize = this.getChild('pageSize');
 
-            listTable.onselect = null;
-            listTable.onsubrowopen = null;
-            listTable.onsort = null;
-            listPager.onselect = null;
-            pageSize.onselect = null;
+            if (listTable) {
+                listTable.onselect = null;
+                listTable.onsubrowopen = null;
+                listTable.onsort = null;
+                listPager.onselect = null;
+                pageSize.onselect = null;
+            }
 
             ui.PagableList.superClass.dispose.call(this);
         }
