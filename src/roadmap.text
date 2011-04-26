@@ -32,3 +32,9 @@
    高级模式来删掉无用的代码，减少最终代码中closure library相关的部分。
 2. 宽松的编码规范，能够和closure compiler配合使用，使用自己的ModuleLoader来加载模块，此时只能
    使用SIMPILE模式来进行编译，对代码量的减少有限。
+
+### TODO
+
+1. 控件里面的&dn.config.pageSize要去掉，不能这么写，不方面扩展，而且容易埋坑
+2. 提供工具能够自动从*.html里面分析出ui.Type和model里面的字段
+3. 提供工具能够自动根据model的定义来生成list和form之类的页面
