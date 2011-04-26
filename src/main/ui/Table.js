@@ -199,7 +199,12 @@ ui.Table.prototype = /** @lends {ui.Table.prototype }*/ {
 
         // 根据当前容器的宽度，计算可拉伸的每列宽度
         len = canExpand.length;
-        leaveAverage = Math.round(leftWidth / len);
+        
+        // 某表格有3列可拖动，此时leftWidth为-34，计算round得-11
+        // 因此下个for循环中，每一列都是-11，一共减去(-11 * 3 == -33)，差了1像素，导致滚动条
+        // 因此改为floor，得-12，下个for循环中分别是-12, -12, -10，保证不会有差
+        // leaveAverage = Math.round(leftWidth / len);
+        leaveAverage = Math.floor(leftWidth / len);
         for (i = 0; i < len; i++) {
             offset = Math.abs(leftWidth) > Math.abs(leaveAverage)
                         ? leaveAverage
