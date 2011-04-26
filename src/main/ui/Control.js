@@ -37,7 +37,7 @@ ui.Control = function(options) {
      * @noalias
      * @type {?string}
      */
-    this.view = null;
+    this.view;
 
     /**
      * 需要渲染的节点
