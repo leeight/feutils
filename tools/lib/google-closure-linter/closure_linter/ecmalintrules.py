@@ -619,9 +619,11 @@ class EcmaScriptLintRules(checkerbase.LintRulesBase):
                   '@suppress {underscore} is not necessary with @private',
                   jsdoc.suppressions['underscore'])
           elif jsdoc.HasFlag('private'):
-            self._HandleError(errors.EXTRA_PRIVATE,
-                'Member "%s" must not have @private JsDoc' %
-                identifier, token)
+            qualifiedName = identifier[identifier.rfind('.') + 1:]
+            if not qualifiedName.startswith('_'):
+              self._HandleError(errors.EXTRA_PRIVATE,
+                  'Member "%s" must not have @private JsDoc' %
+                  identifier, token)
 
           if ((jsdoc.HasFlag('desc') or jsdoc.HasFlag('hidden'))
               and not identifier.startswith('MSG_')
