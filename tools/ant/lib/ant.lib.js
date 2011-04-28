@@ -499,7 +499,7 @@ function javamail(from, to, subject, message) {
   task.setMessage(message);
   try {
     task.perform();
-  } catch(e) {
+  } catch (e) {
     logger.warning('mail failed.');
     logger.warning(e);
   }
@@ -728,8 +728,9 @@ function getFileContent(input) {
  * 用gcc来检测文件的错误，编译的时候给出的错误太粗略了，不能
  * 确定是哪个文件里面的。
  * @param {Array.<string>|string} input 输入文件.
+ * @param {Array.<string>=} opt_extraflags 额外的参数.
  */
-function gcc_lint(input) {
+function gcc_lint(input, opt_extraflags) {
   var fileset = [];
   if (isString(input)) {
     fileset = getFileSet(input);
@@ -746,10 +747,14 @@ function gcc_lint(input) {
     '--warning_level=VERBOSE'
   ];
 
-  var lintLog = getPath(_("basedir") + "/lint.log");
+  if (opt_extraflags) {
+    extraflags = extraflags.concat(opt_extraflags);
+  }
+
+  var lintLog = getPath(_('basedir') + '/lint.log');
   gcc(fileset, getNullDevice(), null, extraflags, lintLog);
   echo(readFile(lintLog));
-  logger.debug("Please check file \"" + lintLog + "\" for detail.");
+  logger.debug('Please check file \"' + lintLog + '\" for detail.');
 }
 
 /**
@@ -774,8 +779,9 @@ function merge_js(input, opt_output) {
 
 /**
  * @param {string} input 输入文件.
+ * @param {Array.<string>=} opt_extraflags 额外的参数.
  */
-function compile_js(input) {
+function compile_js(input, opt_extraflags) {
   echo('compiling ' + input + ' ...');
   var extraflags = [
     '--define=\'dn.COMPILED="true"\'',
@@ -788,6 +794,10 @@ function compile_js(input) {
 
   if (_('env.USER') != 'scmpf') {
     extraflags.push('--formatting PRETTY_PRINT');
+  }
+
+  if (opt_extraflags) {
+    extraflags = extraflags.concat(opt_extraflags);
   }
 
   var output = tempfile();
