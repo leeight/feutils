@@ -303,8 +303,9 @@ function yui(input, output, opt_jar) {
  * @param {string} output 输出文件.
  * @param {string=} opt_jar gcc的jar文件.
  * @param {Array.<string>=} opt_extraflags 命令行参数.
+ * @param {string=} opt_error error的输出文件.
  */
-function gcc(input, output, opt_jar, opt_extraflags) {
+function gcc(input, output, opt_jar, opt_extraflags, opt_error) {
   var task = createTask('java'),
       jar = opt_jar || (_('tools.dir') + '/lib/google-closure-compiler.jar');
 
@@ -326,6 +327,10 @@ function gcc(input, output, opt_jar, opt_extraflags) {
     for (var i = 0, j = extraflags.length; i < j; i++) {
       task.createArg().setLine(extraflags[i]);
     }
+  }
+
+  if (opt_error) {
+    task.setError(new java.io.File(opt_error));
   }
 
   try {
@@ -740,7 +745,11 @@ function gcc_lint(input) {
   var extraflags = [
     '--warning_level=VERBOSE'
   ];
-  gcc(fileset, getNullDevice(), null, extraflags);
+
+  var lintLog = getPath(_("basedir") + "/lint.log");
+  gcc(fileset, getNullDevice(), null, extraflags, lintLog);
+  echo(readFile(lintLog));
+  logger.debug("Please check file \"" + lintLog + "\" for detail.");
 }
 
 /**
