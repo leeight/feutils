@@ -8,15 +8,17 @@
 
 我已经帮忙申请了三个虚拟机，分别是：`ie6`, `ie7`, `ie8`，机器如下：
 
-1. db-sys-vdesktop640.vm  
+1. db-sys-vdesktop640.vm.baidu.com  
    帐号：ie6，密码：sysinitABCD@ZJM13F，域：DESKTOP
-2. db-sys-vdesktop641.vm  
+2. db-sys-vdesktop641.vm.baidu.com  
    帐号：ie7，密码：sysinitABCD@ZJM13F，域：DESKTOP
-3. db-sys-vdesktop642.vm  
+3. db-sys-vdesktop642.vm.baidu.com  
    帐号：ie8，密码：sysinitABCD@ZJM13F，域：DESKTOP
 
 __注意：这三台机器仅仅供大家测试之用，请不要在上面进行开发，也不要保存
 自己的私人数据。如果要进行开发的话，请按照下面的步骤进行申请自己的开发机器。__
+
+Windows下面可以通过远程桌面使用，Linux下面安装rdesktop也可以使用了。
 
 ### 好处
 
