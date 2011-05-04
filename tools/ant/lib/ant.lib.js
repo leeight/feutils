@@ -355,6 +355,35 @@ function gcc(input, output, opt_jar, opt_extraflags, opt_error) {
   }
 }
 
+/**
+ * 获取某个目录中的所有文件.
+ * @param {string} dir 需要变量的目录名称.
+ * @param {RegExp=} opt_exclude 通过正则来忽略某些内容.
+ */
+function fileset(dir, opt_exclude) {
+  var dirFile = new java.io.File(dir);
+  if (!dirFile.isDirectory()) {
+    return [];
+  }
+
+  var files = [];
+  var entries = dirFile.listFiles();
+  for(var i = 0, j = entries.length; i < j; i ++) {
+    var entry = entries[i],
+        name = getPath(dir + '/' + entry.getName());
+    if (!opt_exclude ||
+        (opt_exclude && !opt_exclude.test(name))) {
+      if (entry.isDirectory()) {
+        files = files.concat(fileset(name, opt_exclude));
+      } else {
+        files.push(name);
+      }
+    }
+  }
+
+  return files;
+}
+
 
 /**
  * 判断目标参数是否Array对象
