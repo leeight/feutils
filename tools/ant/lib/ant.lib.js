@@ -368,7 +368,7 @@ function fileset(dir, opt_exclude) {
 
   var files = [];
   var entries = dirFile.listFiles();
-  for(var i = 0, j = entries.length; i < j; i ++) {
+  for (var i = 0, j = entries.length; i < j; i++) {
     var entry = entries[i],
         name = getPath(dir + '/' + entry.getName());
     if (!opt_exclude ||
@@ -696,7 +696,7 @@ function writeFile(input, content, opt_append) {
   if (isString(input)) {
     file = new java.io.File(input);
   }
-  
+
   var parentDir = file.getParentFile();
   if (parentDir != null && !parentDir.exists()) {
     parentDir.mkdirs();
