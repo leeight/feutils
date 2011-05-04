@@ -16,7 +16,7 @@
  * dn/init.js要用,test的时候也要用，所以独立出来了。
  **/
 
-goog.require('baidu');
+
 goog.require('base.AbstractWorker');
 goog.require('er.template');
 
@@ -71,6 +71,7 @@ app.Worker.prototype._loadTemplate = function() {
 
 /**
  * 模版加载成功，解析.
+ * @param {XMLHttpRequest} xhr xhr对象.
  * @private
  */
 app.Worker.prototype._loadTemplateSuccess = function(xhr) {

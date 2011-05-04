@@ -85,7 +85,7 @@ app.json.parse = function(s) {
   if (app.json.isValid_(o)) {
     /** @preserveTry */
     try {
-      return (new Function("return (" + o + ")"))();
+      return (new Function('return (' + o + ')'))();
     } catch (ex) {
     }
   }

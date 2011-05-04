@@ -46,7 +46,7 @@ app.Launch = function(main) {
  * @param {Object=} opt_model 当前页面的DataModel.
  * @param {boolean=} opt_isPopup 是否是popup状态，默认false.
  *
- * @return {ui.Page}
+ * @return {ui.Page} 创建好的Page控件.
  */
 app.Init = function(view, main, opt_model, opt_isPopup) {
   var model = opt_model || {},
@@ -66,7 +66,7 @@ app.Init = function(view, main, opt_model, opt_isPopup) {
  * @param {Object=} opt_model 当前页面的DataModel.
  * @param {boolean=} opt_isPopup 是否是popup状态，默认false.
  *
- * @return {ui.Page}
+ * @return {ui.Page} 创建好的Page控件.
  */
 app.InitFromElement = function(main, opt_model, opt_isPopup) {
   var view = 'MAIN_PAGE_' + new Date().getTime();

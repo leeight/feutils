@@ -15,7 +15,7 @@
  * TODO 功能太弱...
  **/
 
-goog.require('baidu');
+
 
 goog.provide('app.module.ModuleLoader');
 goog.provide('app.module.ModuleManager');
@@ -116,7 +116,7 @@ app.module.ModuleLoader.prototype.load = function(moduleUrl, callback) {
         if (!this.readyState || this.readyState == 'loaded' ||
             this.readyState == 'complete') {
           // Guard against redundant state changes.
-          script.onreadystatechange = baidu.emptyMethod;
+          script.onreadystatechange = baidu.fn.blank;
           me._loadedUrl[moduleUrl] = true;
           callback();
         }

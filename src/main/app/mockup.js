@@ -16,7 +16,7 @@
  *
  **/
 
-goog.require('baidu');
+
 goog.require('app.json');
 
 goog.provide('baidu.mockup.register');
@@ -27,21 +27,21 @@ goog.provide('baidu.mockup.register');
  * @constructor
 **/
 baidu.Mockup = function() {
+  /**
+   * @private
+   * @type {Object}
+   */
+  this.maps_ = {};
+
+  /**
+   * @private
+   * @type {Object}
+   */
+  this.maps_once_ = {};
+
   this.init();
 };
 baidu.addSingletonGetter(baidu.Mockup);
-
-/**
- * @private
- * @type {Object}
- */
-baidu.Mockup.prototype.maps_ = {};
-
-/**
- * @private
- * @type {Object}
- */
-baidu.Mockup.prototype.maps_once_ = {};
 
 /**
  * 初始化，给baidu.ajax.request添加一个钩子
@@ -53,8 +53,11 @@ baidu.Mockup.prototype.init = function() {
         var found_in_mock = false;
         for (var k in me.maps_) {
             if (url.indexOf(k) == 0) {
-                if (typeof console == 'object' && typeof console.log == 'function') {
-                    console.log('[MOCKUP]' + (options.method || 'get').toUpperCase() + ' ' + url + ' ' + (options.data || ''));
+                if (typeof console == 'object' &&
+                    typeof console.log == 'function') {
+                    console.log('[MOCKUP]' +
+                                (options.method || 'get').toUpperCase() + ' ' +
+                                url + ' ' + (options.data || ''));
                     console.log(me.maps_[k]);
                 }
 
@@ -127,4 +130,4 @@ baidu.Mockup.prototype.register_once = function(url, rv) {
 baidu.mockup.register = function(url, rv) {
   var mockup = baidu.Mockup.getInstance();
   mockup.register(url, rv);
-}
+};
