@@ -48,7 +48,10 @@ er.Context.prototype.get = function(key) {
   return this.applicationContext[key];
 };
 
-// instance
+/**
+ * instance
+ * @type {er.Context}
+ */
 er.context = new er.Context();
 
 

@@ -28,6 +28,7 @@ er.Permission = function() {
 
 /**
  * 初始化权限控制器
+ * @param {Object} data 权限初始化数据.
  */
 er.Permission.prototype.init = function(data) {
   var key, item;
@@ -51,7 +52,10 @@ er.Permission.prototype.isAllow = function(name) {
   return !!this.permissible[name];
 };
 
-// instance
+/**
+ * instance
+ * @type {er.Permission}
+ */
 er.permission = new er.Permission();
 
 

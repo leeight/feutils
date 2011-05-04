@@ -52,6 +52,12 @@ er.Locator = function() {
    * @type {string}
    */
   this.referer = '';
+
+  /**
+   * setInterval的定时器
+   * @type {number}
+   */
+  this._timer = 0;
 };
 
 /**
@@ -129,8 +135,13 @@ er.Locator.prototype.redirect = function(loc, preventDefault) {
 er.Locator.prototype.parseLocation = function(loc) {
     var pair = loc.match(/^([^~]+)(~(.*))?$/),
         re = {};
-    re.path = pair[1];
-    re.query = (pair.length === 4 ? pair[3] : '');
+    if (pair) {
+        re.path = pair[1];
+        re.query = (pair.length === 4 ? pair[3] : '');
+    } else {
+        re.path = '';
+        re.query = '';
+    }
 
     return re;
 };
@@ -194,6 +205,11 @@ er.Locator.prototype.getQuery = function() {
  * 初始化er.Locator
  */
 er.Locator.prototype.init = function() {
+    if (this._timer) {
+        // 定时器已经启动了
+        return;
+    }
+
     var me = this,
         prevLocation;
 
@@ -222,9 +238,12 @@ er.Locator.prototype.init = function() {
         iframe = null;
     }
 
-    setInterval(changeListener, 100);
+    this._timer = setInterval(changeListener, 100);
 };
 
+/**
+ * @type {er.Locator}
+ */
 er.locator = new er.Locator();
 
 

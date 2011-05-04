@@ -298,99 +298,97 @@ er.AbstractFormAction = function() {
      */
     this.form = null;
 };
-er.AbstractFormAction.prototype = function() {
-    return {
-        /**
-         * @inheritDoc
-         * @protected
-         * @param {ui.Page} page Page对象.
-         */
-        initBehavior: function(page) {
-            er.AbstractFormAction.superClass.initBehavior.call(this, page);
-
-            if (this.form) {
-                var handler = baidu.fn.bind(this.onFormSubmit, this);
-                this.form.onsubmit = /** @type {function(this:ui.Form, string)}*/ (handler);
-            }
-        },
-
-        /**
-         * @inheritDoc
-         * @protected
-         */
-        leave: function() {
-            if (this.form) {
-                this.form.onsubmit = null;
-            }
-            this.form = null;
-
-            er.AbstractFormAction.superClass.leave.call(this);
-        },
-
-        /**
-         * 开始提交数据，请求的参数由ui.Form.onsubmit传递过来的
-         * @protected
-         * @param {string} params 请求参数.
-         */
-        onFormSubmit: function(params) {
-            var finalParam = this.getFinalParam(params);
-            this.doSubmit(finalParam);
-        },
-
-        /**
-         * 获取最终请求参数
-         * @protected
-         * @this {er.AbstractFormAction}
-         * @param {string} params 表单请求参数，由{ui.Form}传递过来.
-         */
-        getFinalParam: function(params) {
-            params = this.processParam(params);
-            var extraParam = this.getExtraParam();
-            if (extraParam) {
-                params += '&' + extraParam;
-            }
-            return params;
-        },
-
-        /**
-         * 提交数据，请求的参数是最终的参数
-         * @protected
-         * @param {string} params 请求参数.
-         */
-        doSubmit: function(params) {},
-
-        /**
-         * 参数适配器链.
-         * @type {Array.<base.IParamAdapter>}
-         */
-        paramAdapters: null,
-
-        /**
-         * 处理请求参数。如果需要修改，请覆写此方法。
-         * @protected
-         * @param {string} params 待处理的参数.
-         * @return {string} 处理完的参数.
-         */
-        processParam: function(params) {
-            if (baidu.lang.isArray(this.paramAdapters)) {
-                for (var i = 0; i < this.paramAdapters.length; i++) {
-                    params = this.paramAdapters[i].processParam(params);
-                }
-            }
-            return params;
-        },
-
-        /**
-         * 获取额外参数
-         * @protected
-         * @return {string} 检索参数.
-         */
-        getExtraParam: function() {
-            return '';
-        }
-    };
-}();
 baidu.inherits(er.AbstractFormAction, er.Action);
+
+/**
+ * @inheritDoc
+ * @protected
+ * @param {ui.Page} page Page对象.
+ */
+er.AbstractFormAction.prototype.initBehavior = function(page) {
+    er.AbstractFormAction.superClass.initBehavior.call(this, page);
+
+    if (this.form) {
+        var handler = baidu.fn.bind(this.onFormSubmit, this);
+        this.form.onsubmit = /** @type {function(this:ui.Form, string)}*/ (handler);
+    }
+};
+
+/**
+ * @inheritDoc
+ * @protected
+ */
+er.AbstractFormAction.prototype.leave = function() {
+    if (this.form) {
+        this.form.onsubmit = null;
+    }
+    this.form = null;
+
+    er.AbstractFormAction.superClass.leave.call(this);
+};
+
+/**
+ * 开始提交数据，请求的参数由ui.Form.onsubmit传递过来的
+ * @protected
+ * @param {string} params 请求参数.
+ */
+er.AbstractFormAction.prototype.onFormSubmit = function(params) {
+    var finalParam = this.getFinalParam(params);
+    this.doSubmit(finalParam);
+};
+
+/**
+ * 获取最终请求参数
+ * @protected
+ * @param {string} params 表单请求参数，由{ui.Form}传递过来.
+ * @return {string} 表单参数.
+ */
+er.AbstractFormAction.prototype.getFinalParam = function(params) {
+    params = this.processParam(params);
+    var extraParam = this.getExtraParam();
+    if (extraParam) {
+        params += '&' + extraParam;
+    }
+    return params;
+};
+
+/**
+ * 提交数据，请求的参数是最终的参数
+ * @protected
+ * @param {string} params 请求参数.
+ */
+er.AbstractFormAction.prototype.doSubmit = function(params) {
+};
+
+/**
+ * 参数适配器链.
+ * @type {Array.<base.IParamAdapter>}
+ */
+er.AbstractFormAction.prototype.paramAdapters = null;
+
+/**
+ * 处理请求参数。如果需要修改，请覆写此方法。
+ * @protected
+ * @param {string} params 待处理的参数.
+ * @return {string} 处理完的参数.
+ */
+er.AbstractFormAction.prototype.processParam = function(params) {
+    if (baidu.lang.isArray(this.paramAdapters)) {
+        for (var i = 0; i < this.paramAdapters.length; i++) {
+            params = this.paramAdapters[i].processParam(params);
+        }
+    }
+    return params;
+};
+
+/**
+ * 获取额外参数
+ * @protected
+ * @return {string} 检索参数.
+ */
+er.AbstractFormAction.prototype.getExtraParam = function() {
+    return '';
+};
 
 /**
  * 列表Action类
@@ -430,207 +428,206 @@ er.ListAction = function() {
      */
     this.requesterBatch = null;
 };
-
-er.ListAction.prototype = function() {
-    return {
-        /**
-         * @override
-         */
-        afterInit: function() {
-            throw new Error("Please implemented this method to initialize 'form', 'list', 'pnlBatch'");
-        },
-
-        /**
-         * @inheritDoc
-         */
-        beforeRender: function(page) {
-            this.list.datasource = new base.RemoteListDataSource(
-                this.requesterList,
-                baidu.fn.bind(this.getSearchParam, this)
-            );
-        },
-
-        /**
-         * 为了避免在子类里面的enterDocument调用superClass.enterDocument.call(this, page)
-         * 提供了这个函数，子类值需要去实现这个函数就OK了
-         * @protected
-         */
-        enterDocumentInternal: function() {},
-
-        /**
-         * @inheritDoc
-         */
-        enterDocument: function(page) {
-            // FIXME: 将其他的formSearch改成form，之前不应该直接暴露formSearch...
-            this.form = this.formSearch || this.form;
-
-            this.model.triggerPropertyChanged('selectedItems');
-
-            this.enterDocumentInternal();
-        },
-
-
-        /**
-         * 其他的初始化行为逻辑
-         * @see {enterDocumentInternal}
-         */
-        initBehaviorInternal: function() {},
-
-        /**
-         * @inheritDoc
-         */
-        initBehavior: function(page) {
-            er.ListAction.superClass.initBehavior.call(this, page);
-
-            this.list.onstatechange = baidu.fn.bind(this.onListStateChanged, this);
-            this.list.onlistselect = baidu.fn.bind(this.onListSelected, this);
-
-            this.initBehaviorInternal();
-
-            this.list.getData();
-        },
-
-        /**
-         * @inheritDoc
-         */
-        onModelChanged: function(propertyName, newValue, oldValue) {
-            if (propertyName === 'selectedItems') {
-                if (!this.pnlBatch) {
-                    return;
-                }
-                var selectedItems = newValue;
-                if (selectedItems && selectedItems.length) {
-                    this.pnlBatch.enableChildren();
-                } else {
-                    this.pnlBatch.disableChildren();
-                }
-            }
-            if (propertyName === 'listState' ||
-                propertyName === 'searchParams') {
-                this.list.getData();
-                this.saveSearchAndListState();
-            }
-        },
-
-        /**
-         * 保存当前的页面的状态
-         * @private
-         */
-        saveSearchAndListState: function() {
-            var states = [],
-                searchParams = this.model.get('searchParams'),
-                listState = this.model.get('listState');
-            if (searchParams) {
-                states.push(searchParams);
-            }
-            if (listState) {
-                baidu.object.each(listState, function(value, key) {
-                    states.push(key + '=' + value);
-                });
-            }
-            this.saveState(states.join('&'));
-        },
-
-        /**
-         * FIXME 解释一下getSearchParam, getExtraParam, processParam
-         * 这个函数的用处以及应用场景。
-         *
-         * 获取当前页面的检索参数
-         * @private
-         * @return {string} 检索参数.
-         */
-        getSearchParam: function() {
-            var searchParam = this.model.get('searchParams');
-            // 第一次请求时，没有检索参数，则从检索表单中直接获取，作为之后的检索参数。
-            if (!searchParam && this.form) {
-                searchParam = this.getFinalParam(this.form.getParams());
-                this.model['searchParams'] = searchParam;
-            }
-            return searchParam;
-        },
-
-        /**
-         * 分页列表状态改变事件的处理函数，如pageNo,pageSize,order,orderBy.
-         * @private
-         */
-        onListStateChanged: function(state) {
-            this.model.set('listState', state);
-        },
-
-        /**
-         * 列表选择事件处理函数
-         * @this {er.ListAction}
-         * @private
-         */
-        onListSelected: function(selectedItems) {
-            this.model.set('selectedItems', selectedItems);
-        },
-
-        /**
-         * @inheritDoc
-         * @this {er.ListAction}
-         * @protected
-         */
-        doSubmit: function(params) {
-            // 搜索时重置翻页
-            if (this.list.resetPageNo) {
-                this.list.resetPageNo();
-            }
-            // XXX: 不论搜索条件是否改变都触发请求
-            this.model['searchParams'] = params;
-            this.model.triggerPropertyChanged('searchParams');
-        },
-
-        /**
-         * 批量更新或者删除，具体的操作和requesterBatch的行为有关系.
-         * @param {string=} opt_field 属性名称.
-         * @param {string=} opt_value 更新的值.
-         */
-        batchUpdate: function(opt_field, opt_value) {
-            if (!this.requesterBatch) {
-                return;
-            }
-
-            var me = this,
-                selectedItems = me.model.get('selectedItems'),
-                ids = [],
-                params = [];
-            baidu.each(selectedItems, function(item) {
-                ids.push(item.id);
-            });
-            params.push('ids=' + ids.join(','));
-            if (baidu.lang.hasValue(opt_field)) {
-                params.push(opt_field + '=' + opt_value);
-            }
-            this.requesterBatch(params.join('&'), function() {
-                me.list.getData();
-            });
-        },
-
-        /**
-         * 子类的销毁在这处理
-         */
-        leaveInternal: function() {},
-
-        /**
-         * @inheritDoc
-         */
-        leave: function() {
-            if (this.list) {
-                this.list.onstatechange = null;
-                this.list.onlistselect = null;
-            }
-
-            this.pnlBatch = null;
-            this.list = null;
-
-            this.leaveInternal();
-
-            er.ListAction.superClass.leave.call(this);
-        }
-    };
-}();
 baidu.inherits(er.ListAction, er.AbstractFormAction);
+
+/**
+ * @override
+ */
+er.ListAction.prototype.afterInit = function() {
+    throw new Error("Please implemented this method to initialize 'form', 'list', 'pnlBatch'");
+};
+
+/**
+ * @inheritDoc
+ */
+er.ListAction.prototype.beforeRender = function(page) {
+    this.list.datasource = new base.RemoteListDataSource(
+        this.requesterList,
+        baidu.fn.bind(this.getSearchParam, this)
+    );
+};
+
+/**
+ * 为了避免在子类里面的enterDocument调用superClass.enterDocument.call(this, page)
+ * 提供了这个函数，子类值需要去实现这个函数就OK了
+ * @protected
+ */
+er.ListAction.prototype.enterDocumentInternal = function() {
+};
+
+/**
+ * @inheritDoc
+ */
+er.ListAction.prototype.enterDocument = function(page) {
+    // FIXME: 将其他的formSearch改成form，之前不应该直接暴露formSearch...
+    this.form = this.formSearch || this.form;
+
+    this.model.triggerPropertyChanged('selectedItems');
+
+    this.enterDocumentInternal();
+};
+
+
+/**
+ * 其他的初始化行为逻辑
+ * @see {enterDocumentInternal}
+ */
+er.ListAction.prototype.initBehaviorInternal = function() {
+};
+
+/**
+ * @inheritDoc
+ */
+er.ListAction.prototype.initBehavior = function(page) {
+    er.ListAction.superClass.initBehavior.call(this, page);
+
+    this.list.onstatechange = baidu.fn.bind(this.onListStateChanged, this);
+    this.list.onlistselect = baidu.fn.bind(this.onListSelected, this);
+
+    this.initBehaviorInternal();
+
+    this.list.getData();
+};
+
+/**
+ * @inheritDoc
+ */
+er.ListAction.prototype.onModelChanged = function(propertyName, newValue, oldValue) {
+    if (propertyName === 'selectedItems') {
+        if (!this.pnlBatch) {
+            return;
+        }
+        var selectedItems = newValue;
+        if (selectedItems && selectedItems.length) {
+            this.pnlBatch.enableChildren();
+        } else {
+            this.pnlBatch.disableChildren();
+        }
+    }
+    if (propertyName === 'listState' ||
+        propertyName === 'searchParams') {
+        this.list.getData();
+        this.saveSearchAndListState();
+    }
+};
+
+/**
+ * 保存当前的页面的状态
+ * @private
+ */
+er.ListAction.prototype.saveSearchAndListState = function() {
+    var states = [],
+        searchParams = this.model.get('searchParams'),
+        listState = this.model.get('listState');
+    if (searchParams) {
+        states.push(searchParams);
+    }
+    if (listState) {
+        baidu.object.each(listState, function(value, key) {
+            states.push(key + '=' + value);
+        });
+    }
+    this.saveState(states.join('&'));
+};
+
+/**
+ * FIXME 解释一下getSearchParam, getExtraParam, processParam
+ * 这个函数的用处以及应用场景。
+ *
+ * 获取当前页面的检索参数
+ * @private
+ * @return {string} 检索参数.
+ */
+er.ListAction.prototype.getSearchParam = function() {
+    var searchParam = this.model.get('searchParams');
+    // 第一次请求时，没有检索参数，则从检索表单中直接获取，作为之后的检索参数。
+    if (!searchParam && this.form) {
+        searchParam = this.getFinalParam(this.form.getParams());
+        this.model['searchParams'] = searchParam;
+    }
+    return searchParam;
+};
+
+/**
+ * 分页列表状态改变事件的处理函数，如pageNo,pageSize,order,orderBy.
+ * @param {string} state 需要更新的状态.
+ * @private
+ */
+er.ListAction.prototype.onListStateChanged = function(state) {
+    this.model.set('listState', state);
+};
+
+/**
+ * 列表选择事件处理函数
+ * @param {string} selectedItems 选中的项.
+ * @private
+ */
+er.ListAction.prototype.onListSelected = function(selectedItems) {
+    this.model.set('selectedItems', selectedItems);
+};
+
+/**
+ * @inheritDoc
+ * @protected
+ */
+er.ListAction.prototype.doSubmit = function(params) {
+    // 搜索时重置翻页
+    if (this.list.resetPageNo) {
+        this.list.resetPageNo();
+    }
+    // XXX: 不论搜索条件是否改变都触发请求
+    this.model['searchParams'] = params;
+    this.model.triggerPropertyChanged('searchParams');
+};
+
+/**
+ * 批量更新或者删除，具体的操作和requesterBatch的行为有关系.
+ * @param {string=} opt_field 属性名称.
+ * @param {string=} opt_value 更新的值.
+ */
+er.ListAction.prototype.batchUpdate = function(opt_field, opt_value) {
+    if (!this.requesterBatch) {
+        return;
+    }
+
+    var me = this,
+        selectedItems = me.model.get('selectedItems'),
+        ids = [],
+        params = [];
+    baidu.each(selectedItems, function(item) {
+        ids.push(item.id);
+    });
+    params.push('ids=' + ids.join(','));
+    if (baidu.lang.hasValue(opt_field)) {
+        params.push(opt_field + '=' + opt_value);
+    }
+    this.requesterBatch(params.join('&'), function() {
+        me.list.getData();
+    });
+};
+
+/**
+ * 子类的销毁在这处理
+ */
+er.ListAction.prototype.leaveInternal = function() {
+};
+
+/**
+ * @inheritDoc
+ */
+er.ListAction.prototype.leave = function() {
+    if (this.list) {
+        this.list.onstatechange = null;
+        this.list.onlistselect = null;
+    }
+
+    this.pnlBatch = null;
+    this.list = null;
+
+    this.leaveInternal();
+
+    er.ListAction.superClass.leave.call(this);
+};
 
 /**
  * 表单Action类
@@ -664,189 +661,189 @@ er.FormAction = function() {
      */
     this.requester = null;
 };
-er.FormAction.prototype = function() {
-    return {
-
-        /**
-         * @protected
-         */
-        initBehaviorInternal: function() {},
-
-        /**
-         * @inheritDoc
-         */
-        initBehavior: function(page) {
-            er.FormAction.superClass.initBehavior.call(this, page);
-
-            if (this.btnCancel) {
-                this.btnCancel.onclick = baidu.fn.bind(this.onCancelClick, this);
-            }
-
-            this.initBehaviorInternal();
-        },
-
-
-        /**
-         * 类似er.ListAction中enterDocumentInternal的作用。
-         * @protected
-         */
-        enterDocumentInternal: function() {},
-
-        /**
-         * @inheritDoc
-         */
-        enterDocument: function(page) {
-          er.FormAction.superClass.enterDocument.call(this, page);
-
-          this.enterDocumentInternal();
-        },
-
-        /**
-         * 点击返回按钮时候的处理函数.
-         * @protected
-         */
-        onCancelClick: function() {
-            this.back();
-        },
-
-        /**
-         * 表单提交前的验证
-         */
-        onValidateForm: function() {},
-
-        /**
-         * @inheritDoc
-         * @protected
-         * @param {string} params 请求参数.
-         */
-        onFormSubmit: function(params) {
-            // FIXME：验证步骤再表单中已经完成了，不应该放这再验证
-            if (this.onValidateForm() === false) {
-                return;
-            }
-
-            if (this.btnSubmit) {
-                this.btnSubmit.disable();
-            }
-
-            er.FormAction.superClass.onFormSubmit.call(this, params);
-        },
-
-        /**
-         * @inheritDoc
-         * @protected
-         */
-        doSubmit: function(params) {
-            if (this.requester) {
-                this.requester(params,
-                  baidu.fn.bind(this.onSubmitFinish, this),
-                  baidu.fn.bind(this.onSubmitFail, this));
-            }
-        },
-
-        /**
-         * 处理返回的数据，可能会显示错误信息
-         * @protected
-         * @param {Object} data 后端返回的数据.
-         */
-        onSubmitFinish: function(data) {
-            var controls = this.form.getInputControls(),
-                i,
-                errorMap,
-                control,
-                errorMessage;
-
-            if (this.btnSubmit) {
-                this.btnSubmit.enable();
-            }
-
-            // 当后端验证失败时
-            // 处理后端验证结果
-            if (data['success'] !== 'true') {
-                errorMap = data['message']['field'];
-
-                if (!errorMap) {
-                    return;
-                }
-
-                // 这里的解析过程和processParam是逆序的
-                if (baidu.lang.isArray(this.paramAdapters)) {
-                    for (i = this.paramAdapters.length - 1; i >= 0; i--) {
-                        this.paramAdapters[i].processObject(errorMap);
-                    }
-                }
-
-                for (i = 0; i < controls.length; i++) {
-                    control = controls[i];
-                    if (!control.isDisabled()) {
-                        errorMessage = errorMap[control.formName];
-                        if (errorMessage) {
-                            control.showError(errorMessage);
-                        }
-                    }
-                }
-
-                this.onSubmitFail(data);
-                return;
-            }
-
-            if (this.onSubmitSucceed(data) !== false) {
-                this.back();
-            }
-        },
-
-        /**
-         * 后端返回数据的错误处理函数
-         * @protected
-         * @param {Object} data 后端返回的数据结构.
-         */
-        onSubmitFail: function(data) {
-            if (this.btnSubmit) {
-                this.btnSubmit.enable();
-            }
-        },
-
-        /**
-         * @protected
-         */
-        onSubmitSucceed: function(data) {
-            if (this.isModify()) {
-                dn.notice('修改成功');
-            } else {
-                dn.notice('新建成功');
-            }
-        },
-
-        /**
-         * 是否修改
-         *
-         * @private
-         * @return {boolean} 是否是修改状态.
-         */
-        isModify: function() {
-            return (/update$/).test(this.argMap.path);
-        },
-
-        /**
-         * 子类的销毁在这处理
-         */
-        leaveInternal: function() {},
-
-        /**
-         * @inheritDoc
-         */
-        leave: function() {
-            if (this.btnCancel) {
-                this.btnCancel.onclick = null;
-            }
-
-            this.btnSubmit = null;
-            this.btnCancel = null;
-
-            this.leaveInternal();
-
-            er.FormAction.superClass.leave.call(this);
-        }
-    };
-}();
 baidu.inherits(er.FormAction, er.AbstractFormAction);
+
+/**
+ * @protected
+ */
+er.FormAction.prototype.initBehaviorInternal = function() {
+};
+
+/**
+ * @inheritDoc
+ */
+er.FormAction.prototype.initBehavior = function(page) {
+    er.FormAction.superClass.initBehavior.call(this, page);
+
+    if (this.btnCancel) {
+        this.btnCancel.onclick = baidu.fn.bind(this.onCancelClick, this);
+    }
+
+    this.initBehaviorInternal();
+};
+
+
+/**
+ * 类似er.ListAction中enterDocumentInternal的作用。
+ * @protected
+ */
+er.FormAction.prototype.enterDocumentInternal = function() {
+};
+
+/**
+ * @inheritDoc
+ */
+er.FormAction.prototype.enterDocument = function(page) {
+  er.FormAction.superClass.enterDocument.call(this, page);
+
+  this.enterDocumentInternal();
+};
+
+/**
+ * 点击返回按钮时候的处理函数.
+ * @protected
+ */
+er.FormAction.prototype.onCancelClick = function() {
+    this.back();
+};
+
+/**
+ * 表单提交前的验证
+ */
+er.FormAction.prototype.onValidateForm = function() {
+};
+
+/**
+ * @inheritDoc
+ * @protected
+ * @param {string} params 请求参数.
+ */
+er.FormAction.prototype.onFormSubmit = function(params) {
+    // FIXME：验证步骤再表单中已经完成了，不应该放这再验证
+    if (this.onValidateForm() === false) {
+        return;
+    }
+
+    if (this.btnSubmit) {
+        this.btnSubmit.disable();
+    }
+
+    er.FormAction.superClass.onFormSubmit.call(this, params);
+};
+
+/**
+ * @inheritDoc
+ * @protected
+ */
+er.FormAction.prototype.doSubmit = function(params) {
+    if (this.requester) {
+        this.requester(params,
+          baidu.fn.bind(this.onSubmitFinish, this),
+          baidu.fn.bind(this.onSubmitFail, this));
+    }
+};
+
+/**
+ * 处理返回的数据，可能会显示错误信息
+ * @protected
+ * @param {Object} data 后端返回的数据.
+ */
+er.FormAction.prototype.onSubmitFinish = function(data) {
+    var controls = this.form.getInputControls(),
+        i,
+        errorMap,
+        control,
+        errorMessage;
+
+    if (this.btnSubmit) {
+        this.btnSubmit.enable();
+    }
+
+    // 当后端验证失败时
+    // 处理后端验证结果
+    if (data['success'] !== 'true') {
+        errorMap = data['message']['field'];
+
+        if (!errorMap) {
+            return;
+        }
+
+        // 这里的解析过程和processParam是逆序的
+        if (baidu.lang.isArray(this.paramAdapters)) {
+            for (i = this.paramAdapters.length - 1; i >= 0; i--) {
+                this.paramAdapters[i].processObject(errorMap);
+            }
+        }
+
+        for (i = 0; i < controls.length; i++) {
+            control = controls[i];
+            if (!control.isDisabled()) {
+                errorMessage = errorMap[control.formName];
+                if (errorMessage) {
+                    control.showError(errorMessage);
+                }
+            }
+        }
+
+        this.onSubmitFail(data);
+        return;
+    }
+
+    if (this.onSubmitSucceed(data) !== false) {
+        this.back();
+    }
+};
+
+/**
+ * 后端返回数据的错误处理函数
+ * @protected
+ * @param {Object} data 后端返回的数据结构.
+ */
+er.FormAction.prototype.onSubmitFail = function(data) {
+    if (this.btnSubmit) {
+        this.btnSubmit.enable();
+    }
+};
+
+/**
+ * @protected
+ * @param {Object} data 服务器返回的json数据.
+ */
+er.FormAction.prototype.onSubmitSucceed = function(data) {
+    if (this.isModify()) {
+        dn.notice('修改成功');
+    } else {
+        dn.notice('新建成功');
+    }
+};
+
+/**
+ * form是否处于修改状态.
+ * @protected
+ * @return {boolean} 是否是修改状态.
+ */
+er.FormAction.prototype.isModify = function() {
+    return (/update$/).test(this.argMap.path);
+};
+
+/**
+ * 子类的销毁在这处理
+ */
+er.FormAction.prototype.leaveInternal = function() {
+};
+
+/**
+ * @inheritDoc
+ */
+er.FormAction.prototype.leave = function() {
+    if (this.btnCancel) {
+        this.btnCancel.onclick = null;
+    }
+
+    this.btnSubmit = null;
+    this.btnCancel = null;
+
+    this.leaveInternal();
+
+    er.FormAction.superClass.leave.call(this);
+};

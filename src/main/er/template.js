@@ -201,7 +201,10 @@ er.Template.prototype.parse = function(source) {
     }
 };
 
-// instance
+/**
+ * instance
+ * @type {er.Template}
+ */
 er.template = new er.Template();
 
 

@@ -83,7 +83,14 @@ er.base.extend = function(target, source) {
   return target;
 };
 
+/**
+ * @type {number}
+ */
 er.base.ie = 0;
+
+/**
+ * @type {number}
+ */
 er.base.firefox = 0;
 
 (function() {

@@ -71,7 +71,7 @@ er.Controller.ActionConfigType;
  * 跳转视图
  *
  * @param {string} path 路径.
- * @param {object} paramMap 查询条件.
+ * @param {Object} paramMap 查询条件.
  * @param {string} referer 定位器.
  */
 er.Controller.prototype.forward = function(path, paramMap, referer) {
