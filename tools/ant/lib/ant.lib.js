@@ -713,7 +713,7 @@ function writeFile(input, content, opt_append) {
  * @return {string} 归一化之后的路径.
  */
 function getPath(input) {
-  return input.replace('/', java.io.File.separator);
+  return input.replace(/\//g, java.io.File.separator);
 }
 
 /**
