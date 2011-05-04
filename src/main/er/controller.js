@@ -228,7 +228,10 @@ er.Controller.prototype.loadAction = function(domId, actionName, opt_argMap) {
   return this.enterAction(actionConfig, argMap);
 };
 
-// instance
+/**
+ * instance
+ * @type {er.Controller}
+ */
 er.controller = new er.Controller();
 
 

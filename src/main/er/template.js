@@ -28,6 +28,22 @@ er.Template = function() {
 };
 
 /**
+ * @param {string} type 类型.
+ * @param {string} varName 变量的名字.
+ * @return {?string} 变量的值.
+ */
+er.Template.prototype._getObject = function(type, varName) {
+  return null;
+};
+
+/**
+ * @param {function(string,string):string} fn ObjectGetter.
+ */
+er.Template.prototype.setObjectGetter = function(fn) {
+  this._getObject = fn;
+};
+
+/**
  * 解析模板变量的值。现在实际上只做字符串的静态绑定。
  *
  * @private
@@ -57,15 +73,13 @@ er.Template.prototype.parseVariableByType = function(varName, type) {
 
   type = type.toLowerCase();
   if (type === 'lang' || type === 'config') {
-      // TODO：和dn解耦
-      variable = /** @type {string} */ (
-        er.base.getObjectByName('dn.' + type + '.' + varName));
+    variable = this._getObject(type, varName);
   } else {
-      throw 'Not handled';
+    throw 'Not handled';
   }
 
   if (er.base.hasValue(variable)) {
-      return variable;
+    return variable;
   }
 
   return '';
