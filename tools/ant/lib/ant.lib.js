@@ -241,13 +241,31 @@ function basename(path) {
  * @param {boolean=} opt_overwrite 是否覆盖.
  */
 function copy(from, to, opt_overwrite) {
+  var fromFile = new java.io.File(from);
+  if (!fromFile.exists()) {
+    return;
+  }
   var task = createTask('copy');
-  task.setFile(new java.io.File(from));
+  task.setFile(fromFile);
   task.setTofile(new java.io.File(to));
   if (opt_overwrite) {
     task.setOverwrite(true);
   }
   task.perform();
+}
+
+/**
+ * @param {string} inputfile 输入文件.
+ */
+function md5sum(inputfile) {
+  var property = uuid();
+
+  var checksum = createTask('checksum');
+  checksum.setFile(inputfile);
+  checksum.setProperty(property);
+  checksum.perform();
+
+  return _(property);
 }
 
 /**
@@ -259,24 +277,21 @@ function gen_checksum(inputfile) {
     return;
   }
 
-  var property = uuid();
-
-  var checksum = createTask('checksum');
-  checksum.setFile(file);
-  checksum.setProperty(property);
-  checksum.perform();
+  var checksum = md5sum(inputfile);
 
   var destfile = '',
       last_dot_pos = inputfile.lastIndexOf('.');
   if (last_dot_pos == -1) {
-    destfile = inputfile + '-' + _(property);
+    destfile = inputfile + '-' + checksum;
   } else {
     destfile = inputfile.substring(0, last_dot_pos) + '-' +
-                _(property) + inputfile.substring(last_dot_pos);
+                checksum + inputfile.substring(last_dot_pos);
   }
 
-  echo(file.getName() + ' -> ' + _(property));
+  echo(file.getName() + ' -> ' + checksum);
   copy(inputfile, destfile);
+
+  return checksum;
 }
 
 /**
@@ -652,7 +667,11 @@ function writeFile(input, content, opt_append) {
   if (isString(input)) {
     file = new java.io.File(input);
   }
-  file.getParentFile().mkdirs();
+  
+  var parentDir = file.getParentFile();
+  if (parentDir != null && !parentDir.exists()) {
+    parentDir.mkdirs();
+  }
 
   var writer = new java.io.BufferedWriter(
     new java.io.FileWriter(file, opt_append === true));
