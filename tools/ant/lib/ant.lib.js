@@ -236,22 +236,50 @@ function basename(path) {
 }
 
 /**
+ * 请参考python中的os.path.splitext
+ * @param {string} name 文件名
+ * @return {Array.<string}> 数组有两项，[0]是名字,[1]是后缀包含'.'
+ * 如果没有后缀，则[1]为空
+ */
+function splitext(name) {
+  var last_dot_pos = name.lastIndexOf('.');
+  if (last_dot_pos == -1) {
+    return [name, '']
+  } else {
+    var basename = name.substring(0, last_dot_pos);
+    var extension = name.substring(last_dot_pos);
+
+    return [basename, extension];
+  }
+}
+
+/**
  * @param {string} from 源文件.
  * @param {string} to 目标文件.
  * @param {boolean=} opt_overwrite 是否覆盖.
  */
 function copy(from, to, opt_overwrite) {
-  var fromFile = new java.io.File(from);
+  var fromFile = new java.io.File(from),
+      toFile = new java.io.File(to);
   if (!fromFile.exists()) {
     return;
   }
-  var task = createTask('copy');
-  task.setFile(fromFile);
-  task.setTofile(new java.io.File(to));
-  if (opt_overwrite) {
-    task.setOverwrite(true);
+
+  if (fromFile.isDirectory()) {
+    var task = createTask('copydir');
+    task.setSrc(fromFile);
+    task.setDest(toFile);
+    task.perform();
+  } else {
+    var task = createTask('copy');
+    task.setFile(fromFile);
+    task.setTofile(toFile);
+
+    if (opt_overwrite) {
+      task.setOverwrite(true);
+    }
+    task.perform();
   }
-  task.perform();
 }
 
 /**
@@ -261,6 +289,9 @@ function md5sum(inputfile) {
   var property = uuid();
 
   var checksum = createTask('checksum');
+  if (isString(inputfile)) {
+    inputfile = new java.io.File(inputfile);
+  }
   checksum.setFile(inputfile);
   checksum.setProperty(property);
   checksum.perform();
@@ -288,7 +319,6 @@ function gen_checksum(inputfile) {
                 checksum + inputfile.substring(last_dot_pos);
   }
 
-  echo(file.getName() + ' -> ' + checksum);
   copy(inputfile, destfile);
 
   return checksum;
@@ -384,6 +414,19 @@ function fileset(dir, opt_exclude) {
   return files;
 }
 
+/**
+ * @param {string} pattern 正则的规则.
+ * @param {string=} opt_flag flag.
+ * @return {RegExp}
+ */
+function regexp(pattern, opt_flag) {
+  var escaped = pattern.replace(new RegExp("([.*+?^=!:\x24{}()|[\\]/\\\\])", "g"), "\\\x241");
+  if (opt_flag) {
+    return new RegExp(escaped, opt_flag);
+  } else {
+    return new RegExp(escaped);
+  }
+}
 
 /**
  * 判断目标参数是否Array对象
@@ -683,7 +726,7 @@ function readFile(input) {
   }
   scanner.close();
 
-  return content;
+  return String(content);
 }
 
 /**
