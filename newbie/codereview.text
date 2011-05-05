@@ -23,11 +23,8 @@
 使用之前确认一下需要的工具和环境已经准备完毕，请参考[这里](env.text)
 
 0. 准备必要的环境，请参考[这里](env.text)。
-1. 下载这个工具包<http://fe.baidu.com/codereview/static/Fcodereview.zip>。
-2. 解压到一个目录下，假定是`c:\dev\Fcodereview`（Windows系统）或者`$HOME/dev/Fcodereview`（NIX系统）。
-3. 修改环境变量`%PATH%`（Windows系统）或者`$PATH`（NIX系统）的值。
-![modify-windows-env.png](modify-windows-env.png)
-4. 打开终端，执行命令`Fcodereview --help`，如果有帮助信息输出，说明环境已经准备好了。
+1. 安装`feutils`这个工具集，请参考[这里](feutils.text)。
+2. 打开终端，执行命令`Fcodereview --help`，如果有帮助信息输出，说明环境已经准备好了。
 
 ### 提交Review
 
