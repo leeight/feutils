@@ -237,14 +237,14 @@ function basename(path) {
 
 /**
  * 请参考python中的os.path.splitext
- * @param {string} name 文件名
- * @return {Array.<string}> 数组有两项，[0]是名字,[1]是后缀包含'.'
- * 如果没有后缀，则[1]为空
+ * @param {string} name 文件名.
+ * @return {Array.<string} > 数组有两项，[0]是名字,[1]是后缀包含'.'
+ * 如果没有后缀，则[1]为空.
  */
 function splitext(name) {
   var last_dot_pos = name.lastIndexOf('.');
   if (last_dot_pos == -1) {
-    return [name, '']
+    return [name, ''];
   } else {
     var basename = name.substring(0, last_dot_pos);
     var extension = name.substring(last_dot_pos);
@@ -279,6 +279,27 @@ function copy(from, to, opt_overwrite) {
       task.setOverwrite(true);
     }
     task.perform();
+  }
+}
+
+/**
+ * @return {string} svnversion.
+ */
+function svnversion() {
+  var property = uuid();
+
+  var task = createTask('exec');
+  task.setExecutable('svnversion');
+  task.setOutputproperty(property);
+  task.setFailonerror(false);
+  task.setFailIfExecutionFails(false);
+  task.setDir(_('base.dir'));
+
+  try {
+    task.perform();
+    return _(property);
+  } catch (e) {
+    return 'BUILD_VERSION';
   }
 }
 
@@ -420,7 +441,9 @@ function fileset(dir, opt_exclude) {
  * @return {RegExp}
  */
 function regexp(pattern, opt_flag) {
-  var escaped = pattern.replace(new RegExp("([.*+?^=!:\x24{}()|[\\]/\\\\])", "g"), "\\\x241");
+  var escaped = pattern.replace(
+      new RegExp('([.*+?^=!:\x24{}()|[\\]/\\\\])', 'g'),
+      '\\\x241');
   if (opt_flag) {
     return new RegExp(escaped, opt_flag);
   } else {
