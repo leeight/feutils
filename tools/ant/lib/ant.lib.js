@@ -953,7 +953,7 @@ function merge_css(input) {
       }
     }
 
-    writeFile(_('build.dir') + '/' + input, merged.join(';'));
+    writeFile(_('build.dir') + '/' + input, merged.join('\n'));
   }
 }
 
