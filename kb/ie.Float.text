@@ -1,0 +1,100 @@
+% IE6&7下float:right导致父元素的inline-block失效
+% liyubei
+% 2011-06-21
+% ie6,ie7,css,float,right
+
+## 影响范围
+
+IE6, IE7
+
+## 重现代码
+
+    :::html
+    <style type="text/css">
+    .ui-button {
+      border-top:solid 10px #0c0;
+      display:inline-block;
+      *display:inline;
+      *zoom:1;
+    }
+    .ui-button-bg-left {
+      border-top:solid 10px #00c;
+      float:right;
+    }
+    .ui-button-label {
+      border-top:solid 10px #c0c;
+      float:left;
+    }
+    </style>
+
+    <div class="ui-button">
+      <div class="ui-button-bg-left">ui-button-bg-left</div>
+      <div class="ui-button-label">ui-button-label</div>
+    </div>
+
+## 期望效果
+
+标准浏览器下面的效果如下：
+
+![demo/ie.Float-w3c.png](demo/ie.Float-w3c.png)
+
+在IE6和IE7下面的效果是：
+
+![demo/ie.Float-ie6.png](demo/ie.Float-ie6.png)
+
+如果我们把`.ui-button-bg-left`的`float:right`去掉，效果则是一致的，如下：
+
+![demo/ie.Float-no-float.png](demo/ie.Float-no-float.png)
+
+## 解决方案
+
+*1. 调整HTML结构*
+
+    :::html
+    <div class="ui-button">
+      <div class="ui-button-bg-left">ui-button-bg-left</div>
+      <div class="ui-button-label">ui-button-label</div>
+      <div class="ui-button-bg-right">ui-button-bg-right</div>
+    </div>
+
+*2. 针对IE6，IE7进行HACK*
+
+    :::html
+    <style type="text/css">
+    .ui-button-bg-left {
+        display:none; /** 用不到它了 */
+    }
+    </style>
+    <!--[if lte IE 7]>
+    <style type="text/css">
+    .ui-button {
+        text-align:right;
+    }
+
+    .ui-button-bg-left,
+    .ui-button-bg-right,
+    .ui-button-label {
+        float:none;
+        zoom:1;
+        display:inline;
+    }
+    .ui-button-bg-left {
+        display:none;
+    }
+    </style>
+    <![endif]-->
+
+*3. 修复效果*
+
+标准浏览器:
+
+![demo/ie.Float-fix-w3c.png](demo/ie.Float-fix-w3c.png)
+
+IE6和IE7:
+
+![demo/ie.Float-fix-ie6.png](demo/ie.Float-fix-ie6.png)
+
+## 测试页面
+
+1. [ie.Float-w3c.html](demo/ie.Float-w3c.html)
+2. [ie.Float-fix.html](demo/ie.Float-fix.html)
