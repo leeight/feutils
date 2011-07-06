@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<RDF:RDF xmlns:RDF="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+       xmlns:em="http://www.mozilla.org/2004/em-rdf#">
+  <RDF:Description about="urn:mozilla:extension:pythonformatters@seleniumhq.org">
+    <em:updates>
+      <RDF:Seq>
+        <!-- one li for each new release; newest first according to some sources -->
+        <RDF:li>
+          <RDF:Description>
+            <em:version>1.0.0</em:version>
+            <em:targetApplication>
+              <RDF:Description>
+                <em:id>{a6fd85ed-e919-4a43-a5af-8da18bda539f}</em:id>
+                <em:minVersion>1.0.9</em:minVersion> 
+                <em:maxVersion>1.*</em:maxVersion>              
+                <em:updateLink>http://fe.baidu.com/repos/doc/sdcfe/tools/lib/python-format-1.0.0.xpi</em:updateLink>
+                <em:updateHash>sha1:80f2f01146079cd497cfe5fe145bb73776fe311b</em:updateHash>
+              </RDF:Description>
+            </em:targetApplication>
+          </RDF:Description>
+        </RDF:li>
+      </RDF:Seq>
+    </em:updates>
+  </RDF:Description>
+</RDF:RDF>
