@@ -9,7 +9,7 @@
   <RDF:Description RDF:about="urn:mozilla:install-manifest"
                    em:id="{a6fd85ed-e919-4a43-a5af-8da18bda539f}"
                    em:name="Selenium IDE"
-                   em:version="1.0.12"
+                   em:version="1.0.13"
                    em:creator="Shinya Kasatani"
                    em:description="Record, edit and play Selenium tests"
                    em:type="2"

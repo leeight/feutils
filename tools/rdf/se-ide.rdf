@@ -1,25 +1,22 @@
 <?xml version="1.0"?>
-<RDF:RDF xmlns:RDF="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-       xmlns:em="http://www.mozilla.org/2004/em-rdf#">
-  <RDF:Description about="urn:mozilla:extension:{a6fd85ed-e919-4a43-a5af-8da18bda539f}">
-    <em:updates>
-      <RDF:Seq>
-        <!-- one li for each new release; newest first according to some sources -->
-        <RDF:li>
-          <RDF:Description>
-            <em:version>1.0.13</em:version>
-            <em:targetApplication>
-              <RDF:Description>
-                <em:id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</em:id>
-                <em:minVersion>3.6.0</em:minVersion> 
-                <em:maxVersion>5.0.*</em:maxVersion> 
-                <em:updateLink>http://fe.baidu.com/repos/doc/sdcfe/tools/lib/se-ide-1.0.13.xpi</em:updateLink>
-                <em:updateHash>sha1:0adda34eecf264303399144dc62d4c2a9c9e33fa</em:updateHash>
-              </RDF:Description>
-            </em:targetApplication>
-          </RDF:Description>
-        </RDF:li>
-      </RDF:Seq>
-    </em:updates>
+<RDF:RDF xmlns:em="http://www.mozilla.org/2004/em-rdf#"
+         xmlns:NC="http://home.netscape.com/NC-rdf#"
+         xmlns:RDF="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+  <RDF:Description RDF:about="rdf:#$i84vk1"
+                   em:id="{ec8030f7-c20a-464f-9b0e-13a3a9e97384}"
+                   em:minVersion="3.6.0"
+                   em:maxVersion="5.0.*"
+                   em:updateLink="http://fe.baidu.com/repos/doc/sdcfe/tools/lib/selenium-ide-1.0.13.xpi"
+                   em:updateHash="sha1:330814caf93cb559b9d91de2969eb57e31f9a04e" />
+  <RDF:Seq RDF:about="rdf:#$e84vk1">
+    <RDF:li RDF:resource="rdf:#$f84vk1"/>
+  </RDF:Seq>
+  <RDF:Description RDF:about="rdf:#$f84vk1"
+                   em:version="1.0.13">
+    <em:targetApplication RDF:resource="rdf:#$i84vk1"/>
+  </RDF:Description>
+  <RDF:Description RDF:about="urn:mozilla:extension:{a6fd85ed-e919-4a43-a5af-8da18bda539f}"
+                   em:signature="MIGTMA0GCSqGSIb3DQEBDQUAA4GBAGECcixk8Lwfk7dDlAKWpPmb3UMGRaDXjqKE0Yz8y4LvTOUXxl/uUaxlPmgd/LDP7oGAB1GvxAlrOgqYtYoW04v+jsaAG50f44SlHeCEZ/VZUnrzblmpCiV25vU+5+YVUZAoiQgsJan43hjeRTs7jFwKVyyCasn/fR8BXal4SaaE">
+    <em:updates RDF:resource="rdf:#$e84vk1"/>
   </RDF:Description>
 </RDF:RDF>

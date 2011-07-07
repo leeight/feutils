@@ -5,7 +5,7 @@
   <RDF:Description RDF:about="urn:mozilla:install-manifest"
                    em:id="pythonformatters@seleniumhq.org"
                    em:name="Selenium IDE: Python Formatters"
-                   em:version="1.0.2"
+                   em:version="1.0.3"
                    em:creator="Adam Goucher"
                    em:description="Python code formatters for Selenium IDE"
                    em:type="2"
