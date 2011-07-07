@@ -1,5 +1,5 @@
 VERSION=$(shell grep "em:version=" install.rdf | awk -F[=\"] '{print $$3}')
-NAME=python-format
+NAME=selenium-ide
 
 all:
 	@rm -rf ../$(NAME)-$(VERSION).xpi
