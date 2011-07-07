@@ -1,0 +1,36 @@
+% [SDCFE]新人指南-selenium-ide
+% liyubei
+% 20110707
+
+### selenium-ide
+
+本周(07/04)宏梁同学介绍了一下selenium-ide的一些基本用法，期间提到了一些
+不太方便的地方，抽空升级了一下，主要有如下的改动点儿：
+
+1. 新增配置项`$user`，保证导出的python代码里面含有用户的信息
+2. 支持批量导出的功能，导出之前需要选择一个需要保存的目录即可
+3. 去掉了其它语言的支持，只保留python语言的版本
+4. 导出的python语言代码格式进行了调整
+5. `updateURL`修改为`http://fe.baidu.com/repos/doc/sdcfe/tools/rdf/`
+
+### 安装方式
+
+1. 首先去`Firefox`的`Addons`管理页面把原来安装的`selenium-ide`以及相关的`Python Formatter`, `Java Formatter`
+等等扩展都删掉，然后重启Firefox
+2. 下载修改之后的[selenium-ide.xpi](http://fe.baidu.com/repos/doc/sdcfe/tools/lib/selenium-ide-packed-1.0.12.xpi)
+3. 下载到本地之后，用Firefox打开即可安装，默认会安装两个扩展(selenium-ide和python-formatter)
+
+### 设置
+
+在`Firefox`的`Addons`管理页面，需要设置一下`selenium-ide`，主要是`User and email`，输入的内容需要符合
+正则表达式`/^\w+\s+<\w+@\w+\.\w+>$/`，默认值是`leeight <liyubei@baidu.com>`。
+
+![selenium-ide-options.png](selenium-ide-options.png)
+
+### 批量导出
+
+![selenium-ide-export-all-test-cases.png](selenium-ide-export-all-test-cases.png)
+
+### 源码
+
+    svn co http://fe.baidu.com/repos/doc/sdcfe/src/extensions/
