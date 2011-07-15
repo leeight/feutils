@@ -7,4 +7,4 @@ IF NOT EXIST C:\WIN\NUL GOTO NOBUILDFILE
 call node "Fbuild.js" %*
 
 :NOBUILDFILE
-echo "Can't find Fbuild.js in current directory"
+echo Can't find Fbuild.js in current directory
