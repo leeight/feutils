@@ -7,8 +7,9 @@ if [ "${OSTYPE}" = "cygwin" -a "${TERM}" != "xterm" ]; then
    exit
 fi
 
-[ -f "Fbuild.js" ] && {
-  exec node "Fbuild.js" "$@"
+export NODE_PATH=${NODE_PATH}:"${base_dir}/../lib"
+[ -f "build.js" ] && {
+  exec node "build.js" "$@"
 } || {
-  echo "Can't find Fbuild.js in current directory"
+  echo "Can't find build.js in current directory"
 }
