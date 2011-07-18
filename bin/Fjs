@@ -1,0 +1,30 @@
+#!/bin/bash
+
+. `dirname $0`/Futils.inc
+
+java -jar ${LIB_HOME}/js.jar
+exit 0
+
+# define command-line options
+DEFINE_string 'in' '' 'input file'
+DEFINE_string 'engine' 'v8' 'which engine to use, only support v8, spidermonkey'
+
+# parse the command-line
+FLAGS "$@" || exit 1
+eval set -- "${FLAGS_ARGV}"
+
+# check the inputs
+[ ! -f "${FLAGS_in}" ] && die "no such file (${FLAGS_in})"
+
+engine="${FLAGS_engine}"
+case ${engine} in
+  '') die ;;
+  
+  v8)
+    ;;
+
+  spidermonkey)
+    ;;
+
+  *) die "can't support such engine (${engine})";
+esac

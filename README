@@ -1,0 +1,12 @@
+feutils is short form front-end utility tools, which is used to help web development, such as
+1. Fcodereview
+2. Flint
+3. Fjs
+4. Foutline
+5. Fcompressor
+6. Fformat
+7. Flayout
+8. Fcsi
+......
+
+please fork it from git://github.com/leeight/feutils.git
