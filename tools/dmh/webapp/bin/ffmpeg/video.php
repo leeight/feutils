@@ -27,7 +27,7 @@ if(!isset($filename)) {
 $action = isset($action) ? $action : 'convert';
 
 $args = array('python',
-	'/home/maoquan/public_html/bin/ffmpeg/video.py -f '. $vframes .' -p ' . $ss .' -c '. $crop . ' -s '. $size .' -b '. $bsp .' -o '.$action, 'upload/'.$filename
+	'video.py -f '. $vframes .' -p ' . $ss .' -c '. $crop . ' -s '. $size .' -b '. $bsp .' -o '.$action, 'upload/'.$filename
 );
 
 echo	'{' .
