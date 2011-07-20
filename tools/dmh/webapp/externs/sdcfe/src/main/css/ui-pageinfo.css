@@ -1,0 +1,58 @@
+/*
+ * dn-web
+ * Copyright 2011 Baidu Inc. All rights reserved.
+ * 
+ * path:    ui-pageinfo.css
+ * desc:    提示信息
+ * author:  zhaolei,erik
+ * date:    $Date: 2011-05-06 14:54:36 +0800 (周五, 06 五月 2011) $
+ */
+/**
+ * 提示信息
+ */
+.ui-pageinfo {
+    border-width:1px 0;
+    border-style:solid;
+    border-color:#F0DCA5;
+    background:#FFF7DB;
+    margin-bottom:10px;
+    font-family:STHeiti, SimSun;
+    position:relative;
+    zoom:1;
+}
+
+.ui-pageinfo-icon {
+    position:absolute;
+    left:9px;
+    top:7px;
+    background:url(http://img.bdimg.com/adm/BlockSprites.png) no-repeat -90px -315px;
+    width:19px;
+    height:15px;
+}
+.ui-pageinfo-text {
+    padding:3px 35px;
+    line-height:24px;
+    line-height:24px;
+}
+.ui-pageinfo-text-r {
+    float:right;
+}
+.ui-pageinfo-text a,
+.ui-pageinfo-text strong {
+    margin:0 3px;
+}
+
+.ui-pageinfo-close {
+    position:absolute;
+    right:7px;
+    top:6px;
+    height:11px;
+    width:11px;
+    border:3px solid #FFF4DE;
+    background:url(http://img.bdimg.com/adm/BlockSprites.png) no-repeat -180px -240px;
+    cursor:pointer;
+}
+
+.ui-pageinfo-close-hover {
+    background-position: -180px -251px;
+}

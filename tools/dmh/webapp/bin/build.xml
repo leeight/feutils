@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project basedir="." name="dan">
+  <property environment="env"/>
+  <!-- uncomment this for local use -->
+  <property name="deploy_path" value=".." />
+	
+  <!-- uncomment this for online use -->
+  <!-- property name="deploy_path" value="/home/work/dnweb/apache/htdocs" / -->
+  <property name="classes.dir" value="${deploy_path}/WEB-INF/classes" />
+  <property name="lib.dir" value="${deploy_path}/WEB-INF/lib" />
+
+  <path id="project.classpath">
+    <pathelement path="${lib.dir}"/>
+    <fileset dir="${lib.dir}"><include name="**/*.jar"/></fileset>
+    <pathelement location="${classes.dir}"/>
+  </path>
+	
+  <target name="genUnion">
+    <java classname="com.baidu.dan.billingdomain.task.GenerateBilingStatisticsTask"
+          maxmemory="1024m" fork="true" failonerror="true">
+      <classpath refid="project.classpath"/>
+      <arg value="${file}" />
+    </java>
+  </target>
+  
+  <target name="syncUnion">
+    <java classname="com.baidu.dan.billingdomain.task.SyncBillingNameTask"
+          maxmemory="1024m" fork="true" failonerror="true">
+      <classpath refid="project.classpath"/>
+      <arg value="${file}" />
+    </java>
+  </target>
+  
+  <target name="syncAdm">
+    <java classname="com.baidu.dan.adslot.task.SyncSlotStatusTask"
+          maxmemory="1024m" fork="true" failonerror="true">
+      <classpath refid="project.classpath"/>
+      <arg value="${file}" />
+    </java>
+  </target>
+	
+   <target name="danToAdm">
+	   <java classname="com.baidu.dan.adslot.task.DanToAdmSlotStatusTask"
+	         maxmemory="1024m" fork="true" failonerror="true">
+	   <classpath refid="project.classpath"/>
+	   </java>
+   </target>
+	    	
+  
+  <target name="importFromALB">
+    <java classname="com.baidu.dan.task.order.ImportFromALBTask"
+          maxmemory="1024m" fork="true" failonerror="true">
+      <classpath refid="project.classpath"/>
+      <arg value="${filename}"/>
+    </java>
+  </target>
+  
+  <target name="exportToALB">
+    <java classname="com.baidu.dan.task.order.ExportToALBTask"
+          maxmemory="1024m" fork="true" failonerror="true">
+      <classpath refid="project.classpath"/>
+      <arg value="${path}"/>
+    </java>
+  </target>
+	
+  <target name="adNewDayNotify">
+    <java classname="com.baidu.dan.task.ad.AdNewDayTask"
+          maxmemory="1024m" fork="true" failonerror="true">
+      <classpath refid="project.classpath"/>
+    </java>
+  </target>
+	
+  <target name="updateSlotStatus">
+    <java classname="com.baidu.dan.adslot.task.UpdateSlotStatusTask"
+          maxmemory="1024m" fork="true" failonerror="true">
+      <classpath refid="project.classpath"/>
+    </java>
+  </target>
+
+	  <target name="initPriceTable">
+	    <java classname="com.baidu.dan.task.ad.InitPriceTask"
+	          maxmemory="1024m" fork="true" failonerror="true">
+	      <classpath refid="project.classpath"/>
+	    </java>
+	  </target>
+	
+</project>

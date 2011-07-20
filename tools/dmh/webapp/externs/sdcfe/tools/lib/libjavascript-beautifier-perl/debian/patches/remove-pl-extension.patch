@@ -1,0 +1,40 @@
+Description: Remove .pl extension from js_beautify.pl
+Origin: vendor
+Author: Jonathan Yu <frequency@cpan.org>
+Forwarded: not-needed
+--- a/Makefile.PL
++++ b/Makefile.PL
+@@ -12,7 +12,7 @@
+                          },
+           'INSTALLDIRS' => 'site',
+           'EXE_FILES' => [
+-                           'bin/js_beautify.pl'
++                           'bin/js_beautify'
+                          ],
+           'PL_FILES' => {}
+         )
+--- a/bin/js_beautify.pl
++++ b/bin/js_beautify.pl
+@@ -56,12 +56,12 @@
+ 
+ =head1 NAME
+ 
+-js_beautify.pl - command tool to beautify your javascript files
++js_beautify - command tool to beautify your javascript files
+ 
+ =head1 SYNOPSIS
+ 
+-    js_beautify.pl [options] FILE
+-    js_beautify.pl [options] -
++    js_beautify [options] FILE
++    js_beautify [options] -
+ 
+ =head1 OPTIONS
+ 
+@@ -98,4 +98,4 @@
+ This program is free software; you can redistribute it and/or modify it
+ under the same terms as Perl itself.
+ 
+-=cut
+\ No newline at end of file
++=cut

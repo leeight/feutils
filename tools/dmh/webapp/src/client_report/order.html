@@ -1,0 +1,47 @@
+<!-- target:orderReport -->
+<div class="dn-report skin-white-dn-report">
+  <div class="crumb dn-report-crumb">
+    <div class="crumb-nav">
+      <div class="crumb-icon"></div>
+      <div class="crumb-text"><a href="#/report/index">所有订单行</a></div>
+      <div class="crumb-info"><span class="arrow">&nbsp;&gt;&nbsp;</span>订单行：<span ui="type:Label;id:order-name;text:@order_name"></span></div>
+    </div>
+    <div class="crumb-detail">
+      <h2>订单行：<span ui="type:Label;id:order-name2;text:@order_name"></span></h2>
+    </div>
+  </div>
+  <div class="layout grid-s180m0">
+    <div class="col-main">
+      <div class="main-wrap">
+        <div class="main">
+          <div id="orderReportContainer">
+            // load Action here hahahah<br />
+            // &lt;- click the left menu
+          </div>
+      </div>
+      </div>
+    </div>
+    <div class="col-sub">
+      <!-- import:orderReportMenu -->
+    </div>
+  </div>
+</div>
+
+<!-- target:orderReportMenu -->
+<div ui="type:report.Menu;id:report-menu;datasource:@datasource;defaultItemIndex:@index;skin:white-report-menu"></div>
+
+<!-- target:PagableListWithBorderPager -->
+<div class="list-table-main">
+    <div ui="type:Table;datasource:@result;id:listTable;fields:@listFields;noDataHtml:&dn.config.listNoDataHtml;order:@order;orderBy:@orderBy;select:@select;sortable:true;dragable:true;subrow:@subrow;"></div>
+</div>
+<div class="list-table-foot">
+    <div class="list-table-info border-pager-list-table-info">
+        <span class="table-sumary" ui="type:ListInfoShort;id:listInfo;start:@startIndex;end:@endIndex;total:@totalCount"></span>
+        <div class="table-pagesize">
+            <span class="table-pagesize-desc">${itemPerPage2:lang}</span>
+            <div class="table-pagesize-select" ui="type:ComboBox;id:pageSize;datasource:&dn.config.pageSize;width:80;value:@pageSize;skin:select-button;"></div>
+            
+        </div>
+    </div>
+    <div ui="type:Pager;id:listPager;showCount:@pagerCount;page:@page;total:@totalPage;skin:border-pager"></div>
+</div>

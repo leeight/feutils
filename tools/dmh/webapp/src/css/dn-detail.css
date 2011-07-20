@@ -1,0 +1,336 @@
+/*
+ * dn-web
+ * Copyright 2011 Baidu Inc. All rights reserved.
+ * 
+ * path:    dn-detail.css
+ * desc:    详情页样式
+ * author:  zhaolei,erik
+ * date:    $Date: 2011-04-27 12:15:29 +0800 (周三, 27 四月 2011) $
+ */
+
+/**
+ * 清除浮动
+ */
+.detail-tab,
+.detail-info,
+.detail-info-group,
+.detail-list-item,
+.detail-list-headcntr {
+    zoom:1;
+}
+
+.detail-tab:after,
+.detail-info:after,
+.detail-info-group:after,
+.detail-list-item:after,
+.detail-list-headcntr:after {
+    content:"\0020"; 
+    display:block;
+    height:0; 
+    visibility:hidden; 
+    clear:both;
+}
+
+/**
+ * 详情页洋葱皮定位
+ */
+.list-crumb {
+    padding:5px 0 0 5px;
+    border-top:1px solid #ccc;
+    zoom:1;
+}
+
+/**
+ * tab页
+ */
+.detail-tab {
+    padding:5px 0 0 25px;
+    border-bottom:2px solid #628DB7;
+    zoom:1;
+}
+.detail-tab .ui-button {
+    margin-right:3px;
+}
+
+/* 头部链接 */
+.detail-head-links {
+    float:left;
+    padding:3px 0 0 25px;
+}
+
+/**
+ * 详情信息-主要
+ */
+.detail-info {
+    padding-left:30px;
+    zoom:1;
+}
+
+.detail-info-group,
+.detail-info-label,
+.detail-info-title,
+.detail-info-text,
+.detail-info-cproentry {
+    float:left;
+    display:inline;
+    line-height:28px;
+    height:28px;
+}
+
+.detail-info-group {
+    margin-right:15px;
+}
+
+.detail-info-label {
+    color:#999999;
+    white-space:nowrap;
+}
+
+.detail-info-title {
+    font-size:14px;
+    font-weight:700;
+}
+.detail-info-cproentry {
+    text-decoration:underline;
+    color:#37a;
+    cursor:pointer;
+    line-height:26px;
+}
+
+.detail-info-text {
+    margin-right:5px;
+    font-weight:700;
+}
+
+/**
+ * 说明图标
+ */
+.detail-icon-desc {
+    float:left;
+    overflow:hidden;
+    display:inline;
+    width:13px;
+    height:12px;
+    background: url(/assets/img/BlockSprites.png) no-repeat -72px -304px;
+    margin:8px 0 0 10px;
+    cursor:pointer;
+}
+
+/**
+ * 详情信息链接
+ */
+.detail-info-links {
+    overflow:hidden;
+    margin-left:-6px;
+}
+
+/**
+ * 详情列表头部
+ */
+.detail-list-head {
+    border-width:1px 0;
+    border-style:solid;
+    border-color:#CCC;
+    background:#EEE;
+    zoom:1;
+}
+
+.detail-list-headcntr {
+    border-top:1px solid #F6F6F6;
+    height:27px;
+    line-height:27px;
+    padding-left:20px;
+    overflow:hidden;
+}
+
+.detail-th-name,
+.detail-th-status,
+.detail-th-timebegin,
+.detail-th-timeline,
+.detail-th-timeend,
+.detail-th-timeinfo,
+.detail-th-type,
+.detail-th-price,
+.detail-th-links {
+    float:left;
+    display:inline;
+    padding:0 5px;
+}
+
+.detail-th-name {
+    width:160px;
+    font-weight:700;
+    overflow:hidden;
+}
+
+.detail-th-status {
+    width:70px;
+}
+
+.detail-th-timeinfo {
+    width:300px;
+    padding:0;
+}
+.detail-th-timeline {
+    text-align:center;
+    color:#999;
+}
+.detail-th-timeend,
+.detail-th-timebegin {
+    color:#999;
+}
+
+.detail-th-type {
+    width:80px;
+}
+
+.detail-th-price {
+    width:160px;
+}
+
+.detail-th-links {
+    overflow:hidden;
+}
+
+/**
+ * 详情列表选项
+ */
+.detail-list-item {
+    height:28px;
+    line-height:28px;
+    padding-left:40px;
+    overflow:hidden;
+}
+
+.detail-item-name,
+.detail-item-size,
+.detail-item-icon,
+.detail-item-links {
+    float:left;
+    display:inline;
+    padding:0 5px;
+}
+
+.detail-item-name {
+    width:360px;
+}
+
+.detail-item-size {
+    width:100px;
+}
+
+.detail-item-icon {
+    width:35px;
+}
+
+.detail-materialicon-text,
+.detail-materialicon-image,
+.detail-materialicon-flash,
+.detail-materialicon-media {
+    display:block;
+    width:14px;
+    height:15px;
+    margin:6px 1px 0;
+    background-image:url(/assets/img/BlockSprites.png);
+    background-repeat: no-repeat;
+}
+
+.detail-materialicon-text {
+    background-position:0 -332px;
+}
+.detail-materialicon-image {
+    background-position:-14px -332px;
+}
+.detail-materialicon-flash {
+    background-position:-28px -332px;
+}
+.detail-materialicon-media {
+    margin:6px 0 0;
+    width:16px;
+    background-position:-42px -332px;
+}
+
+.detail-item-links {
+    overflow:hidden;
+}
+
+/**
+ * 详情页排期进度条
+ */
+.detail-timeline {
+    text-align:left;
+    display:block;
+    padding:0 5px;
+    margin-top:8px;
+    width:120px;
+    height:10px;
+    font-size:0;
+    background:url(/assets/img/BlockSprites.png) no-repeat -70px -355px;
+}
+
+.detail-timeline-block {
+    display:block;
+    height:10px;
+    font-size:0;
+    border-right:1px solid #389A38;
+    margin-right:-1px;
+    background:url(/assets/img/InlineSprites.png) repeat-x 0 -97px;
+}
+
+/**
+ * 排期表格调整
+ */
+.detail-plan {
+    margin:0 -1px -1px;
+}
+
+/**
+ * 排期定位图标
+ */
+.detail-plan-located,
+.detail-plan-text {
+    float:left;
+    display:inline;
+}
+
+.detail-plan-located {
+    background:url(/assets/img/BlockSprites.png) no-repeat -86px -330px;
+    height:16px;
+    width:16px;
+    margin:6px 0 0 5px;
+    cursor:pointer;
+}
+
+.detail .dn-list-nodata {
+    border-width:1px 0 0 0;
+}
+
+.detail-code .getcode-tabs {
+    border:0;
+    border-top:1px solid #ccc;
+}
+
+.detail-code-head {
+    margin-left:20px;
+}
+
+.detail-seeall {
+    float:right;
+    margin-right:25px;
+}
+
+.detail-seeall a {
+    line-height:24px;
+    float:left;
+    margin-right:10px;
+}
+
+.detail-locate-tip {
+    display:block;
+}
+
+.detail-icon-pan 
+{
+    padding-left: 21px;
+    background: transparent url(/assets/img/BlockSprites.png) no-repeat -50px -454px;
+}

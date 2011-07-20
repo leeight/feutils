@@ -1,0 +1,40 @@
+<!-- target:keywordsReport -->
+<div class="dn-report">
+  <div class="layout grid-s180m0">
+    <div class="col-main">
+      <div class="main-wrap">
+        <div class="main">
+          <!-- import:keywordsReportFilter -->
+          <!-- import:keywordsReportMain -->
+      </div>
+      </div>
+    </div>
+    <div class="col-sub">
+      <!-- import:keywordsReportMenu -->
+    </div>
+  </div>
+</div>
+
+<!-- target:keywordsReportMenu -->
+<div ui="type:report.Menu;id:report-menu"></div>
+
+<!-- target:keywordsReportFilter -->
+<div class="list-search-form">
+  <div class="form-main">
+    <div class="form-block">
+      <div class="form-row">
+        <div ui="type:ToggleButton;id:today;">今天</div>
+        <div ui="type:ToggleButton;id:yesterday">昨天</div>
+        <div ui="type:ToggleButton;id:last-7-days">最近7天</div>
+        <div ui="type:ToggleButton;id:last-30-days">最近30天</div>
+        <div ui="type:ToggleButton;id:this-month">本月</div>
+        <div class="form-value">
+          <div ui="type:MultiCalendar;id:custom-day-range;"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- target:keywordsReportMain -->
+<div ui="type:PagableList;id:list;fields:@fields;select:none"></div>

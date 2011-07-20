@@ -1,0 +1,162 @@
+.ui-timeline {
+    width:600px;
+	float:left
+}
+
+.ui-timeline .playback {
+    height: 18px;
+    border-top: 1px solid #3377AA;
+    margin-top: 5px;
+    padding-top: 10px;
+}
+
+.ui-timeline .playback li {
+    background: none repeat scroll 0 0 transparent;
+    display: inline;
+    list-style: none outside none;
+    margin: 0;
+    padding: 0;
+}
+.ui-timeline .playback .pause {
+    display: none;
+}
+.ui-timeline .playback a {
+    background-image: url("/assets/img/timeline-icons.png");
+    background-repeat: no-repeat;
+    display: block;
+    float: left;
+    height: 20px;
+    margin: 0 3px 0 0;
+    outline: 0 none;
+    text-indent: -9000px;
+    width: 20px;
+}
+.ui-timeline .playback .prev a {
+    background-position: 0 0;
+}
+
+.ui-timeline .playback .operating-video-info {
+	margin-left:20px
+}
+
+.ui-timeline .playback .operating-video-info span {
+	color:#ff0000
+}
+
+.ui-timeline .playback .play a {
+    background-position: 0 -20px;
+}
+.ui-timeline .playback .pause a {
+    background-position: 0 -60px;
+}
+.ui-timeline .playback .next a {
+    background-position: 0 -40px;
+}
+.ui-timeline .playback a:hover {
+    opacity: 0.9;
+}
+.ui-timeline .timeline {
+    background: url("/assets/img/timeline.png") no-repeat scroll 0 0 transparent;
+    height: 15px;
+    overflow: hidden;
+    width: 100%;
+	position:relative;
+	
+}
+.ui-timeline .timeline .inside {
+    background: url("/assets/img/timeline.png") no-repeat scroll -570px -33px transparent;
+    height: 100%;
+    position: relative;
+    width: 100%;
+}
+.ui-timeline .timeline .dragHand {
+    position: absolute;
+	left:0;
+	top:0;
+	height:15px;
+	width:15px;
+	background-color:#ff0000;
+	opacity:0;
+	filter:alpha(opacity=0);
+}
+.ui-timeline .picBox {
+	padding: 10px;
+    width: 580px;
+	border: 1px solid #3377AA;
+}
+
+.ui-timeline .picBox img {
+	width: 100%
+
+}
+
+.ui-timeline .timeline-contextmenu {
+	border: 1px solid #D8E8F2;
+	width: 110px;
+	display: none;
+	position: absolute;
+	z-index : 1001;
+}
+
+.ui-timeline .timeline-contextmenu-header {
+	height: 24px;
+	line-height: 24px;
+	background-color: #D8E8F2;
+    color: #1C4A79;
+    font-size: 14px;
+    font-weight: bold;
+    padding-left: 10px;
+}
+
+.ui-timeline .timeline-contextmenu-row {
+	border-bottom: 1px solid #D8E8F2;
+    color: #1C4A79;
+    height: 24px;
+    line-height: 24px;
+    padding-left: 10px;
+	cursor: pointer;
+	background-color: #ffffff;
+}
+
+/*
+ * imgAreaSelect default style
+ */
+
+.imgareaselect-border1 {
+	background: url(/assets/img/border-v.gif) repeat-y left top;
+}
+
+.imgareaselect-border2 {
+    background: url(/assets/img/border-h.gif) repeat-x left top;
+}
+
+.imgareaselect-border3 {
+    background: url(/assets/img/border-v.gif) repeat-y right top;
+}
+
+.imgareaselect-border4 {
+    background: url(/assets/img/border-h.gif) repeat-x left bottom;
+}
+
+.imgareaselect-border1, .imgareaselect-border2,
+.imgareaselect-border3, .imgareaselect-border4 {
+    filter: alpha(opacity=50);
+	opacity: 0.5;
+	width : 10px;
+}
+
+.imgareaselect-handle {
+    background-color: #fff;
+    border: solid 1px #000;
+    filter: alpha(opacity=50);
+    opacity: 0.5;
+}
+
+.imgareaselect-outer {
+    background-color: #000;
+    filter: alpha(opacity=50);
+    opacity: 0.5;
+}
+
+.imgareaselect-selection {  
+}

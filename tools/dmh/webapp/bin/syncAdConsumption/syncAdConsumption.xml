@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="syncAdConsumption" basedir=".">
+	<property name="latest" value="${latestFile}"/>
+	<property environment="env"/>
+	<!-- uncomment this for local use -->
+	<property name="deploy_path" value="../.." />
+	    
+	<!-- uncomment this for online use -->
+	<!-- property name="deploy_path" value="/home/work/dnweb/apache/htdocs" / -->
+	<property name="classes.dir" value="${deploy_path}/WEB-INF/classes" />
+	<property name="lib.dir" value="${deploy_path}/WEB-INF/lib" />
+	
+
+    <path id="project.classpath">
+      <pathelement path="${lib.dir}"/>
+      <fileset dir="${lib.dir}"><include name="**/*.jar"/></fileset>
+      <pathelement location="${classes.dir}"/>
+    </path>
+	
+	<target name="listAllDat">
+    	<ftp action="list"
+    	       server="${remoteServerHost}"
+    	       userid="${remoteServerAccount}"
+    	       password="${remoteServerPWD}"
+    		   remotedir="${remotePath}"
+    		   binary="no"
+    	       listing="${fileList}"
+    		   retriesAllowed="5">
+    	    <fileset>
+    	    	 <include name="**/*.dat"/>
+    	    	 <scriptselector language="javascript" manager="bsf"><![CDATA[
+    	    	      var str = filename.split(/[/\\]/);
+    	    	      if (str.length!=2) {
+    	    	 	        self.setSelected(false);
+    	    	 	  }else{
+    	    	 	        self.setSelected(str[1]>latest);
+    	    	 	  }
+    	    	 ]]></scriptselector>
+    	    </fileset>
+        </ftp>
+	</target>
+	
+    <target name="calculate">
+	    <java classname="com.baidu.dan.adconsumption.task.AddAdConumptionTask"
+	          maxmemory="1024m" fork="true" failonerror="true">
+	      <classpath refid="project.classpath"/>
+	      <arg value="${filelist}" />
+	      <arg value="${faillist}"/>
+	    </java>
+	  </target>
+</project>

@@ -1,0 +1,18 @@
+/*
+ * dn-web
+ * Copyright 2011 Baidu Inc. All rights reserved.
+ * 
+ * path:    ui-checkbox.css
+ * desc:    组合框样式
+ * author:  zhaolei,erik
+ * date:    $Date: 2011-04-27 12:15:29 +0800 (周三, 27 四月 2011) $
+ */
+
+/**
+ * 基础样式
+ */
+
+.ui-checkbox,
+.ui-radiobox{
+    *margin-left:-2px;
+}

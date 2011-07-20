@@ -1,0 +1,147 @@
+<!-- target:adresourceCreate -->
+    <!-- import:adresourceEditCrumb -->
+    <!-- import:adresourceEditForm -->    
+
+<!-- target:adresourceEditCrumb -->
+<div class="crumb">
+    <div class="crumb-icon"></div>
+    <div class="crumb-text"><strong><span ui="type:Label;id:lblHeader;text:新建资源预估"></span></strong></div>   
+</div>
+
+<!-- target:adresourceEditForm -->
+<div ui="type:Form;id:formAd;">
+    <div class="edit-form">
+        <!-- import:adresourceEditFormTitle -->
+        <!-- import:adresourceEditFormMain -->
+    </div>
+    <!-- import:adresourceEditSubmit -->
+</div>
+
+<!-- target:adresourceEditFormTitle -->
+<div class="form-head">
+    <div class="form-headcntr">
+        <h2><span ui="type:Label;id:lblHeader;text:新建资源预估"></span></h2>
+    </div>
+</div>
+
+<!-- target:adresourceEditFormMain -->
+<div class="form-main">
+    <div class="form-block-title">
+        <h3>投放信息</h3>
+    </div>
+    <div class="form-block-wrap">
+        <div class="form-block">
+        	<div class='form-row'>
+            	<div class="form-key ">预估任务名称：</div>
+                <div class="form-value">
+                	<input type="text" name="name" title="预估任务名称" ui="type:TextInput;id:txtAdresourceName;width:300;rule:required;value:@name;" />                	
+                </div>
+            </div>
+            
+            <div class="form-row">
+				<div class="form-key ">产品形式：</div>
+                <div class="form-value">
+					<div name="type" title='产品形式' ui="type:CheckBoxGroup;id:rbgType;datasource:@types;value:@productType;rule:required;"></div>					
+                </div>
+            </div>
+            
+        	<div class="form-row">
+				<div class="form-key ">开始时间：</div>
+                <div class="form-value">                                              
+                        <div class="form-content-block" id='beginTimeValueBlockFloat'>
+                            <div  ui="type:Calendar;id:beginTime;value:@start_time;paramFormat:yyyyMMdd;rule:calendar;"></div>
+                        </div>
+                </div>
+            </div>
+            
+            <div class='form-row'>
+            	<div class="form-key">结束时间：</div>
+                <div class="form-value">
+                    <div class="form-value">
+                        <div class="form-content-block" id="endTimeValueBlockFloat">
+                            <div ui="type:Calendar;id:endTime;value:@end_Time;paramFormat:yyyyMMdd;rule:calendar;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>            
+            
+            <div class='form-row'>
+            	<div class="form-key">频次控制：</div>
+                <div class="form-value">
+                	<span class="form-text">每个独立访客每天最多展示</span>
+                	<input type="text" name="max_impression_per_day_uu" title="" ui="type:TextInput;id:txtMaxImpressionPerDay;width:50;rule:positiveNumber;rule:max,2147483647,int;value:@max_impression_per_day_uu;" />
+                	<span class="form-text">次</span>
+                </div>
+            </div>
+            
+            <div class='form-row'>
+            	<div class="form-key"></div>
+                <div class="form-value">
+                	<span class="form-text">每个独立访客每个投放周期最多展示</span>
+                	<input type="text" name="max_impression_per_cycle_uu" title="" ui="type:TextInput;id:txtMaxImpressionPerCycle;width:50;rule:positiveNumber;rule:max,2147483647,int;value:@max_impression_per_cycle_uu;" />
+                	<span class="form-text">次</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    
+    <div class="form-block-title">
+        <h3>制定投放</h3>
+    </div>
+    <div class="form-block-wrap">
+        <div class="form-block">
+        	<div class="form-row">
+				<div class="form-key ">推广时段：</div>
+                <div class="form-value">
+                    <div ui="type:Orientation;id:orientWeek;entryText:推广时段;orientType:weektime;value:@orient_hour;defaultValue:all;resultTextTitle:推广时段;"></div>
+                </div>
+            </div>
+            
+            <div class="form-row">
+				<div class="form-key ">推广地域：</div>
+                <div class="form-value">
+                    <div ui="type:Orientation;id:orientRegion;orientType:region;entryText:推广地域;value:@orient_location;defaultValue:all;resultTextTitle:推广地域;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="form-block-title">
+        <h3>定向方式</h3>
+    </div>
+    <div class="form-block-wrap">
+        <div class="form-block" id="outerWrapperCommunityKeywords">
+        <div id="wrapperCommunityKeywords" style="margin:0;padding:0;">
+        	<div class="form-row">
+				<div class="form-key" style="width:auto;">
+					<input type="checkbox" value="1" title="生活圈或网站" ui="type:CheckBox;id:chkCommunitySlot;" />
+				</div>
+                <div class="form-value" style='width:auto;'>
+					<div id="communitySlotWrapper" style="display:none;background-color:#FFFFFF;">
+						<div ui='type:SlotSelector;id:slotSelector;datasourceMultiSitesLeft:@slot_datasourceMultiSitesLeft;datasourceSingleSiteLeft:@slot_datasourceSingleSiteLeft;slotlistRequester:@slotlistRequester;datasourceSlotStatus:@datasourceSlotStatus;singleSiteTotalCount:@singleSiteTotalCount;selectedSlot:@selectedSlot;productType:@productType;communityslotRequester:@communityslotRequester;hideBudget:true;' ></div>
+					</div>
+				</div>
+            </div>
+            
+            <div class="form-row">
+				<div class="form-key"  style="width:auto;">
+					<input type="checkbox"  value="1" title="人群" ui="type:CheckBox;id:chkKeywordsSlot;" />
+				</div>
+                <div class="form-value">
+					<div id="keywordsSlotWrapper" style="display:none;">
+						<div ui="type:Orientation;id:orientKeywords;orientType:keywords;inputHeadTitle:人群;inputIntroType:keywords;entryText:人群定位;value:@keywords;resultTextTitle:人群;"></div>
+					</div>
+				</div>
+            </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- target:adresourceEditSubmit -->
+<div class="edit-submit">
+    <div ui="type:SubmitButton;id:btnSubmit;skin:btnsubmit">生成预估任务</div>
+    <div ui="type:Button;id:btnBack;skin:btnback">返回</div>
+</div>

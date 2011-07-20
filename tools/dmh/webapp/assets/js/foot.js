@@ -1,0 +1,1 @@
+document.write('<p>如果您有任何建议和意见请联系<a href="mailto:adm_service@baidu.com">adm_service@baidu.com</a></p><p>&copy;2010 Baidu <a href="http://adm.baidu.com/contract.html" target="_blank">用户协议</a></p>');

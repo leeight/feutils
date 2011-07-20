@@ -1,0 +1,101 @@
+/*
+ * dn-web
+ * Copyright 2011 Baidu Inc. All rights reserved.
+ * 
+ * path:    ui-dialog.css
+ * desc:    弹出层样式
+ * author:  zhaolei,erik
+ * date:    $Date: 2011-05-06 10:18:53 +0800 (周五, 06 五月 2011) $
+ */
+
+.ui-dialog {
+    position:absolute;
+    z-index:1001;
+    width:800px;
+    background:#fff;
+    border:1px solid #9EC9E9;
+}
+.ui-dialog-close {
+    position:absolute;
+    top:5px;
+    right:16px;
+    cursor:pointer;
+    border:4px solid #C7DEEC;
+    height:11px;
+    width:11px;
+    overflow:hidden;
+    background:#C7DEEC url(/assets/img/BlockSprites.png) -180px -240px no-repeat;
+}
+.ui-dialog-close-hover {
+    background-position: -180px -251px;
+}
+
+.ui-dialog-head {
+    background:#C7DEEC;
+    border-top:1px solid #DCEAF3;
+    border-bottom:1px solid #9EC9E9;
+    height:27px;
+}
+.ui-dialog-title {
+    color:#336699;
+    font-size:12px;
+    font-weight:700;
+    line-height:27px;
+    padding-left:12px;
+}
+.ui-dialog-foot {
+    border-top:1px solid #C5DFF0;
+    background:#E6F3FB;
+    padding:10px;
+    zoom:1;
+}
+
+.ui-dialog-foot .ui-button {
+    margin-right:5px;
+}
+
+.ui-dialog-body {
+    padding:10px;
+    position:relative;
+}
+
+.skin-dialognobodymargin .ui-dialog-body {
+    padding:0;
+}
+
+.ui-dialog-foot:after {
+    content:"\0020"; 
+    display:block;
+    height:0; 
+    visibility:hidden; 
+    clear:both;
+}
+
+.ui-dialog-icon {
+    width:16px;
+    height:15px;
+    overflow:hidden;
+    position:absolute;
+}
+
+.ui-dialog-icon-warning {
+    background:url(/assets/img/BlockSprites.png) -109px -314px no-repeat;
+}
+
+.ui-dialog-icon-notice {
+    background:url("/assets/img/BlockSprites.png") no-repeat scroll -141px -315px transparent;
+    height:17px;
+    width:14px;
+}
+
+.ui-dialog-text {
+    padding-left:23px;
+}
+
+.ui-dialog-custom-notice {
+    color:#E17800;
+    font-size:14px;
+    border-bottom:1px solid #c3d9ff;
+    margin-bottom:10px;
+    padding-bottom:10px;
+}

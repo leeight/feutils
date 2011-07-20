@@ -1,0 +1,22 @@
+<!-- target:demoList -->
+<div ui="type:Form;id:formSearch;" class="edit-form">
+    <div class="form-main">
+        <div class="form-block">
+            <div class="form-row">
+                <div class="form-value">
+                    <input type="text" name="name" ui="type:TextInput;id:txtName;value:@name" />            
+                </div>
+            </div>
+            <div class="form-row">
+                <div ui="type:SubmitButton;id:btnSearch"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<div ui="type:Panel;id:pnlOperation" class="list-table-status">
+    <div class="list-table-statuscntr">
+        <div class="list-table-status-icon"></div>
+        <div ui="type:Button;id:btnDelete">${btnDelete:lang}</div>
+    </div>
+</div>
+<div ui="type:PagableList;id:listDemo;fields:@fieldsDemo"></div>

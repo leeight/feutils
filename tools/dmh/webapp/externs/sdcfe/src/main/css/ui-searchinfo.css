@@ -1,0 +1,44 @@
+/* 表间提示消息 */
+.ui-searchinfo {
+    position:relative;
+    background:#FFF4DE;
+    border-top:1px solid #CCCCCC;
+    font-family:STHeiti, SimSun;
+    zoom:1;
+}
+
+.ui-searchinfo-close {
+    position:absolute;
+    right:7px;
+    top:6px;
+    height:11px;
+    width:11px;
+    border:3px solid #FFF4DE;
+    background:url(http://img.bdimg.com/adm/BlockSprites.png) no-repeat -180px -240px;
+    cursor:pointer;
+    overflow:hidden;
+}
+
+.ui-searchinfo-close-hover {
+    background-position: -180px -251px;
+}
+
+.ui-searchinfo-icon {
+    position:absolute;
+    left:10px;
+    top:12px;
+    width:7px;
+    height:5px;
+    background:url(http://img.bdimg.com/adm/BlockSprites.png) no-repeat -182px -265px;
+    overflow:hidden;
+}
+.ui-searchinfo-text {
+    padding:2px 25px;
+    line-height:24px;
+    color:#999999;
+}
+
+.ui-searchinfo-text strong {
+    font-weight:700;
+    color:#FF6600;
+}

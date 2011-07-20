@@ -1,0 +1,69 @@
+<!doctype html>
+<!--
+/***************************************************************************
+ * 
+ * Copyright (c) 2011 Baidu.com, Inc. All Rights Reserved
+ * $Id: app.html 5303 2011-05-07 05:14:27Z liyubei $ 
+ * 
+ **************************************************************************/
+ 
+ 
+ 
+/**
+ * app.html ~ 2011/04/25 23:10:32
+ * @author liyubei@baidu.com (leeight)
+ * @version $Revision: 5303 $ 
+ * @description 
+ *  
+ **/
+-->
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>slot App</title>
+  <link rel="stylesheet" type="text/css" href="app.css" />
+  <script type="text/javascript" src="http://img.baidu.com/adm/tangram-base-1.3.7.1.js"></script>
+  <script type="text/javascript" src="../base.js"></script>
+  <script type="text/javascript">
+    // FIXME 将来会去掉这个flag
+    goog.ENABLE_DEBUG = true;
+
+    // App相关的初始化函数
+    goog.require('er.locator');
+    goog.require('er.controller');
+    goog.require('app.Launch');
+
+    // include的路径是相对于base.js的
+    goog.include('css/base.css');
+    goog.include('css/dn-list.css');
+    goog.include('css/dn-edit.css');
+
+    // FIXME dn.config.pageSize
+    goog.require('dn.config');
+
+    // google app module
+    goog.require('slot.fixed.List');
+    goog.require('slot.fixed.Form');
+    goog.require('slot.dedicated.List');
+    goog.require('slot.dedicated.Form');
+    goog.require('slot.mockup');
+    goog.require('community.mockup');
+  </script>
+</head>
+<body>
+  <div id="Navigation">
+    <a href="#/slot/fixed/list">/slot/fixed/list</a>&nbsp;
+    <a href="#/slot/dedicated/list">/slot/dedicated/list</a>&nbsp;
+  </div>
+  <div id="Main"></div>
+</body>
+<script type="text/javascript">
+app.Launch(function(){
+  er.controller.init();
+  var loc = er.locator.getLocation();
+  if (!loc || loc == '/') {
+    er.locator.redirect('/slot/fixed/list');
+  }
+});
+</script>
+</html>

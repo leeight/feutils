@@ -1,0 +1,60 @@
+<!doctype html>
+<html>
+  <meta charset="utf-8" />
+  <head>
+    <link rel="stylesheet" type="text/css" href="../../../assets/css/dn.css" />
+    <script type="text/javascript" src="../../../src/base.js"></script>
+    <script type="text/javascript">
+      document.domain = 'baidu.com';
+      goog.require('community.List.App'); 
+    </script>
+  </head>
+
+  <body>
+    <!--[if lte IE 6]>
+    <div class="ie6-out"><div class="ie6-in">
+    <![endif]--> 
+
+    <div class="wrapper">
+      <div class="container" id="Main"></div>
+    </div>
+        
+    <!--[if lte IE 6]>
+    </div></div>
+    <![endif]-->
+  </body>
+
+  <script type="text/javascript">
+    function constCallback(data) {
+      dn.initConst(data.result);
+    }
+
+    function sessionCallback(data) {
+      var visitor = data.result.visitor;
+      er.context.set('visitor', visitor);
+      er.context.set('pageSize', visitor.pageSize);
+      // 初始化用户的权限控制信息
+      er.permission.init(visitor.auth);
+    }
+
+    var template = [
+      '../../../src/ui/PagableList.html',
+      '../../../src/community/list.html'
+    ];
+    var pwm = new base.ParallelWorkerManager();
+    pwm.addWorker(new dn.TemplateWorker(template));
+    pwm.addWorker(new base.RequestWorker('/system_const/read', constCallback));
+    pwm.addWorker(new base.RequestWorker('/account/session', sessionCallback));
+
+    pwm.addDoneListener(function() {
+      ui.template.setAdapter(function(name){
+        var html = er.template.getMerged(name);
+        return html;
+      });
+      
+      er.controller.init();
+      er.locator.redirect('/community/list'); 
+    });
+    pwm.start();
+  </script>
+</html>

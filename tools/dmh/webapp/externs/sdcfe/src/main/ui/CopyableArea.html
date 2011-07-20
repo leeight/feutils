@@ -1,0 +1,32 @@
+<!-- target:CopyableAreaMain -->
+<div class="ui-copyarea-main">
+    <textarea id="{0}" class="ui-copyarea-text" readonly="1"></textarea>
+</div>
+
+<!-- target:CopyableTextInputMain -->
+<div class="ui-copyarea-main">
+    <input id="{0}"  class="ui-text ui-copyarea-textinput" readonly="1"></input>
+</div>
+
+<!-- target:CopyableAreaFlash -->
+<div class="ui-copyarea-flash">
+    <object height="18" align="middle" width="62" id="{0}" codebase="http://fpdownload.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=9,0,0,0" classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000">
+        <param value="always" name="allowScriptAccess">
+        <param value="high" name="quality">
+        <param value="{1}" name="movie">
+        <param value="window" name="wmode">
+        <param value="method={2}&amp;id={3}" name="flashvars">
+        <embed height="18" align="middle" width="62" pluginspage="http://www.macromedia.com/go/getflashplayer" type="application/x-shockwave-flash" allowscriptaccess="always" name="clipboard_cb_0_A15" quality="high" flashvars="method={2}&amp;id={3}" wmode="window" src="{1}">
+    </object>
+</div>
+
+<!-- target:CopyableAreaTip -->
+<div class="ui-copyarea-tip">{0}</div>
+
+<!-- target:CopyableAreaInfo -->
+<div class="ui-copyarea-info">{0}</div>
+
+<!-- target:CopyableAreaSuccess -->
+<div class="ui-copyarea-success" id="{0}" style="left:-10000px">
+{1}
+</div>

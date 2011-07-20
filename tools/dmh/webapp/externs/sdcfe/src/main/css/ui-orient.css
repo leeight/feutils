@@ -1,0 +1,586 @@
+/*
+ * dn-web
+ * Copyright 2011 Baidu Inc. All rights reserved.
+ * 
+ * path:    ui-orient.css
+ * desc:    定位控件样式
+ * author:  zhaolei,erik
+ * date:    $Date: 2011-05-06 14:54:36 +0800 (周五, 06 五月 2011) $
+ */
+
+.ui-orient-entry {
+    height:22px;
+}
+
+.ui-orient-selector {
+    width:640px;
+    position:relative;
+    background-color:#FFFFFF;
+}
+
+.ui-orient-selector-module {
+    zoom:1;
+}
+
+.ui-orient-tip {
+    position:absolute;
+    left:0;
+    bottom:27px;
+    background:#FFF7DB;
+    border:1px solid #BEA06E;
+    padding:5px;
+    color:#333;
+}
+.ui-orient-selector-head {
+    background:#C7DEED;
+    border-color:#A3CDE9;
+    border-style:solid;
+    border-width:1px 1px 0;
+    height:27px;
+    line-height:27px;
+    padding-left:10px;
+}
+
+.ui-orient-selector-head .ui-combobox,
+.ui-orient-selector-head span {
+    float:left;
+}
+
+.ui-orient-selector-head .ui-combobox {
+    margin:3px 5px 0 0;
+}
+
+.ui-orient-selector-foot {
+    padding:3px 0 0 10px;
+    height:24px;
+    zoom:1;
+    clear:left;
+    background:#C7DEED;
+    border-color:#A3CDE9;
+    border-style:solid;
+    border-width:0 1px 1px;
+}
+.ui-orient-selector-foot .ui-button {
+    margin-right:5px;
+}
+
+.ui-orient-selector-body {
+    border:1px solid #ccc;
+    overflow:hidden;
+    zoom:1;
+}
+
+.ui-orient-resultitem {
+    background:#F5FAFE;
+    border:1px solid #D0DCE8;
+    font-size:12px;
+    line-height:20px;
+    margin-bottom:5px;
+    padding:2px 25px 2px 5px;
+    position:relative;
+    width:530px;
+}
+
+.ui-orient-resultitem span {
+    padding-right:20px;
+}
+.ui-orient-resultitem u {
+    cursor:pointer;
+    color:#37a;
+}
+.ui-orient-resultclose {
+    right:5px;
+    top:5px;
+    position:absolute;
+    height:11px;
+    width:11px;
+    overflow:hidden;
+    background:url('http://img.bdimg.com/adm/BlockSprites.png') -180px -240px;
+    cursor:pointer;
+}
+
+.ui-orient-sel-llist {
+    width:300px;
+    margin-left:-1px;
+    float:left;
+}
+
+.ui-orient-sel-llist .ui-table-body,
+.ui-orient-sel-rlist .ui-table-body {
+    border-width:0 1px;
+    border-color:#ccc;
+    border-style:solid;
+    width:298px;
+}
+
+.ui-orient-sel-llist .ui-table-body {
+    border-width:0 1px 0 0;
+    margin-left:-1px;
+}
+
+.ui-orient-sel-llist .ui-table-body .ui-table-row,
+.ui-orient-sel-rlist .ui-table-body .ui-table-row {
+    border-left:0;
+    border-right:0;
+}
+
+.ui-orient-sel-rlist .ui-table-head th,
+.ui-orient-sel-llist .ui-table-head th {
+    border-top:0;
+}
+
+.ui-orient-sel-rlist {
+    width:300px;
+    margin-right:-1px;
+    float:right;
+}
+
+.ui-orient-sel-lfoot,
+.ui-orient-sel-rfoot
+{
+    background:#eee;
+    line-height:30px;
+    border-width: 0 1px;
+    border-style:solid;
+    border-color:#ccc;
+}
+.ui-orient-sel-lfoot {
+    border-top:1px solid #ccc;
+    text-align:right;
+    padding-right:5px;
+}
+
+.ui-orient-sel-rfoot {
+    border-top:1px solid #ccc;
+    text-align:left;
+    padding-left:5px;
+}
+
+.ui-orient-sel-listentry {
+    cursor: pointer;
+    color: #37a;
+    text-decoration: underline;
+}
+
+.ui-orient-sel-selectedrow table {
+    background: #FDE8C4;
+}
+.ui-orient-sel-selectedrow .ui-orient-sel-listentry {
+    color:#D0BC9B;
+    cursor:default;
+    font-weight:bold;
+    text-decoration:none;
+}
+.ui-orient-sel-text {
+    border:1px solid #7E9DB9;
+    height:218px;
+    width:298px;
+}
+
+.ui-orient-sel-inputtip {
+    color:#a1a1a1;
+    line-height:22px;
+    padding:0 10px;
+}
+
+.ui-orient-sel-linput {
+    float:left;
+    width:310px;
+    padding:0 0 10px 10px;
+}
+
+.ui-orient-sel-rinput {
+    float:left;
+    width:300px;
+    padding-top:30px;
+}
+.ui-orient-sel-region .ui-orient-sel-llist {
+    width:350px;
+}
+
+.ui-orient-sel-region .ui-orient-sel-regionlb {
+    width:348px;
+}
+
+.ui-orient-sel-region .ui-orient-sel-rlist {
+    width:250px;
+}
+
+.ui-orient-sel-region .ui-orient-sel-regionrb {
+    width:248px;
+}
+
+.ui-orient-sel-regioncol {
+    width:82px;
+    padding-left:4px;
+    height:28px;
+    line-height:28px;
+    border-bottom:1px solid #ccc;
+}
+
+.ui-orient-sel-regioncol-active {
+    color:#F90;
+}
+.ui-orient-sel-regioncol input {
+	padding:0;
+	maring:0;
+	border:0;
+}
+
+.ui-orient-sel-regioncol label {
+    padding-left:2px;
+}
+
+.ui-orient-sel-regionlb,
+.ui-orient-sel-regionrb {
+	position:relative;
+	width:298px;
+    height:144px;
+    overflow-y:scroll;
+    overflow-x:hidden;
+    border-color:#ccc;
+    border-style:solid;
+    border-width:0 1px;
+}
+.ui-orient-sel-regionrb{
+    border-left:1px solid #ccc;
+}
+.ui-orient-sel-regionrb .ui-table-tdcntr {
+    position:relative;
+}
+.ui-orient-sel-regionrb .ui-table-row{
+    border-bottom:1px solid #ccc;
+}
+.ui-orient-sel-citylayer {
+    position:absolute;
+    top: 58px;
+    border:1px solid #EDBB72;
+    width:95px;
+    overflow-y: scroll;
+    overflow-x:hidden;
+    background:#fff;
+    height:194px;
+    z-index:10000;
+}
+.ui-orient-sel-citylayer p{
+    height:22px;
+    line-height:22px;
+    overflow:hidden;
+    padding-left:4px;
+    white-space:nowrap;
+}
+
+.ui-orient-sel-city {
+    padding-left:30px;
+}
+
+.ui-orient-sel-datehead {
+    background:#E4EFFA;
+    height:28px;
+    line-height:28px;
+    border:1px solid #D3DDE9;
+}
+.ui-orient-sel-datehead span {
+    float:left;
+    padding-left:5px;
+}
+.ui-orient-sel-datehead b {
+    float:right;
+    padding:0 5px 0 3px;
+}
+
+.ui-orient-sel-datehead .ui-combobox {
+    float:right;
+    margin-top:4px;
+}
+
+.ui-orient-sel-date {
+    width:240px;
+    float:left;
+    margin:5px 0 5px 5px;
+}
+.ui-orient-sel-datemonth {
+    padding-top:3px;
+    border-left:1px solid #D3DDE9;
+    border-right:1px solid #D3DDE9;
+}
+
+.ui-orient-sel-datemonth td {
+    border-bottom:3px solid #87A9CB;
+    cursor:pointer;
+    height:22px;
+    line-height:22px;
+    width:38px;
+    text-align:center;
+}
+
+.ui-orient-sel-prevmonth span,
+.ui-orient-sel-nextmonth span{
+    background-image:url("http://img.bdimg.com/adm/BlockSprites.png");
+    overflow:hidden;
+    background-repeat:no-repeat;
+    cursor:pointer;
+    display:block;
+    height:9px;
+    width:6px;
+}
+.ui-orient-sel-datemonth .ui-orient-sel-prevmonth,
+.ui-orient-sel-datemonth .ui-orient-sel-nextmonth {
+    width:24px;
+    cursor:default;
+}
+
+.ui-orient-sel-activemonth {
+    cursor:default;
+    background:#87A9CB;
+    color:#FFFFFF;
+    font-weight:700;
+}
+
+.ui-orient-sel-prevmonth span {
+    background-position:-172px -333px;
+    margin: 7px 6px 6px 7px;
+}
+.ui-orient-sel-nextmonth span {
+    background-position:-172px -342px;
+    margin: 7px 7px 6px 6px;
+}
+
+.ui-orient-sel-dateresult {
+    float:left;
+    width:280px;
+    margin:5px 10px;
+}
+
+.ui-orient-sel-dateresult b {
+    display:block;
+    color:#FF9500;
+    line-height:22px;
+}
+
+.ui-orient-sel-dateresult u {
+    text-decoration:none;
+    color:#FF9500;
+}
+
+
+.ui-orient-sel-dateresult textarea {
+    display:block;
+    width:276px;
+    height:175px;
+    border:1px solid #7E9DB9;
+	font-size:12px;
+}
+
+.ui-orient-sel-dateremoveall,
+.ui-orient-sel-wtop {
+    color:#37a;
+    text-decoration:underline;
+    cursor:pointer;    
+}
+
+.ui-orient-sel-caldate {
+    width:28px;
+    height:22px;
+    line-height:22px;
+}
+.ui-orient-sel-calweek,
+.ui-orient-sel-calmonth {
+    width:48px;
+    height:22px;
+    line-height:22px;
+    background:#eef5fc;
+}
+
+.ui-orient-sel-calhoverdate {
+    background: #fff4dd;
+}
+
+.ui-orient-sel-calseldate {
+    background: #ffe8c8;
+}
+
+
+
+.ui-orient-sel-cal {
+    text-align:center;
+    border:1px solid #D3DDE9;
+}
+.ui-orient-sel-cal thead th {
+    height:22px;
+    line-height:22px;
+    background:#eef5fc;
+    border:1px solid #D3DDE9;
+    text-align:center;
+    cursor:pointer;
+}
+
+.ui-orient-sel-cal td {
+    border:1px solid #D3DDE9;
+    text-align:center;
+    cursor:pointer;
+    color:#369;
+}
+
+.ui-orient-sel-cal .ui-orient-sel-calvirtualdate {
+    color:#ccc;
+}
+
+.ui-orient-sel-cal .ui-orient-sel-caleddate {
+    color:#ccc;
+    background:#f5f5f5;
+}
+
+.ui-orient-sel-weektime {
+    padding:2px;
+}
+
+.ui-orient-sel-wthead,
+.ui-orient-sel-wtfoot {
+    background:#F0F6FA;
+    border:1px solid #C5DEF0;
+    height:28px;
+    line-height:28px;
+    padding-left:15px;
+}
+
+.ui-orient-sel-wtfoot b{
+    color:#ff9500;
+}
+
+.ui-orient-sel-wtfoot .ui-orient-sel-wttime {
+    margin-top:4px;
+}
+
+.ui-orient-sel-wtbody {
+    padding:7px;
+}
+
+.ui-orient-sel-wtfoot-eg {
+    float:right;
+}
+
+.ui-orient-sel-wt-egtext {
+    float:left;   
+    padding:0 15px 0 5px; 
+    line-height:28px;
+}
+
+.ui-orient-sel-wtbodyline {
+    height:18px;
+    padding:2px 0;
+    border:1px solid #fff;
+}
+
+.ui-orient-sel-wtbodylinehover {
+    border:1px solid #ffe8c6;
+    background:#fffbf3;
+}
+
+.ui-orient-sel-wttimezone {
+    float:left;
+    padding-left:9px;
+    width:121px;
+}
+
+.ui-orient-sel-wttimeseg {
+    float:left;
+    width:130px;
+}
+
+
+.ui-orient-sel-wtday {
+    width:90px;
+    float:left;
+    line-height:18px;
+    padding-left:2px;
+}
+
+.ui-orient-sel-wtday label {
+    margin-left:2px;
+}
+
+.ui-orient-sel-wttime {
+    width:16px;
+    height:16px;
+    line-height:16px;
+    margin-right:2px;
+    background:#e6e6e6;
+    color:#e6e6e6;
+    float:left;
+    font-size:11px;
+    cursor:pointer;
+    text-align:center;
+    border:1px solid #e6e6e6;
+    border-radius:2px;
+    -moz-border-radius:2px;
+}
+
+.ui-orient-sel-wtzonenight,
+.ui-orient-sel-wtzoneday {
+    float:left;
+    background-image:url(http://img.bdimg.com/adm/BlockSprites.png);
+    height:16px;
+    width:16px;
+    margin-right:4px;
+}
+.ui-orient-sel-wtzonenight {
+    background-position:-33px -439px;
+}
+.ui-orient-sel-wtzoneday {
+    background-position:-49px -439px;
+}
+
+.ui-orient-sel-wttimehead {
+    width:18px;
+    height:17px;
+    line-height:16px;
+    margin-right:2px;
+    background:url(http://img.bdimg.com/adm/BlockSprites.png) 0 -445px;
+    float:left;
+    font-size:11px;
+    cursor:pointer;
+    overflow:hidden;
+}
+.ui-orient-sel-wttimehead-active {
+    background:red;
+    background:url(http://img.bdimg.com/adm/BlockSprites.png) 0 -462px;
+}
+.ui-orient-sel-wktimehover {
+    background:#fff;
+    color:#ceae79;
+    border:1px solid #e4d39f;
+}
+
+.ui-orient-sel-wktimesel {
+    background:#fde8c5;
+    color:#ceae79;
+    border:1px solid #fde8c5;
+}
+
+.ui-orient-sel-province {
+    color:#000;
+    font-weight:bold;
+}
+
+.ui-orient-sel-province-virtual {
+    color:#666;
+}
+
+.ui-orient-sel-city-seled {
+    text-indent:10px;
+}
+
+.ui-orient-gticon{
+    height:11px;
+    width:15px;
+    background:url(http://img.bdimg.com/adm/BlockSprites.png) -33px -455px;
+    overflow:hidden;
+    margin:90px 0 0 12px;
+    float:left;
+}
+
+.ui-orient-sel-inputerr {
+    color:#f90;    
+}
+

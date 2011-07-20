@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>ui.Link</title>
+  <link rel="stylesheet" type="text/css" href="../../src/css/base.css" />
+  <link rel="stylesheet" type="text/css" href="../../src/css/ui-link.css" />
+  <script type="text/javascript" src="../../base.js"></script>
+  <script type="text/javascript">
+    goog.require("ui.Page");
+    goog.require("ui.Link");
+  </script>
+  <script type="text/javascript" src="../fet.js"></script>
+</head>
+<body>
+<div id="Main">
+  <div ui="type:Link;id:link;">AAAAAAAAAAA</div>
+</div>
+<script type="text/javascript">
+var page = fet.testControl({});
+
+test("init", function(){
+  expect(1);
+
+  equals(page.getChild("link") != null, true);
+});
+
+test("rebindModel", function(){
+  // TODO      
+});
+</script>
+</body>
+</html>

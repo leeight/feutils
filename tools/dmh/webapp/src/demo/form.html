@@ -1,0 +1,66 @@
+<!-- target:demoEdit -->
+    <!-- import:demoEditCrumb -->
+    <!-- import:demoEditForm -->
+
+<!-- target:demoEditCrumb -->
+<div class="crumb">
+    <div class="crumb-icon"></div>
+    <div class="crumb-text"><strong><span ui="type:Label;id:lblTitle;text:@title"></span></strong></div>
+    <div class="crumb-info">创建者：<span><span ui="type:Label;id:lblCreator;text:@creator"></span></span></div>
+</div>
+
+<!-- target:demoEditForm -->
+<div ui="type:Form;id:formDemo;">
+    <div class="edit-form">
+        <!-- import:demoEditFormTitle -->
+        <!-- import:demoEditFormMain -->
+    </div>
+    <!-- import:demoEditSubmit -->
+</div>
+
+<!-- target:demoEditFormTitle -->
+<div class="form-head">
+    <div class="form-headcntr">
+        <h2><span ui="type:Label;id:lblHeader;text:@title"></span></h2>
+    </div>
+</div>
+
+<!-- target:demoEditFormMain -->
+<div class="form-main">
+    <div class="form-block">
+        <div class="form-row">
+            <div class="form-key">说明文字：</div>
+            <div class="form-value">
+                <span class="required-icon">*</span>
+                <div name="a" ui="type:ComboBox;id:cb;datasource:@cbDataSource;value:1;width:100"></div>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-key">说明文字：</div>
+            <div class="form-value">
+                <span class="required-icon">*</span>
+                <input name="b" type="text" title="${langOK}" ui="type:TextInput;id:txtDemo;width:150;value:@langOK" />
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-key">说明文字：</div>
+            <div class="form-value">
+                <input type="radio" name="rbDemo" value="1" title="居上" ui="type:RadioBox;id:rbDemo;datasource:1" />
+                <input type="radio" name="rbDemo" value="2" title="居下" ui="type:RadioBox;id:rbDemo2;datasource:0" />
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-key">说明文字：</div>
+            <div class="form-value">
+                <input type="checkbox" name="chkDemo" value="1" title="居上" ui="type:CheckBox;id:chkDemo;group:true;datasource:1" />
+                <input type="checkbox" name="chkDemo" value="2" title="居下" ui="type:CheckBox;id:chkDemo2;group:true;datasource:2" />
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- target:demoEditSubmit -->
+<div class="edit-submit">
+    <div ui="type:SubmitButton;id:btnSubmit;skin:btnsubmit">${formOK:lang}</div>
+    <div ui="type:Button;id:deliveryBack;skin:btnback">${formCancel:lang}</div>
+</div>

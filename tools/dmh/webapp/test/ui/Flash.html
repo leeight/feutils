@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>ui.Flash</title>
+  <link rel="stylesheet" type="text/css" href="../../src/css/base.css" />
+  <link rel="stylesheet" type="text/css" href="../../src/css/ui-flash.css" />
+  <script type="text/javascript" src="../../src/base.js"></script>
+  <script type="text/javascript">
+    goog.require("ui.Page");
+    goog.require("ui.Flash");
+  </script>
+  <script type="text/javascript" src="../fet.js"></script>
+</head>
+<body>
+<div id="Main">
+  <div ui="type:Flash;id:flash;options:@flash_options"></div>
+  <div ui="type:Flash;id:flash2;options:@flash_options"></div>
+  <div ui="type:Flash;id:map;options:@map_flash_options"></div>
+</div>
+<script type="text/javascript">
+var model = {
+  'flash_options' : {
+    url: '../../assets/flash/line.swf',
+    width: '100%',
+    height: '150',
+    wmode: 'transparent'
+  },
+  'map_flash_options' : {
+    url: '../../assets/flash/map.swf',
+    width: '473',
+    height: '286',
+    wmode: 'transparent'
+  }
+}
+var page = fet.testControl(model);
+
+test("init", function(){
+  expect(3);
+
+  // init is ok
+  equals(page.getChild("flash") != null, true);
+  equals(page.getChild("flash2") != null, true);
+  equals(page.getChild("map") != null, true); 
+});
+
+
+var flash = page.getChild('flash');
+flash.invokeMethod('getData', '../../assets/flash/data.xml');
+
+var flash2 = page.getChild('flash2');
+flash2.invokeMethod('getData', '../../assets/flash/data.xml');
+
+var map = page.getChild('map');
+map.invokeMethod('getData', '../../assets/flash/order-location-data.xml');
+
+test("rebindModel", function(){
+  // TODO      
+});
+</script>
+</body>
+</html>

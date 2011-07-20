@@ -1,0 +1,34 @@
+/*
+ * dn-web
+ * Copyright 2011 Baidu Inc. All rights reserved.
+ *
+ * path:    base/DataSource.js
+ * desc:    DataSource接口定义
+ * author:  yuanhongliang
+ * date:    $Date: 2011-05-06 14:54:36 +0800 (周五, 06 五月 2011) $
+ */
+
+goog.require('baidu');
+goog.require('base.Object');
+
+goog.provide('base.DataSource');
+
+/**
+ * DataSource接口定义
+ * @constructor
+ * @extends {base.Object}
+ */
+base.DataSource = function() {
+    base.Object.call(this);
+};
+baidu.inherits(base.DataSource, base.Object);
+
+/**
+ * 从数据源获取数据.
+ * @param {string|Object} params 参数.
+ * @param {Function} callback 处理结果的回掉函数.
+ * @protected
+ */
+base.DataSource.prototype.getData = function(params, callback) {
+  throw 'Not implemented';
+};

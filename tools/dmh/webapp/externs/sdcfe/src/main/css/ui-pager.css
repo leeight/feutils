@@ -1,0 +1,119 @@
+/*
+ * dn-web
+ * Copyright 2011 Baidu Inc. All rights reserved.
+ * 
+ * path:    ui-pager.css
+ * desc:    分页组件
+ * author:  zhaolei,erik
+ * date:    $Date: 2011-05-06 14:54:36 +0800 (周五, 06 五月 2011) $
+ */
+
+/**
+ * 外围div
+ */
+.ui-pager {
+    font-family:STHeiti, SimSun;
+}
+
+.ui-pager li {
+    float:left;
+    display:inline;
+    margin:0 1px;
+}
+
+/**
+ * 每个选项的基本样式
+ */
+.ui-pager span {
+    display:inline-block;
+    padding:0 6px;
+    height:20px;
+    line-height:20px;
+}
+
+/**
+ * 分隔符，省略
+ */
+span.ui-pager-omit {
+    padding:0 1px;
+}
+
+/**
+ * 鼠标移上
+ */
+.ui-pager-hover span {
+    background:#FFF;
+    height:18px;
+    line-height:18px;
+    padding:0 5px;
+    border:1px solid #999;
+    cursor:pointer;
+}
+
+/**
+ * 选中选项
+ */
+.ui-pager-selected {
+    color:#fff;
+    background:#999;
+    font-weight:700;
+}
+
+/**
+ * 不可用选项
+ */
+.ui-pager-disabled {
+    color: #CCC;
+}
+
+
+
+/**
+ * border样式分页组件
+ * added by lixiang, 2011.03.24
+ *
+ */
+ 
+.skin-border-pager li {
+    color: #0033CC;
+    cursor: pointer;
+    font: 12px/16px Arial,Helvetica,sans-serif;
+    height: 20px;
+    overflow: hidden;
+    padding: 0;
+}
+
+
+.skin-border-pager .skin-border-pager-prev,
+.skin-border-pager .skin-border-pager-next,
+.skin-border-pager .skin-border-pager-disabled {
+    border: 1px solid #CCCCCC;
+    padding: 0 5px;
+    height: 18px;
+    line-height: 18px;
+}
+
+
+.skin-border-pager .skin-border-pager-item {
+    padding: 0 5px;
+    border: 1px solid #CCCCCC;
+    height: 18px;
+    line-height: 18px;
+
+}
+
+.skin-border-pager-hover .skin-border-pager-prev,
+.skin-border-pager-hover .skin-border-pager-next,
+.skin-border-pager-hover .skin-border-pager-item {
+    background:#E4E9F9;
+    cursor:pointer;
+}
+
+.skin-border-pager .skin-border-pager-selected {
+    color: #666666;
+    font: bold Arial,Helvetica,sans-serif;
+    background: none;
+    border: none;
+}
+
+/** border 样式pager end **/

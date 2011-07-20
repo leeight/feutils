@@ -1,0 +1,63 @@
+<!-- target:communityForm -->
+<div class="crumb">
+    <div class="crumb-icon"></div>
+    <div class="crumb-text"><strong><span ui="type:Label;id:crumb;text:@formHeaderText"></span></strong></div>
+</div>
+<div ui="type:Form;id:form">
+  <div class="edit-form">
+    <!-- import:communityEditTitle -->
+    <!-- import:communityEditMain -->
+  </div>
+  <!-- import:communityEditSubmit -->
+</div>
+
+<!-- target:communityEditSubmit -->
+<div class="edit-submit">
+  <div ui="type:SubmitButton;id:btnSubmit;skin:btnsubmit">${formOK:lang}</div>
+  <div ui="type:Button;id:btnCancel;skin:btnback">${formCancel:lang}</div>
+</div>
+
+<!-- target:communityEditTitle -->
+<div class="form-head">
+    <div class="form-headcntr">
+      <h2><span ui="type:Label;id:form-header;text:@formHeaderText"></span></h2>
+    </div>
+</div>
+
+<!-- target:communityEditMain-->
+<div class="form-main">
+  <div class="form-block-title">
+    <h3 ui="type:Label;id:form-block-title-text;text:@formBlockTitle"></h3>
+  </div>
+
+  <div class="form-block-wrap">
+    <div class="form-block">
+      
+      <div class="form-row">
+        <div class="form-key">生活圈名称：</div>
+        <div class="form-value">
+          <input type="text" name="name" ui="type:TextInput;id:name;value:@name;rule:required" />
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="form-block-title">
+    <h3>刊例价</h3>
+  </div>
+
+  <div class="form-block-wrap">
+    <div class="form-block">
+      <div ui="type:Repeater;id:repeater;datasource:@repeater.ds;tpl:@repeater.tpl"></div>
+    </div>
+  </div>
+</div>
+
+<!-- target:communityPriceTpl -->
+<div class="form-row">
+  <div class="form-key">${text}刊例价：</div>
+  <div class="form-value">
+    <input type="text" name="sale_price[${value}]" title="${text}刊例价" ui="type:TextInput;id:sale-price-${value};value:@sale_price[${value}];rule:required" />
+  </div>
+</div>

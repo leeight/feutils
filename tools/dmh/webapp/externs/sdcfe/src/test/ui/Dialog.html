@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>ui.Link</title>
+  <link rel="stylesheet" type="text/css" href="../../src/css/base.css" />
+  <link rel="stylesheet" type="text/css" href="../../src/css/ui-button.css" />
+  <link rel="stylesheet" type="text/css" href="../../src/css/ui-dialog.css" />
+  <script type="text/javascript" src="../../base.js"></script>
+  <script type="text/javascript">
+    goog.require('ui.Page');
+    goog.require('ui.util');
+    goog.require("ui.Dialog.alert");
+    goog.require("ui.Dialog.confirm");
+  </script>
+  <script type="text/javascript" src="../fet.js"></script>
+</head>
+<body>
+<div id="Main">
+</div>
+<script type="text/javascript">
+var alert_options = {
+  title: 'ALERT',
+  content: '请求超时，将为您刷新重试',
+  onok: function() {
+    setTimeout(function(){
+      ui.Dialog.confirm(confirm_options);
+    }, 300);
+  }
+};
+
+var confirm_options = {
+  'title' : 'CONFIRM',
+  content: '请求超时，将为您刷新重试',
+  onok: function() {
+    window.location.reload();
+  },
+  oncancel : function() {
+    ui.Dialog.alert(alert_options);
+  }
+};
+ui.Dialog.alert(alert_options);
+</script>
+</body>
+</html>

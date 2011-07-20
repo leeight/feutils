@@ -1,0 +1,19 @@
+/*
+ * dn-web
+ * Copyright 2011 Baidu Inc. All rights reserved.
+ * 
+ * path:    ui-link.css
+ * desc:    链接控件样式
+ * author:  zhaolei,erik
+ * date:    $Date: 2011-05-06 14:54:36 +0800 (周五, 06 五月 2011) $
+ */
+
+.ui-link {
+	color:#37a;
+	cursor:pointer;
+}
+
+.ui-link-hover {
+    color:#f60;
+}
+

@@ -1,0 +1,32 @@
+<html>
+  <script type="text/javascript">
+  document.domain = "baidu.com";
+  var href = location.href;
+  var cbis = href.indexOf("&callback=");
+  var cbie = href.indexOf("&", cbis + 10);
+  var callback = '';
+  
+  if (cbie == -1) {
+    callback = href.substring(cbis + 10);
+  } else {
+    callback = href.substring(cbis + 10, cbie);
+  }
+
+  callback = decodeURIComponent(callback);
+  var fni = callback.lastIndexOf('.');
+  var ins = eval(callback.substring(0, fni));
+  var method = callback.substring(fni + 1);
+
+  ins[method]({
+    'success' : 'true',
+    'message' : {},
+    'result' : {
+      'width' : 174,
+      'height' : 59,
+      'local_file_name' : "本地文件的名称",
+      'preview_url' : "http://www.baidu.com/img/logo.gif",
+      'control_id' : "form_src"
+    }
+  });
+  </script>
+</html>

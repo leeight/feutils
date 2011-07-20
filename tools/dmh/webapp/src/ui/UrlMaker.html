@@ -1,0 +1,56 @@
+<!-- target:urlMakerFunction -->
+<div>
+<div id="{0}" style="margin-right:5px;">上传图片或Flash</div>
+<div id="{1}">统计点击量</div>
+</div>
+
+<!-- target:urlMakerUpload -->
+<div class="ui-urlmaker-box" id="urlMakerUpload" style="display:none">
+    <div class="ui-forminfo">
+        <div class="ui-forminfo-icon"></div>
+		<div class="ui-forminfo-text">
+	                   上传图片大小不能超过256k，Flash大小不能超过512k
+		</div>
+	</div>
+	<div class="form-row" style="margin-top:10px;">
+        <div class="form-key">图片或flash：</div>
+        <div class="form-value" style="width:400px;">
+			<div id="{0}"></div><div style="display:none" id="{1}"></div>
+		</div>
+
+    </div>
+	 <div class="form-row" id="mcUrlCopyArea" style="display:none">
+        <div class="form-single-line">
+            <div id="{2}"></div>
+        </div>
+    </div>
+	<div id="urlMakerPicPreview" class="form-row" style="display:none">
+        <div class="form-single-line" id="urlMakerPicPreviewValue" >
+			
+		</div>
+    </div>
+</div>
+
+<!-- target:urlMakerLink -->
+<div class="ui-urlmaker-box" id="urlMakerLink" style="display:none">
+    <div class="ui-forminfo">
+        <div class="ui-forminfo-icon"></div>
+		<div class="ui-forminfo-text">
+	                   输入点击链接后，点击生成新链接按钮，使用生成的新链接替换上面代码中的点击链接，便可对点击进行统计。
+		</div>
+	</div>
+
+    <div class="form-row" style="margin-top:10px;">
+        <div class="form-key">点击链接：</div>
+        <div class="form-value">
+            <input title="点击链接" type="text" id="{0}" />
+            <div  id="{1}" ></div>
+        </div>
+    </div>
+    <div class="form-row" id="urlMakerLinkCopyArea" style="display:none;">
+        <div class="form-single-line">
+            <div id="{3}"></div>
+        </div>
+    </div>
+    
+</div>

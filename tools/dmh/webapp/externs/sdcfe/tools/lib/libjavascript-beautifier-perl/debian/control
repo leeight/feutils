@@ -1,0 +1,21 @@
+Source: libjavascript-beautifier-perl
+Section: perl
+Priority: optional
+Build-Depends: debhelper (>= 7.0.50), quilt (>= 0.46-7)
+Build-Depends-Indep: perl, libtest-pod-perl,
+ perl (>= 5.10.1) | libtest-simple-perl (>= 0.88)
+Maintainer: Debian Perl Group <pkg-perl-maintainers@lists.alioth.debian.org>
+Uploaders: Ryan Niebur <ryan@debian.org>, Jonathan Yu <jawnsy@cpan.org>
+Standards-Version: 3.8.3
+Homepage: http://search.cpan.org/dist/JavaScript-Beautifier/
+Vcs-Svn: svn://svn.debian.org/pkg-perl/trunk/libjavascript-beautifier-perl/
+Vcs-Browser: http://svn.debian.org/viewsvn/pkg-perl/trunk/libjavascript-beautifier-perl/
+
+Package: libjavascript-beautifier-perl
+Architecture: all
+Depends: ${perl:Depends}, ${misc:Depends}
+Description: Perl module to beautify JavaScript code
+ JavaScript::Beautifier is a Perl module providing a simple way to beautify
+ arbitrary JavaScript code. This beautifier can process your messy or compacted
+ JavaScript, neatly and consistently formatting it, thus making it easier to
+ read and maintain.

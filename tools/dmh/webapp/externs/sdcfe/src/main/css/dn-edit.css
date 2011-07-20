@@ -1,0 +1,466 @@
+/*
+ * dn-web
+ * Copyright 2011 Baidu Inc. All rights reserved.
+ * 
+ * path:    dn-edit.css
+ * desc:    编辑页业务组合
+ * author:  zhaolei,erik
+ * date:    $Date: 2011-05-06 14:54:36 +0800 (周五, 06 五月 2011) $
+ */
+
+/* 清除浮动 */
+.crumb,
+.form-row,
+.form-line,
+.form-single-line,
+.form-value,
+.form-value-mini,
+.edit-submit {
+    zoom:1;
+}
+
+.crumb:after,
+.form-row:after,
+.form-line:after,
+.form-single-line:after,
+.form-value:after,
+.form-value-mini:after,
+.edit-submit:after {
+    content:"\0020"; 
+    display:block;
+    height:0; 
+    visibility:hidden; 
+    clear:both;
+}
+
+/* 面包屑导航 */
+.crumb {
+    padding:3px 4px;
+    margin-bottom:10px;
+}
+
+.crumb-to,
+.crumb-icon,
+.crumb-text {
+    float:left;
+    display:inline;
+}
+
+/* 面包屑层级标识 */
+.crumb-to {
+    width:5px;
+    height:9px;
+    margin:3px 5px;
+    background:url(http://img.bdimg.com/adm/BlockSprites.png) no-repeat -85px -316px;
+    font-family:STHeiti, SimSun;
+}
+
+/* 面包屑小箭头图标 */
+.crumb-icon {
+    background:url(http://img.bdimg.com/adm/BlockSprites.png) no-repeat -182px -265px;
+    margin:5px 8px 0 0;
+    width:7px;
+    height:5px;
+    overflow:hidden;
+}
+/* 面包屑(文字|链接) */
+.crumb-text {
+    height:15px;
+    line-height:15px;
+}
+
+/*面包屑右边的信息，新建/修改广告页面有创建者信息*/
+.crumb-info {
+	float:right;
+	color:#999;
+    padding-right:5px;
+}
+/* 表单部分 */
+.edit-form {
+    background:#FFF;
+    margin-bottom:10px;
+}
+
+/* 表单头部 */
+.edit-form .form-head {
+    border-width: 1px 1px 0 1px;
+    border-style: solid;
+    border-color: #9ecae8;
+    background: #c7deed;
+    height:28px;
+}
+
+.edit-form .form-headcntr {
+    height:27px;
+    line-height:27px;
+    color:#1c4a79;
+    border-top:1px solid #d8e8f2;
+}
+
+.edit-form .form-headcntr h2 {
+    padding-left:20px;
+    font-weight:700;
+    font-size:12px;
+}
+
+/* popup中的表单主体 */
+.ui-dialog-body .form-main {
+    /* margin:-10px; */
+}
+
+/* 表单主体 */
+.edit-form .form-main {
+    border:1px solid #9ecae8;
+    zoom:1;
+}
+
+/* 表单区块外围样式（有标题时添加） */
+.form-block-wrap {
+    margin:0 1px 1px;
+    border-width:0 1px 1px;
+    border-style:solid;
+    border-color: #c5def0;
+    padding-left:42px;
+    background-color:#FFF;
+}
+
+/* 表单区块标题样式 */
+.form-block-title {
+    margin:1px 1px 0;
+    border:1px solid #c5def0;
+    height:28px;
+    line-height:27px;
+    background:#f0f6fa;
+    position:relative;
+}
+
+.form-block-title h3 {
+    font-size:12px;
+    padding-left:53px;
+}
+
+.form-block-title h3 .weak {
+    color:#ccc;
+}
+
+/* 表单区块开关图标 */
+.form-block-icon {
+	overflow:hidden;
+    position:absolute;
+    top:8px;
+    left:36px;
+    width:11px;
+    height:11px;
+    background:url(http://img.bdimg.com/adm/BlockSprites.png) no-repeat -61px -305px;
+}
+
+.form-block-close .form-block-icon {
+    background-position: -61px -305px;
+}
+
+.form-block-open .form-block-icon {
+    background-position: -50px -305px;
+}
+
+/* 表单区块 */
+.form-block {
+    position:relative;
+    padding:10px;
+    zoom:1;
+}
+
+.ui-dialog-body .form-block {
+    padding:0;
+}
+
+/* 表单行 */
+.form-row {
+    padding:2px 0;
+}
+
+.form-line,
+.form-single-line,
+.form-key,
+.form-key-mini,
+.form-value-mini,
+.form-value {
+    float:left;
+    display:inline;
+    line-height:24px;
+}
+
+.form-line,
+.form-value {
+    width: 550px;
+}
+
+.form-value-mini {
+    width:300px;
+    padding:2px;
+}
+.ui-dialog-body .form-value {
+    width:auto;
+}
+
+.form-value-preview {
+    line-height:0;
+}
+
+/* 表单key */
+.form-key,
+.form-key-mini {
+    float:left;
+    padding:2px 0 3px 36px;
+    width:100px;
+}
+
+.form-key-mini {
+    padding-left:0;
+}
+
+.ui-dialog-body .form-key,
+.ui-dialog-body .form-single-line {
+    padding-left:10px;
+}
+
+.ui-dialog-body .form-key-restore,
+.ui-dialog-body .form-single-line-restore {
+    padding-left:36px;
+}
+
+.ui-dialog-body .form-block-title h3{
+    padding-left:20px;
+}
+
+/* 表单value */
+.form-value {
+    padding:2px;
+}
+.form-value-caution {
+	float:left;
+	color:red;
+}
+/*有必填标记的表单value*/
+.form-value-required{
+    position:relative;
+    left:-8px;
+}
+/*必填标记*/
+.required-icon{
+    float:left;
+    margin-right:3px;
+    color:red;
+}
+/* 单独占一行 */
+.form-single-line {
+    padding:2px 0 2px 36px;
+    width:500px;
+    clear:both;
+}
+
+.form-line {
+    clear:both;
+}
+
+/* 表单内控件样式微调 */
+.form-row .ui-checkbox,
+.form-row .ui-radiobox {
+    float:left;
+    display:inline;
+    margin-top:5px;
+    +margin-top:0;
+}
+
+.form-row .ui-text {
+    margin-right:5px;
+}
+
+.form-row .ui-checkbox-label,
+.form-row .ui-radiobox-label {
+    float:left;
+    display:inline;
+    margin:0 20px 0 4px;
+    line-height:24px;
+    -margin-left:3px;
+}
+
+/* 表单文字 */
+.form-text {
+    float:left;
+    display:inline;
+    margin-right:5px;
+    line-height:24px;
+}
+
+/* 表单小文字 */
+.form-text-s {
+    font-size:10px;
+    color:#999;
+}
+.form-text-arrow{
+    font-family:simsun;
+    font-size:12px;
+}
+/* 表单内容块，padding-right:20px */
+.form-content-block {
+    padding-right:20px;
+    float:left;
+}
+
+.form-row .ui-combobox {
+    float:left;
+    margin-right:5px;
+}
+
+.form-row .ui-combobox,
+.form-row .ui-button,
+.form-row .ui-text,
+.form-row .ui-textarea,
+.form-row .ui-cal,
+.form-row .ui-buttonmenu {
+    margin-top:2px;
+}
+.form-row .ui-textarea{
+	margin-right:5px;
+}
+/* 提交部分 */
+.edit-submit {
+    margin:0 0 0 21px;
+    zoom:1;
+}
+.skin-form-container .ui-dialog-body {
+  padding: 0;
+}
+.skin-form-container .edit-form {
+  margin-bottom:0;
+}
+.skin-form-container .edit-form .form-head {
+  display:none;
+}
+.skin-form-container .edit-form .form-main {
+  border:none;
+}
+.skin-form-container .edit-submit {
+  background-color: #E6F3FB;
+  border-top: 1px solid #C5DFF0;
+  margin: 0;
+  padding: 10px;
+}
+.skin-form-container-foot {
+  display:none;
+}
+
+/* 表单验证提示 */
+.validate-error {
+    background:#FEF7DB;
+    border:1px solid #F0DDA5;
+    padding:5px;
+    display:block;
+}
+
+.validate-error input {
+    border:1px solid #F0DDA5;
+}
+
+.validate {
+    clear:left;
+    position:relative;
+    zoom:1;
+}
+.validate-text {
+    padding-left:22px;
+    display:block;
+    background:#fef7db;
+    color:#E17800;
+    line-height:24px;
+}
+
+.validate-icon {
+    position:absolute;
+    top:4px;
+    left:0;
+    width:16px;
+    height:16px;
+    background:#FEF7DB url(http://img.bdimg.com/adm/BlockSprites.png) -125px -315px no-repeat;
+}
+
+/* 表单分支链接（支线任务） */
+.form-branch-task {
+    font-family:STHeiti, SimSun;
+    position:absolute;
+    right:20px;
+    top:20px;
+}
+
+/* 选填 ,灰色*/
+.form-optional,.form-grey {
+    float:left;
+    display:inline;
+    margin-left:5px;
+    line-height:24px;
+    color:#CCC;
+}
+
+.ui-richsel-entry .form-optional {
+    line-height:22px;
+}
+
+.form-grey{float:none;}
+.form-grey2{color:#CCC;}
+/* 表单提示信息（先放在这里，组件做好再转移） */
+.ui-forminfo {
+    position:relative;
+    margin:1px;
+    background:#EFF7F9;
+    border:1px solid #C5DFF0;
+    clear:both;
+    zoom:1;
+}
+
+.ui-forminfo .ui-link {
+    text-decoration:underline;
+}
+
+.ui-forminfo-icon {
+    position:absolute;
+    width:14px;
+    height:17px;
+    background:url(http://img.bdimg.com/adm/BlockSprites.png) no-repeat -141px -315px;
+    left:40px;
+    top:6px;
+}
+
+.ui-forminfo-text {
+    padding:4px 10px 4px 64px;
+    line-height:24px;
+    color:#8BA9C4;
+}
+
+.ui-forminfo-text strong {
+    margin:0 3px;
+}
+
+/**
+ * 表单内的iframe
+ */
+.form-iframe {
+    width:850px;
+    height:450px;
+    overflow-x:hidden;
+    border:none;
+}
+
+.form-iframe-wrapper {
+    border-top:1px solid #DCE3E9;
+    margin:10px;
+    padding:5px 0;
+    width:850px;
+}
+
+/**
+ * 缩进HACK
+ */
+.indent-checkbox {
+    padding-left: 17px;
+    *padding-left: 23px;
+}

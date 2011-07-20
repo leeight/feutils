@@ -1,0 +1,181 @@
+<!-- target:slotEdit -->
+    <!-- import:slotEditCrumb -->
+    <!-- import:slotEditForm -->
+
+<!-- target:slotEditCrumb -->
+<div class="crumb">
+    <div class="crumb-icon"></div>
+    <div class="crumb-text"><strong><span ui="type:Label;id:lblTitle;text:@title"></span></strong></div>
+</div>
+
+<!-- target:slotEditForm -->
+<div ui="type:Form;id:form;">
+    <div class="edit-form">
+        <!-- import:slotEditFormTitle -->
+        <!-- import:slotEditFormMain -->
+    </div>
+    <!-- import:slotEditSubmit -->
+</div>
+
+<!-- target:slotEditFormTitle -->
+<div class="form-head">
+    <div class="form-headcntr">
+        <h2><span ui="type:Label;id:lblHeader;text:@title"></span></h2>
+    </div>
+</div>
+
+<!-- target:slotEditFormMain -->
+<div class="form-main">
+    <div class="form-block-title">
+        <h3>广告位信息</h3>
+    </div>
+    <div class="form-block-wrap">
+        <div class="form-block">
+            <div class="form-row">
+                <div class="form-key">广告位名称：</div>
+                <div class="form-value">
+                    <input name="name" type="text" title="广告位名称" ui="type:TextInput;id:txtName;width:150;value:@name;rule:required;" />
+                </div>
+            </div>
+            <div id="wrapperColumbusSlotId" class="form-row">
+                <div class="form-key">广告管家广告位ID:</div>
+                <div class="form-value">
+                    <input name="columbus_slot_id" type="text" title="广告管家广告位ID" ui="type:TextInput;id:txtColumbusSlotId;width:150;value:@columbus_slot_id;rule:required;rule:number" />
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-key">广告位类型：</div>
+                <div class="form-value">
+                    <div name="slot_sub_type" ui="type:RadioBoxGroup;id:rbgSlotSubType;datasource:@slotSubTypes;value:@slot_sub_type;"></div>
+                    <span id="wrapperSlotSubType"></span>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-key">产品形式：</div>
+                <div class="form-value">
+                    <div name="type" title="产品形式" ui="type:CheckBoxGroup;id:cbgType;datasource:@types;value:@type;defaultFirst:true;rule:required"></div>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-key">用户名：</div>
+                <div class="form-value">
+                    <input name="username" type="text" ui="type:TextInput;id:txtUsername;width:150;value:@username" />
+                    <div class="form-optional">(可选)</div>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-key">域名：</div>
+                <div class="form-value">
+                    <input name="domain" type="text" ui="type:TextInput;id:txtDomain;width:150;value:@domain" />
+                    <div class="form-optional">(可选)</div>
+                </div>
+            </div>
+            <div id="wrapperStatus" class="form-row" style="display:none;">
+                <div class="form-key">状态：</div>
+                <div id="wrapperStatusText" class="form-value"></div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="form-block-title">
+        <h3>生活圈</h3>
+    </div>
+    <div class="form-block-wrap">
+        <div class="form-block">
+            <div class="form-row">
+                <div class="form-value" style="margin-left:36px">
+                    <div ui="type:Panel;id:pnlAddCommunity">
+                        <div ui="type:Button;id:btnCommunity;">添加生活圈</div>
+                        <div class="form-optional">(可选)</div>
+                    </div>
+                    <div ui="type:ListView;id:lvCommunity;title:生活圈;datasource:@communities;fields:@communityFields"></div>
+                    <div name="community_ids" ui="type:SimpleSelector;id:selCommunity;title:生活圈;datasource:@allCommunities;valueField:id;fields:@communityFields;value:@communityIds"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="form-block-title">
+        <h3>频次设置</h3>
+    </div>
+    <div class="form-block-wrap">
+      <div class="form-block">
+        <div class="form-row">
+          <div class="form-value" style="margin-left:36px">
+            <input type="checkbox" title="设置频次上限" ui="type:CheckBox;id:chkFrequency;value:@chkFrequencyChecked"/>
+            <div class="form-optional">(可选)</div>
+          </div>
+        </div>
+      </div>
+      <div id="wrapperFrequency" class="form-block">
+        <div ui="type:Repeater;id:repeater;datasource:@repeater.ds;tpl:@repeater.tpl"></div>
+      </div>
+    </div>
+    
+    <div class="form-block-title">
+        <h3>屏蔽广告主</h3>
+    </div>
+    <div class="form-block-wrap">
+        <div class="form-block">
+            <div class="form-row">
+                <div class="form-value" style="margin-left:36px;position:relative;width:700px">
+                    <div ui="type:Orientation;id:orientAdOwners;orientType:keywords;inputIntroType:blockAdOwners;inputHeadTitle:屏蔽广告主(可选);value:@adOwnerUsernames;resultTextTitle:屏蔽广告主"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="form-block-title">
+        <h3>定价</h3>
+    </div>
+    <div class="form-block-wrap">
+      <div ui="type:Repeater;id:priceRepeater;datasource:@priceRepeater.ds;tpl:@priceRepeater.tpl"></div>
+    </div>
+</div>
+
+<!-- target:frequencyTpl -->
+<div class="form-row"  id="frequence[${value}]">
+    <div class="form-key">${text}</div><div class="form-text">每个独立访客最多展示：</div>
+    <div class="form-value">
+      <input name="max_impression_freq_uu_count[${value}]" type="text" title="${text}次数" ui="type:TextInput;rule:required;id:txtUUCount-${value};width:50;value:@max_impression_freq_uu_count[${value}];rule:min,0;rule:max,255,int" />
+      <span class="form-text">次/</span>
+      <input name="max_impression_freq_uu_hour[${value}]" type="text" title="${text}次数" ui="type:TextInput;rule:required;id:txtUUHour-${value};width:50;value:@max_impression_freq_uu_hour[${value}];rule:min,0;rule:max,255,int" />
+      <span class="form-text">小时</span>
+    </div>
+</div>
+
+<!-- target:priceTpl -->
+<div id="wrapperPrice[${value}]" class="form-block">
+  <div class="form-row">
+    <div class="form-key">
+      <span class="form-text">${text}采购价</span>
+    </div>
+    <div class="form-value">
+      <div class="form-value" style="width:200px;">
+        <input name="purchase_price[${value}]" type="text" ui="type:TextInput;id:txtPurchasePrice[${value}];width:100;value:@purchase_price[${value}];rule:required;rule:number;" />
+                        元/每千次展现
+      </div>
+    </div>
+  </div>
+  <div class="form-row">
+    <div class="form-key">
+      <span class="form-text">${text}刊例价</span>
+    </div>
+    <div class="form-value">
+      <div class="form-value" style="width:200px;">
+        <input name="sale_price[${value}]" title="${text}刊例价" type="text" ui="type:TextInput;id:txtSalePrice[${value}];width:100;value:@sale_price[${value}];rule:required;rule:number;" />
+                        元/每千次展现
+      </div>
+    </div>
+  </div>
+</div>
+<!-- target:slotEditSubmit -->
+<div class="edit-submit">
+    <div ui="type:SubmitButton;id:btnSubmit;skin:btnsubmit">${formOK:lang}</div>
+    <div ui="type:Button;id:btnCancel;skin:btnback">${formCancel:lang}</div>
+</div>
+
+<!-- target:UIOrientSelectorInputIntroBlockAdOwners -->
+说明信息：<br>
+输入要屏蔽的广告主用户名。<br>
+每行一个用户名，最多只能输入100个。<br>

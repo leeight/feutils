@@ -1,0 +1,12 @@
+<!-- target:communityNonVideo -->
+<div class="report-header clearfix" ui="type:Form;id:formSearch">
+    <div name="ad_id" ui="type:Hidden;id:reportAdId;value:@ad_id"></div>
+    <div class="report-title report-title-community">生活圈报告</div>
+    <div class="report-calendar" name="date_range" ui="type:ReportCalendar;id:reportCalendar;defaultMode:1;converter:&base.dateRangeConverter"></div>
+</div>
+<div class="report-table">
+    <div class="report-table-head">
+        <div class="report-table-headcntr"><h2>非视频广告（<span ui='type:Label;id:lblDate;'></span>）</h2></div>
+    </div>
+    <div ui="type:List;id:list;fields:@fields;select:;"></div>    
+</div>

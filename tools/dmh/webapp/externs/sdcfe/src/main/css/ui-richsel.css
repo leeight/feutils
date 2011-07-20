@@ -1,0 +1,134 @@
+/*
+ * dn-web
+ * Copyright 2011 Baidu Inc. All rights reserved.
+ * 
+ * path:    ui-richsel.css
+ * desc:    占位层选择表格
+ * author:  zhaolei,erik
+ * date:    $Date: 2011-05-06 14:54:36 +0800 (周五, 06 五月 2011) $
+ */
+
+/* 清除浮动 */
+.ui-richsel-sub-headcntr,
+.ui-richsel-sub-footcntr,
+.ui-richsel-sub-actioncntr {
+    zoom:1;
+}
+
+.ui-richsel-sub-headcntr:after,
+.ui-richsel-sub-footcntr:after,
+.ui-richsel-sub-actioncntr:after {
+    content:"\0020"; 
+    display:block;
+    height:0; 
+    visibility:hidden; 
+    clear:both;
+}
+
+/* 整体外部容器 */
+.ui-richsel {
+    zoom:1;
+}
+
+/* 选择入口容器 */
+.ui-richsel-entry {
+}
+
+.ui-richsel-btn-result {float:left;padding-right:5px}
+
+/* 提示图标 */
+.ui-richsel-tip {
+    height:15px;
+    width:15px;
+    background:url(http://img.bdimg.com/adm/BlockSprites.png) no-repeat -155px -315px;
+    margin:4px 10px 0 5px;
+    display:inline;
+    float:left;
+    cursor:pointer;
+    zoom:1;
+}
+
+/* 子表格外部容器 */
+.ui-richsel-sub {
+    line-height:normal;
+    clear:both;
+    width:500px;
+    zoom:1;
+}
+
+/* 表格头部 */
+.ui-richsel-sub-head {
+    color:#35608c;
+    border-width:1px 1px 0;
+    border-style: solid;
+    border-color: #a3cde9;
+    background:#c7deed;
+}
+
+.ui-richsel-sub-headcntr {
+    border-top:1px solid #d8e8f2;
+    height:27px;
+}
+
+.ui-richsel-sub-title {
+    margin:0 10px;
+    line-height:25px;
+    height:25px;
+    float:left;
+    font-size:12px;
+}
+
+.ui-richsel .table-search {
+    margin:3px 10px 0 0;
+    float:right;
+    display:inline;
+    zoom:1;
+}
+
+.ui-richsel input.ui-text {
+    margin-top:0;
+}
+
+/* 表格底部 */
+.ui-richsel-sub-foot {
+    border-width:0 1px 1px;
+    border-style: solid;
+    border-color: #CCC;
+}
+.ui-richsel-sub-footcntr {
+    background:#EEEEEE;
+    border-top:1px solid #F6F6F6;
+    height:27px;
+}
+
+.ui-richsel .ui-pager {
+    display:inline;
+    float:left;
+    margin:3px 0 0 10px;
+}
+
+/* 表格底部按钮区域 */
+.ui-richsel-sub-action {
+    border-width:0 1px 1px;
+    border-style: solid;
+    border-color: #a3cde9;
+    background:#c7deed;
+}
+
+.ui-richsel-sub-actioncntr {
+    border-top:1px solid #d8e8f2;
+    padding:3px 10px 4px;
+}
+
+.ui-richsel-sub-actioncntr .ui-button {
+    margin-right:5px;
+}
+
+.ui-richsel-sub-empty {
+    text-align:center;
+    padding:50px 0;
+    border-style:solid;
+    border-width:0 1px 1px;
+    border-color:#ccc;
+    
+}

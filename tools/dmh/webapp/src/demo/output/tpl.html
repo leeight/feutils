@@ -1,0 +1,216 @@
+<!-- target:PagableList -->
+<div class="list-table-main">
+    <div ui="type:Table;datasource:@result;id:listTable;fields:@listFields;noDataHtml:&dn.config.listNoDataHtml;order:@order;orderBy:@orderBy;select:@select;sortable:true;dragable:true;subrow:@subrow"></div>
+</div>
+<div class="list-table-foot">
+    <div ui="type:Pager;id:listPager;showCount:@pagerCount;page:@page;total:@totalPage"></div>
+    <div class="list-table-info">
+        <span class="table-sumary" ui="type:ListInfo;id:listInfo;start:@startIndex;end:@endIndex;total:@totalCount"></span>
+        <div class="table-pagesize">
+            <div class="table-pagesize-select" ui="type:ComboBox;id:pageSize;datasource:&dn.config.pageSize;width:55;value:@pageSize"></div>
+            <span class="table-pagesize-desc">${itemPerPage:lang}</span>
+        </div>
+    </div>
+</div>
+<!-- target:accountList -->
+<div class="main">
+    <div class="list-links">
+        <a class="list-links-item" ui="id:createRoles;type:Link;href:#/account/create" id="createRoles">
+            <span class="list-links-add"></span>
+            <span class="list-links-text">新建账户</span>
+        </a>
+    </div>
+    <div ui="type:Form;id:formSearch;" class="list-search-form">
+        <div class="form-main">
+            <div class="form-block">
+                <div class="form-row">
+                    <div class="form-key">账户名：</div>
+                    <div class="form-value">
+                        <input type="text" name="name" ui="type:TextInput;id:txtID;value:@name" />
+                    </div>
+                    <div class="form-key">角色：</div>
+                    <div class="form-value">
+                        <div name="role_id" ui="type:ComboBox;id:roles;datasource:@roles;value:;width:100"></div>
+                    </div>
+                </div>
+                <div class="form-seperator">
+                </div>
+                <div class="form-row">
+                    <div ui="type:SubmitButton;id:btnSearch">查找账户</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div ui="type:Panel;id:pnlOperation" class="list-table-status">
+        <div class="list-table-statuscntr">
+            <div class="list-table-status-icon"></div>
+            <div ui="type:Button;id:batch-delete-button">${btnDelete:lang}</div>
+        </div>
+    </div>
+    <div ui="type:PagableList;id:list;fields:@fields;pageSize:@pageSize;pageNo:@pageNo;orderBy:@orderBy;order:@order"></div>
+</div>
+<!-- target:createRoles -->
+	<!-- import:createRolesCrumb -->
+    <!-- import:createRolesForm -->
+<!-- target:createRolesCrumb -->
+<div class="crumb">
+    <div class="crumb-icon"></div>
+    <div class="crumb-text"><strong><span ui="type:Label;id:lblTitle;text:@title"></span></strong></div>
+</div>
+<!-- target:createRolesForm -->
+<div ui="type:Form;id:form;">
+    <div class="edit-form">
+        <!-- import:createRolesFormTitle -->
+        <!-- import:createRolesFormMain -->
+    </div>
+    <!-- import:createRolesSubmit -->
+</div>
+<!-- target:createRolesFormTitle -->
+<div class="form-head">
+    <div class="form-headcntr">
+        <h2><span ui="type:Label;id:cRHeader;text:@title"></span></h2>
+    </div>
+</div>
+<!-- target:createRolesFormMain -->
+<div class="form-main">
+    <div class="form-block-title">
+        <h3>新建账户</h3>
+    </div>
+    <div class="form-block-wrap">
+        <div class="form-block">
+            <div class="form-row">
+                <div class="form-key">
+                    角色：
+                </div>
+                <div class="form-value">
+                    <div name="role_id" ui="type:RadioBoxGroup;id:roles;datasource:@roles;value:@role_id;">
+                    </div>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-key">
+                    账户名称：
+                </div>
+                <div class="form-value">
+                    <input name="name" type="text" title="账户名称" ui="type:TextInput;id:name;width:150;value:@name;rule:required;" />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- target:createRolesSubmit -->
+<div class="edit-submit">
+    <div ui="type:SubmitButton;id:btnSubmit;skin:btnsubmit">
+        ${formOK:lang}
+    </div>
+    <div ui="type:Button;id:btnCancel;skin:btnback">
+        ${formCancel:lang}
+    </div>
+</div>
+<!-- target:communityList -->
+<div class="main">
+  <!-- import:communityListLinks -->
+  <!-- import:communityListBatchOperation -->
+  <!-- import:communityListTable -->
+</div>
+
+<!-- target:communityListSearchForm -->
+<div ui="type:Form;id:formSearch;" class="edit-form">
+  <div class="form-main">
+    <div class="form-block">
+      
+      <div class="form-row">
+        <div class="form-value">
+          <input type="text" name="name" ui="type:TextInput;id:txtName;value:@name" />            
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div ui="type:SubmitButton;id:btnSearch"></div>
+      </div>
+    
+    </div>
+  </div>
+</div>
+
+<!-- target:communityListLinks -->
+<div class="list-links">
+  <a href="#/community/create" class="list-links-item" ui="type:Link;id:community-create-link">
+    <span class="list-links-add"></span>
+    <span class="list-links-text">新建生活圈</span>
+  </a>
+</div>
+
+<!-- target:communityListBatchOperation -->
+<div ui="type:Panel;id:pnlOperation" class="list-table-status">
+    <div class="list-table-statuscntr">
+        <div class="list-table-status-icon"></div>
+        <div ui="type:Button;id:batch-archive-button">${btnArchive:lang}</div>
+    </div>
+</div>
+
+<!-- target:communityListTable -->
+<div ui="type:PagableList;id:list;fields:@fields;pageSize:@pageSize;pageNo:@pageNo;orderBy:@orderBy;order:@order"></div>
+<!-- target:communityForm -->
+<div class="crumb">
+    <div class="crumb-icon"></div>
+    <div class="crumb-text"><strong><span ui="type:Label;id:crumb;text:@formHeaderText"></span></strong></div>
+</div>
+<div ui="type:Form;id:form">
+  <div class="edit-form">
+    <!-- import:communityEditTitle -->
+    <!-- import:communityEditMain -->
+  </div>
+  <!-- import:communityEditSubmit -->
+</div>
+
+<!-- target:communityEditSubmit -->
+<div class="edit-submit">
+  <div ui="type:SubmitButton;id:btnSubmit;skin:btnsubmit">${formOK:lang}</div>
+  <div ui="type:Button;id:btnCancel;skin:btnback">${formCancel:lang}</div>
+</div>
+
+<!-- target:communityEditTitle -->
+<div class="form-head">
+    <div class="form-headcntr">
+      <h2><span ui="type:Label;id:form-header;text:@formHeaderText"></span></h2>
+    </div>
+</div>
+
+<!-- target:communityEditMain-->
+<div class="form-main">
+  <div class="form-block-title">
+    <h3 ui="type:Label;id:form-block-title-text;text:@formBlockTitle"></h3>
+  </div>
+
+  <div class="form-block-wrap">
+    <div class="form-block">
+      
+      <div class="form-row">
+        <div class="form-key">生活圈名称：</div>
+        <div class="form-value">
+          <input type="text" name="name" ui="type:TextInput;id:name;value:@name;rule:required" />
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="form-block-title">
+    <h3>刊例价</h3>
+  </div>
+
+  <div class="form-block-wrap">
+    <div class="form-block">
+      <div ui="type:Repeater;id:repeater;datasource:@repeater.ds;tpl:@repeater.tpl"></div>
+    </div>
+  </div>
+</div>
+
+<!-- target:communityPriceTpl -->
+<div class="form-row">
+  <div class="form-key">${text}刊例价：</div>
+  <div class="form-value">
+    <input type="text" name="sale_price[${value}]" title="${text}刊例价" ui="type:TextInput;id:sale-price-${value};value:@sale_price[${value}];rule:required" />
+  </div>
+</div>

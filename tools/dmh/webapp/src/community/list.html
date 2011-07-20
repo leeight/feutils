@@ -1,0 +1,44 @@
+<!-- target:communityList -->
+<div class="main">
+  <!-- import:communityListLinks -->
+  <!-- import:communityListBatchOperation -->
+  <!-- import:communityListTable -->
+</div>
+
+<!-- target:communityListSearchForm -->
+<div ui="type:Form;id:formSearch;" class="edit-form">
+  <div class="form-main">
+    <div class="form-block">
+      
+      <div class="form-row">
+        <div class="form-value">
+          <input type="text" name="name" ui="type:TextInput;id:txtName;value:@name" />            
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div ui="type:SubmitButton;id:btnSearch"></div>
+      </div>
+    
+    </div>
+  </div>
+</div>
+
+<!-- target:communityListLinks -->
+<div class="list-links">
+  <a href="#/community/create" class="list-links-item" ui="type:Link;id:community-create-link">
+    <span class="list-links-add"></span>
+    <span class="list-links-text">新建生活圈</span>
+  </a>
+</div>
+
+<!-- target:communityListBatchOperation -->
+<div ui="type:Panel;id:pnlOperation" class="list-table-status">
+    <div class="list-table-statuscntr">
+        <div class="list-table-status-icon"></div>
+        <div ui="type:Button;id:batch-archive-button">${btnArchive:lang}</div>
+    </div>
+</div>
+
+<!-- target:communityListTable -->
+<div ui="type:PagableList;id:list;fields:@fields;pageSize:@pageSize;pageNo:@pageNo;orderBy:@orderBy;order:@order"></div>

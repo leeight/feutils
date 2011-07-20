@@ -1,0 +1,11 @@
+<!-- target:frequency -->
+<div class="report-header clearfix" ui="type:Form;id:formSearch">
+    <div class="report-title report-title-frequency">频次报告</div>
+    <div name="ad_id" ui="type:Hidden;id:reportAdId;value:@ad_id"></div>    
+</div>
+<div class="report-table">
+    <div class="report-table-head">
+        <div class="report-table-headcntr"><h2>时间：<span ui='type:Label;id:lblDate;text:@lblToday;' ></span>-今天</h2></div>
+    </div>
+    <div ui="type:List;id:list;fields:@fields;select:;"></div>    
+</div>

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>ui.Repeater</title>
+  <link rel="stylesheet" type="text/css" href="../../src/css/base.css" />
+  <link rel="stylesheet" type="text/css" href="../../src/css/ui-textinput.css" />
+  <script type="text/javascript" src="../../src/base.js"></script>
+  <script type="text/javascript">
+    goog.require("ui.Page");
+    goog.require("ui.Repeater");
+    goog.require("ui.TextInput");
+  </script>
+  <script type="text/javascript" src="../fet.js"></script>
+</head>
+<body>
+<div id="Main" class="container">
+  <div ui="type:Repeater;id:repeater;tpl:@tpl;datasource:@datasource"></div>
+</div>
+<script type="text/javascript">
+var model = {
+  'datasource' : [ 
+    {"name":"XXX"}
+  ],
+  'tpl' : '<div><input type="text" ui="type:TextInput;id:input;value:@value" /></div>',
+  'value' : 'google'
+}
+var page = fet.testControl(model);
+
+test("init", function(){
+  expect(1);
+
+  var input = page.getChild("repeater").getChild("input");
+  equals(input.getValue(), "google", "pass test");
+});
+
+test("rebindModel", function(){
+  expect(1);
+
+  var repeater = page.getChild('repeater');
+  repeater.rebindModel({
+    'value' : 'baidu'      
+  });
+  var input = page.getChild("repeater").getChild("input");
+  equals(input.getValue(), "baidu", "pass test");
+});
+</script>
+</body>
+</html>

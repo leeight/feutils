@@ -1,0 +1,15 @@
+<!-- target:reportOrderFrequency -->
+<div class="report-header clearfix" ui="type:Form;id:formSearch">
+    <div class="report-title report-title-frequency">频次报告</div>
+    <div name="order_id" ui="type:Hidden;id:orderId;value:@order_id"></div>
+</div>
+<div class="report-table">
+    <div class="report-table-head">
+        <div class="report-table-headcntr form-row">
+            <h2 class="form-text">时间：</h2>
+            <h2 class="form-text" ui="type:Label;id:lblDate;text:@effect_time"></h2>
+            <h2 class="form-text">-今天</h2>
+        </div>
+    </div>
+    <div ui="type:List;id:list;fields:&report.order.config.fields.frequency;select:none"></div>
+</div>

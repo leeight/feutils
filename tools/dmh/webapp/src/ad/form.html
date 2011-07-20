@@ -1,0 +1,224 @@
+<!-- target:adEdit -->
+    <!-- import:adEditCrumb -->
+    <!-- import:adEditForm -->    
+
+<!-- target:adEditCrumb -->
+<div class="crumb">
+    <div class="crumb-icon"></div>
+    <div class="crumb-text"><strong><span ui="type:Label;id:lblHeader;text:@title"></span></strong></div>   
+</div>
+
+<!-- target:adEditForm -->
+<div ui="type:Form;id:formAd;">
+    <div class="edit-form">
+        <!-- import:adEditFormTitle -->
+        <!-- import:adEditFormMain -->
+    </div>
+    <!-- import:adEditSubmit -->
+</div>
+
+<!-- target:adEditFormTitle -->
+<div class="form-head">
+    <div class="form-headcntr">
+        <h2><span ui="type:Label;id:lblHeader;text:@title"></span></h2>
+    </div>
+</div>
+
+<!-- target:adEditFormMain -->
+<div class="form-main">
+    <div class="form-block-title">
+      <h3>投放形式</h3>
+    </div>
+    <div class="form-block-wrap">
+      <div class="form-block">
+        <div class="form-row">
+          <div class="form-key ">产品形式：</div>
+          <div class="form-value">
+            <div name="type" title='产品形式' ui="type:RadioBoxGroup;id:rbgType;datasource:@types;value:@productType;rule:required;"></div>         
+          </div>
+        </div>
+        <div class='form-row'>
+          <div class="form-key ">广告名称：</div>
+          <div class="form-value">
+            <input type="text" name="name" title="广告名称" ui="type:TextInput;id:txtAdName;width:300;rule:required;value:@name;" />                  
+          </div>
+        </div>
+        <div class='form-row'>
+          <div class="form-key "></div>
+          <div class="form-value">
+            <span style="color:#73797A;">建议格式：产品形式+开始时间+结束时间，如视频-2010.12.31-2011.01.31</span>
+          </div>
+        </div>
+        <div class="form-row" id="charge_mode_row">
+          <div class="form-key ">计费方式：</div>
+          <div class="form-value">
+            <div name="charge_mode" title='计费方式' ui="type:RadioBoxGroup;id:chargeMode;datasource:@chargeModes;value:@charge_mode;rule:required;"></div>         
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-key" style="width:auto;">
+            <input type="checkbox" name="is_supplement" value="1" title="补量" ui="type:CheckBox;id:chkIsSupplement;datasource:@is_supplement" />
+          </div>
+        </div>
+      </div>
+    </div>
+    
+        
+    <div class="form-block-title">
+      <h3>投放订单行</h3>
+    </div>
+    <div class="form-block-wrap">
+      <div class="form-block">
+        <div class="form-row">
+          <div class="form-key ">目标订单行ID：</div>
+            <div class="form-value">
+              <input type="text" name="order_id" title="目标订单行ID" ui="type:TextInput;id:txtOrderId;width:150;rule:required;value:@order_id;" />
+            </div>
+          </div>
+        </div>
+    </div>
+    
+
+    <div class="form-block-title">
+      <h3>投放信息</h3>
+    </div>
+    <div class="form-block-wrap">
+        <div class="form-block">
+          <div class="form-row">
+            <div class="form-key ">开始时间：</div>
+                <div class="form-value"> 
+                  <div class="form-content-block" id='beginTimeValueBlockFloat'>
+                      <div  ui="type:Calendar;id:beginTime;value:@start_time;paramFormat:yyyyMMdd;rule:calendar;"></div>
+                  </div>
+                </div>
+            </div>
+            
+            <div class='form-row'>
+              <div class="form-key">结束时间：</div>
+              <div class="form-value">   
+                <div class="form-content-block" id="endTimeValueBlockFloat">
+                  <div  ui="type:Calendar;id:endTime;value:@end_time;paramFormat:yyyyMMdd;rule:calendar;"></div>
+                </div> 
+              </div>
+            </div>
+            
+            <div class='form-row'>
+              <div class="form-key">预算：</div>
+              <div class="form-value">
+                <input type="text" name="budget_threshold" title="预算" ui="type:TextInput;id:txtBudget;width:100;rule:required;rule:positiveFloat;value:@budget_threshold;" /><span>元</span>
+              </div>
+            </div>
+            
+            <div class='form-row'>
+              <div class="form-key">计费系数：</div>
+              <div class="form-value">
+                <input type="text" name="billing_factor" title="计费系数" ui="type:TextInput;id:txtBilling;width:100;rule:required;rule:positiveFloat;value:@billing_factor;virtualValue:1" />
+              </div>
+            </div>
+
+            <div class='form-row'>
+              <div class="form-key">折扣：</div>
+              <div class="form-value">
+                <input type="text" name="discount_rate" title="折扣" ui="type:TextInput;id:txtDiscountRate;width:100;rule:required;rule:number;rule:min,0;value:@discount_rate;virtualValue:1" />
+              </div>
+            </div>
+            
+            <div class='form-row'>
+              <div class="form-key">频次控制：</div>
+              <div class="form-value">
+                <span class="form-text">每个独立访客每天最多展示</span>
+                <input type="text" name="max_impression_per_day_uu" title="" ui="type:TextInput;id:txtMaxImpressionPerDay;width:50;rule:positiveNumber;rule:max,2147483647,int;value:@max_impression_per_day_uu;" />
+                <span class="form-text">次</span>
+              </div>
+            </div>
+            
+            <div class='form-row'>
+              <div class="form-key"></div>
+              <div class="form-value">
+                <span class="form-text">每个独立访客每个投放周期最多展示</span>
+                <input type="text" name="max_impression_per_cycle_uu" title="" ui="type:TextInput;id:txtMaxImpressionPerCycle;width:50;rule:positiveNumber;rule:max,2147483647,int;value:@max_impression_per_cycle_uu;" />
+                <span class="form-text">次</span>
+              </div>
+            </div>
+        </div>
+    </div>
+    
+    
+    <div class="form-block-title">
+      <h3>制定投放</h3>
+    </div>
+    <div class="form-block-wrap">
+      <div class="form-block">
+        <div class="form-row">
+          <div class="form-key ">推广时段：</div>
+          <div class="form-value">
+            <div ui="type:Orientation;id:orientWeek;entryText:推广时段;orientType:weektime;value:@orient_hour;defaultValue:all;resultTextTitle:推广时段;"></div>
+          </div>
+        </div>
+            
+        <div class="form-row">
+          <div class="form-key ">推广地域：</div>
+          <div class="form-value">
+              <div ui="type:Orientation;id:orientRegion;orientType:region;entryText:推广地域;value:@orient_location;defaultValue:all;resultTextTitle:推广地域;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="form-block-title">
+        <h3>定向方式</h3>
+    </div>
+    <div class="form-block-wrap">
+      <div class="form-block" id="outerWrapperCommunityKeywords">
+        <div id="wrapperCommunityKeywords" style="margin:0;padding:0;">
+          <div class="form-row">
+            <div class="form-key" style="width:auto;">
+              <input type="checkbox" value="1" title="生活圈或网站" ui="type:CheckBox;id:chkCommunitySlot;" />
+            </div>
+            <div class="form-value" style='width:auto;'>
+              <div id="communitySlotWrapper" style="display:none;background-color:#FFFFFF;">
+                <div ui='type:SlotSelector;id:slotSelector;datasourceMultiSitesLeft:@slot_datasourceMultiSitesLeft;datasourceSingleSiteLeft:@slot_datasourceSingleSiteLeft;slotlistRequester:@slotlistRequester;datasourceSlotStatus:@datasourceSlotStatus;singleSiteTotalCount:@singleSiteTotalCount;selectedSlot:@selectedSlot;productType:@productType;communityslotRequester:@communityslotRequester;noCommunitySlotlist:@noCommunitySlotlist' ></div>
+              </div>
+            </div>
+          </div>
+            
+          <div class="form-row">
+            <div class="form-key" style="width:auto;">
+              <input type="checkbox"  value="1" title="人群" ui="type:CheckBox;id:chkKeywordsSlot;" />
+            </div>
+            <div class="form-value">
+              <div id="keywordsSlotWrapper" style="display:none;">
+                <div ui="type:Orientation;id:orientKeywords;orientType:keywords;inputHeadTitle:人群;inputIntroType:keywords;entryText:人群定位;value:@keywords;resultTextTitle:人群;"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="form-block-title">
+        <h3>关联广告创意</h3>
+    </div>
+    <div class="form-block-wrap">
+        <div class="form-block">
+          <div class="form-row">
+            <div class="form-single-line">
+              <div class="form-inner">
+                <div ui="type:Table;id:materialList;skin:ad-m-list;datasource:@materials;fields:@material_list_fields;noDataHtml:&dn.config.listNoDataHtml"></div>
+              </div>
+            </div>
+          </div>
+          <div class="form-row">  
+            <div class="form-key">
+              <div ui="type:Button;id:btnAddMaterial;">新建广告创意</div>
+            </div>
+          </div>
+        </div>
+    </div>
+</div>
+
+<!-- target:adEditSubmit -->
+<div class="edit-submit">
+    <div ui="type:SubmitButton;id:btnSubmit;skin:btnsubmit">完成</div>
+    <div ui="type:Button;id:btnBack;skin:btnback">返回</div>
+</div>

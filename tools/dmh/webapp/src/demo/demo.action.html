@@ -1,0 +1,78 @@
+<!-- target:demo -->
+<div ui="type:Form;id:formDemo;">
+    <div class="form-row">
+        <div ui="type:ComboBox;id:cb;datasource:@cbDataSource;value:1;width:100" style="float:left;"></div>
+    </div>
+    <div class="form-row">
+        <input type="text" title="${langOK}" ui="type:TextInput;id:txtDemo;width:150;value:@langOK" />
+    </div>
+    <div class="form-row">
+        <input type="radio" name="rbDemo" value="1" title="居上" ui="type:RadioBox;id:rbDemo;group:true;datasource:1" />
+        <input type="radio" name="rbDemo" value="2" title="居下" ui="type:RadioBox;id:rbDemo2;group:true;datasource:0" />
+    </div>
+    <div class="form-row">
+        <input type="checkbox" name="chkDemo" value="1" title="居上" ui="type:CheckBox;id:chkDemo;group:true;datasource:1" />
+        <input type="checkbox" name="chkDemo" value="2" title="居下" ui="type:CheckBox;id:chkDemo2;group:true;datasource:2" />
+    </div>
+    <div class="form-row">
+        <div ui="type:Calendar;id:calDemo;value:@timeDemo;paramFormat:yyyyMMddHH;withHour:true;defaultHour:24;rule:calendar"></div>
+    </div>
+    <div class="form-row">
+        <a class="form-text" ui="id:linkDemo;type:Link;href:@urlDemo">自定义网盟推广合作设置</a>
+    </div>
+    <div class="form-row">
+        <div ui="type:ButtonMenu;id:createMaterial;datasource:@cbDataSource;layerWidth:150;">新建广告物料</div>
+    </div>
+    <div class="form-row">
+        <div ui="type:Button;id:btnAlert;">Alert</div>
+        <div ui="type:Button;id:btnConfirm;">Confirm</div>
+        <div ui="type:Button;id:btnCustomized;">Customized</div>
+    </div>
+    <div class="form-row">
+        <div ui="type:Pager;id:pagerDemo;showCount:10;page:2;total:100"></div>
+    </div>
+    <div class="form-row">
+        <span class="table-sumary" ui="type:ListInfo;id:ListInfo;start:10;end:20;total:100"></span>
+    </div>
+    <div class="form-row">
+        <span ui="type:Label;id:lblDemo;text:@textDemo"></span>
+    </div>
+    <div class="form-row">
+         <div ui="type:Table;datasource:@cbDataSource;id:listTable;fields:@fieldsDemo;select:multi;sortable:true;dragable:true;"></div>
+    </div>
+    <div class="form-row">
+        <div title="目标广告位" ui="type:RichSelector;id:slotChoose;boxtype:button;listSource:@listSource;listFields:@fieldsDemo;listDragable:true;buttonText:修改;subTitle:广告位;idField:value;nameField:text;searchText:搜索;value:2;defaultText:DEFAULT_TEXT"></div>
+    </div>
+    <div class="form-row">
+        <div ui="id:imgUploader;type:MediaUploader;url:@urlDemo;datakey:filedata;text:上传图片;conf:@uploaderConf;func:@imgUploadFunc;fitsize:600;mediatype:image;wrapper:imgUploadPreview;rule:mediaUploader,this;token:@uploaderToken"></div><div class="form-grey">（图片文件大小小于256K）</div>
+        <div id="imgUploadPreview"></div>
+    </div>
+    <div class="form-row">
+        <div ui="id:mediaCodeUrlMaker;type:UrlMaker;uploadUrl:@urlDemo;token:@uploaderToken"></div>
+    </div>
+    <div ui="type:Button;id:btnOK;">${langOK}</div>
+    <div ui="type:Button;id:btnCancel;">${langCancel}</div>
+    <div ui="type:ToolTip;id:tip1;"></div>
+     <div class="form-row">
+ 		<div ui="type:SearchInfo;id:searchInfo1;separator:info;fields:@searchInfoFields"></div><!-- dont know what searchInfoFields value type -->
+ 	</div>
+ 	<div ui="type:SummaryInfo;id:reportSummary;fields:@summaryFields;datasource:@data"></div><!-- dont know what searchInfoFields value type -->
+ 	<!-- ui.Tab ui.FormTab ui.FormSwitch havent tested -->
+ 	
+ 	 <div ui="type:FormFolder;id:test;" class="form-block-title">
+	    <div class="form-block-icon"></div>
+	    <h3>测试FormFolder</h3>
+	  </div>
+	  <div id="placeholder" class="form-block-wrap">
+	    <div class="form-block">
+	      <div class="form-row">
+	
+	        <div class="form-value">
+	          <p>收缩区域</p>
+	        </div>
+	      </div>
+	    </div>
+	  </div>
+ 	<!-- <div ui="type:copyarea;id:AdvMultiHeadCode11"></div>  will throw ex,dont konw why-->
+ 	<!-- ui.Frequency thisis unfinished control -->
+</div>

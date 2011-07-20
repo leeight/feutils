@@ -1,0 +1,40 @@
+% er Roadmap
+% liyubei
+% 20110402
+
+## er Roadmap
+
+0. tangram + base
+1. er  
+    * locator
+    * dispatcher（原来的controler）
+2. enhancment requester  
+   增强版的requester，业务无关，提供超时控制的机制
+3. ui  
+    * 基本组件 
+    * 业务组件
+4. tests
+    * test cases
+5. guide + tools
+    * 编码的规范（为了能够和closure compiler配合工作）
+    * 目录结构的规范
+    * 工具的使用方法
+    * 工具的开发（跨平台）
+6. docs
+    * api doc references
+    * how to develop a new ui control
+    * best parctice examples
+
+### MORE
+
+为了实现er的分模块加载，现在有两个方案：
+1. 严格的编码规范，能够和closure compiler配合使用，使用goog.ModuleLoader来加载模块，使用
+   高级模式来删掉无用的代码，减少最终代码中closure library相关的部分。
+2. 宽松的编码规范，能够和closure compiler配合使用，使用自己的ModuleLoader来加载模块，此时只能
+   使用SIMPILE模式来进行编译，对代码量的减少有限。
+
+### TODO
+
+1. 控件里面的&dn.config.pageSize要去掉，不能这么写，不方面扩展，而且容易埋坑
+2. 提供工具能够自动从*.html里面分析出ui.Type和model里面的字段
+3. 提供工具能够自动根据model的定义来生成list和form之类的页面

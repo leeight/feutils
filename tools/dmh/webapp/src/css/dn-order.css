@@ -1,0 +1,48 @@
+/***************************************************************************
+ * 
+ * Copyright (c) 2011 Baidu.com, Inc. All Rights Reserved
+ * $Id$ 
+ * 
+ **************************************************************************/
+ 
+ 
+ 
+/**
+ * css/dn-report.css ~ $Date$
+ * @author yuanhongliang(yuanhongliang@baidu.com)
+ * @version $Revision$ 
+ * @description 订单行详情页样式
+ **/
+
+.order-header {
+    font-size: 14px;
+    line-height: 2;
+}
+.order-table {
+    width: 1100px;
+    margin-top: 10px;
+    background: #fff;
+}
+.order-table tr {
+    height: 28px;
+    line-height: 28px;
+}
+.order-table td {
+    padding: 0 10px;
+}
+.order-table .order-label {
+    padding: 0;
+}
+.order-table .order-label div {
+    background: #eee;
+    border-top: 1px solid #f6f6f6;
+    border-left: 1px solid #f6f6f6;
+    padding: 0 10px;
+}
+.order-table .validate {
+    clear: none;
+    float: left;
+}
+.order-table .validate-error {
+    padding: 1px 5px;
+}

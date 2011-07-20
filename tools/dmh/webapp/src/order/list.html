@@ -1,0 +1,39 @@
+<!-- target:orderList -->
+<div class="main">
+    <div ui="type:Form;id:formSearch;" class="list-search-form">
+        <div class="form-main">
+            <div class="form-block">
+                <div class="form-row">
+                    <div class="form-key">订单行ID：</div>
+                    <div class="form-value">
+                        <input type="text" name="id" ui="type:TextInput;id:txtID;value:@id" />
+                    </div>
+                    <div class="form-key">广告主：</div>
+                    <div class="form-value">
+                        <input type="text" name="adowner_name" ui="type:TextInput;id:txtAdOwner;value:@adowner_name" />
+                    </div>
+                    <div class="form-key">生效时间：</div>
+                    <div class="form-value">
+                        <div name='start_time' ui="type:Calendar;id:calStartTime;paramValue:@start_time;defaultTime:;paramFormat:yyyyMMddhhmmss;rule:calendar"></div>	
+                    </div>
+                    <div class="form-key">失效时间：</div>
+                    <div class="form-value">
+                        <div name='end_time' ui="type:Calendar;id:calEndTime;paramValue:@end_time;defaultTime:;paramFormat:yyyyMMddhhmmss;rule:calendar"></div>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-key">状态：</div>
+                    <div class="form-value" style="padding-left:26px">
+                        <div name="status" ui="type:ComboBox;id:cbStatus;datasource:@allStatus;value:@status;defaultFirst:1;width:100"></div>
+                    </div>
+                </div>
+                <div class="form-seperator">
+                </div>
+                <div class="form-row">
+                    <div ui="type:SubmitButton;id:btnSearch">查找订单行</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div ui="type:PagableList;id:list;fields:&order.config.listFields;select:;pageSize:@pageSize;pageNo:@pageNo;orderBy:@orderBy;order:@order"></div>
+</div>

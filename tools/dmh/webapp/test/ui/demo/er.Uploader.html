@@ -1,0 +1,63 @@
+<!doctype html>
+<!--
+/***************************************************************************
+ * 
+ * Copyright (c) 2011 Baidu.com, Inc. All Rights Reserved
+ * $Id: er.Uploader.html 6591 2011-06-12 08:52:51Z liyubei $ 
+ * 
+ **************************************************************************/
+ 
+ 
+ 
+/**
+ * app.html ~ 2011/04/25 23:10:32
+ * @author liyubei@baidu.com (leeight)
+ * @version $Revision: 6591 $ 
+ * @description 
+ *  
+ **/
+-->
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>material App</title>
+  <link rel="stylesheet" type="text/css" href="app.css" />
+  <script type="text/javascript" src="http://tangram.baidu.com/download/tangram-1.3.9.source.js"></script>
+  <script type="text/javascript" src="../../../src/base.js"></script>
+  <script type="text/javascript">
+    document.domain = 'baidu.com';
+    // FIXME 将来会去掉这个flag
+    goog.ENABLE_DEBUG = true;
+
+    // App相关的初始化函数
+    goog.require('er.locator');
+    goog.require('er.controller');
+    goog.require('er.Action');
+    goog.require('app.Launch');
+
+    // include的路径是相对于base.js的
+    goog.include('css/base.css');
+    goog.include('css/dn-list.css');
+    goog.include('css/dn-edit.css');
+
+    goog.require('dan.test.Action1');
+    goog.require('dan.test.Action2');
+  </script>
+</head>
+<body>
+  <div id="Navigation">
+    <a href="#/action1">Action1</a>&nbsp;&nbsp;
+    <a href="#/action2">Action2</a>
+  </div>
+  <div id="Main"></div>
+</body>
+<script type="text/javascript">
+app.Launch(function(){
+  er.controller.init();
+  var loc = er.locator.getLocation();
+  if (!loc || loc == '/') {
+    er.locator.redirect('/action1');
+  }
+});
+</script>
+</html>

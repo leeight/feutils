@@ -1,0 +1,17 @@
+<!-- target:materialNonVideo -->
+<div class="report-header clearfix" ui="type:Form;id:formSearch">
+    <div class="report-title report-title-material">分创意报告</div>
+    <div name="ad_id" ui="type:Hidden;id:reportAdId;value:@ad_id"></div>
+    <div class="report-calendar" name="date_range" ui="type:ReportCalendarForClient;id:reportCalendar;defaultMode:1;converter:&base.dateRangeConverter"></div>
+</div>
+<div class="report-table skin-white-report-table">
+    <div class="report-table-head skin-white-report-table-head">
+        <div class="skin-white-report-table-head-line"></div>
+        <div class="skin-white-report-table-head-middle">
+            <div class="skin-white-report-table-headcntr"><h2>非视频创意（<span ui='type:Label;id:lblDate;'></span>）</h2></div>
+        </div>
+    </div>
+    <div class="skin-white-report-table-borderless-body">
+        <div ui="type:PagableList;id:list;fields:@fields;select:;skin:white;view:PagableListWithBorderPager"></div>
+    </div>
+</div>

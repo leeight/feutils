@@ -1,0 +1,32 @@
+<!-- target:reportOrderLocation -->
+<div class="report-header clearfix" ui="type:Form;id:formSearch">
+    <div class="report-title report-title-location">分地域报告</div>
+    <div name="order_id" ui="type:Hidden;id:orderId;value:@order_id"></div>
+    <div class="report-calendar" name="date_range" ui="type:ReportCalendar;id:reportCalendar;defaultMode:1;converter:&base.dateRangeConverter"></div>
+</div>
+<div class="report-table">
+    <div class="report-table-head">
+        <div class="report-table-headcntr form-row">
+            <div class="form-text">地域分布图（<span id="lblDate"></span>）</div>
+        </div>
+    </div>
+    <div class="clearfix">
+	    <div ui="type:Flash;id:flash;options:@flash_options" class="report-flash"></div>
+	    <div id="reportSummary" class="report-summary"></div>
+    </div>
+</div>
+<div class="report-table" style="border-bottom:none">
+    <div class="report-table-head">
+        <div class="report-table-headcntr">地域分布数据表（<span id="lblDate2"></span>）</div>
+    </div>
+    <div ui="type:List;id:list;fields:&report.order.config.fields.location;select:none"></div>
+</div>
+
+<!-- target:reportOrderLocationSummary -->
+<h2>{0}</h2>
+<div class="report-summary-item"><span>{1}</span>展现量</div>
+<div class="report-summary-item"><span>{2}</span>点击量</div>
+<div class="report-summary-item" style="padding-left:0">
+    <div class="report-summary-text"><span>{4}</span>点击率</div>
+</div>
+<div class="report-summary-item"><span>¥ {5}</span>消费</div>

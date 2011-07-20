@@ -1,0 +1,449 @@
+/*
+ * dn-web
+ * Copyright 2011 Baidu Inc. All rights reserved.
+ * 
+ * path:    dn-list.css
+ * desc:    列表页业务组合
+ * author:  zhaolei,erik
+ * date:    $Date: 2011-05-06 10:18:53 +0800 (周五, 06 五月 2011) $
+ */
+
+/* 清除浮动 */
+.list-links,
+.list-position,
+.list-table-headcntr,
+.list-table-statuscntr,
+.list-table-foot {
+    zoom:1;
+}
+
+.list-links:after,
+.list-position:after,
+.list-table-headcntr:after,
+.list-table-statuscntr:after,
+.list-table-foot:after {
+    content:"\0020"; 
+    display:block;
+    height:0; 
+    visibility:hidden; 
+    clear:both;
+}
+
+/* 列表页头部 */
+.list-table-head {
+    height:28px;
+    color:#35608c;
+    border-top:1px solid #a3cde9;
+    background:#c7deed;
+}
+.list-table-head h4 {
+    display:inline;
+    float:left;
+}
+.list-table-headcntr {
+    border-top:1px solid #d8e8f2;
+    height:27px;
+    line-height:27px;
+}
+
+/* 表格搜索 */
+.table-search .ui-text {
+    margin-right:5px;
+}
+
+.table-search .ui-combobox {
+    margin-right:5px;
+}
+
+.table-search div.ui-button {
+    margin-top:0;
+}
+
+.list-table-head .table-search {
+    float:right;
+    display:inline;
+    margin:3px 10px 0 0;
+    width:222px;/* webkit的hack，变态的BUG */
+}
+
+
+/* 表格筛选 */
+.table-filter .ui-combobox {
+    float:left;
+    margin-right:25px;
+}
+
+.table-filter-title {
+    padding-top:1px;
+    height:19px;
+    line-height:19px;
+    float:left;
+}
+
+.list-table-head .table-filter {
+    float:left;
+    display:inline;
+    margin:3px 15px 0 10px;
+}
+
+/* 表格日历定位 */
+.list-table-head .table-mcal {
+    float:right;
+    display:inline;
+    margin:3px 10px 0 0;
+}
+
+/* 表格状态更改 */
+.list-table-status {
+    border-top:1px solid #CCCCCC;
+    height:28px;
+    position:relative;
+}
+
+.list-table-statuscntr {
+    border-top:1px solid #F6F6F6;
+    background:#EEEEEE;
+    height:27px;
+}
+
+.list-table-statuscntr .ui-button {
+    margin-right:5px;
+    margin-top:3px;
+}
+
+.list-table-status-icon {
+    width:13px;
+    height:13px;
+    float:left;
+    display:inline;
+    margin:10px 6px 0px 10px;
+    background:url(/assets/img/BlockSprites.png) -58px -333px no-repeat;
+}
+
+/* 表格底部区域 */
+.list-table-foot {
+    background:#EEEEEE;
+    border-top:1px solid #F6F6F6;
+    border-bottom:1px solid #ccc;
+    height:27px;
+}
+
+.list-table-foot .ui-pager {
+    margin:3px 0 0 10px;
+    display:inline;
+    float:left;
+}
+
+.list-table-info {
+    margin:3px 10px 0 0;
+    display:inline;
+    float:right;
+}
+
+.table-sumary,
+.table-pagesize {
+    margin-left:15px;
+    display:inline;
+    float:left;
+}
+
+.table-sumary {
+    line-height:19px;
+}
+
+.table-pagesize-select {
+    display:inline;
+    float:left;
+}
+
+.table-pagesize-desc {
+    line-height:19px;
+    margin-left:5px;
+    display:inline;
+    float:left;
+}
+
+/* 列表页表格主体 */
+.list-table-main {
+    margin: 0 -1px;
+}
+
+/* 表格操作列样式 */
+.list-table-operation {
+    margin:0 -8px 0 -9px;
+    display:inline-block;
+    overflow:hidden;
+}
+
+.list-table-operation li {
+    float:left;
+    padding:0 8px;
+    line-height:28px;
+    background:url(/assets/img/SplitLine.png) no-repeat 0 10px;
+}
+
+/* 列表当前位置 */
+.list-position {
+    padding-bottom:10px;
+    height:20px;
+    line-height:20px;
+    position:relative;
+}
+
+.list-position-icon,
+.list-position-title,
+.list-position-name {
+    float:left;
+    display:inline;
+}
+
+.list-position-icon {
+    overflow:hidden;
+    width:15px;
+    height:12px;
+    background:url(/assets/img/BlockSprites.png) no-repeat -13px -304px;
+    margin:2px 8px 0 0;
+}
+.list-position-title {
+    height:15px;
+    line-height:15px;
+    margin-top:2px;
+    color:#999999;
+}
+.list-position-name {
+    height:18px;
+    line-height:18px;
+    font-size:14px;
+    font-weight:700;
+    position:absolute;
+    overflow:hidden;
+    width:100%;
+    text-indent:60px;
+    left:0;
+}
+
+/* 列表链接 */
+.list-links {
+    padding:10px;
+    border-top:1px solid #ccc;
+}
+
+.list-links-item, .list-links-item-disabled {
+    float:left;
+    display:inline;
+    margin-right:40px;
+}
+.list-links-item-disabled:hover{
+    color:#ccc;
+}
+.list-links-item span, .list-links-item-disabled span {
+    float:left;
+    display:inline;
+}
+
+/* 列表链接静态文档流版本 */
+.list-links-item-f {
+    display:inline;
+    margin-right:40px;
+    text-decoration:none;
+}
+.list-links-item-f .list-links-add{
+    position:relative;
+    margin:0;
+    top:3px;
+    display:inline-block;
+}
+.list-links-item-f .list-links-text{
+    text-decoration:underline;
+}
+
+/* 列表链接文字 */
+.list-links-text {
+    height:19px;
+    line-height:19px;
+    font-size:14px;
+    font-weight:700;
+}
+.list-links-text-small {
+    height:19px;
+    line-height:19px;
+    font-size:12px;
+    font-weight:700;
+}
+.list-links-item-disabled{
+	color:#CCC;
+}
+
+/* 添加图标 */
+.list-links-add {
+    margin:2px 8px 0 0;
+    height:15px;
+    width:15px;
+    background:url(/assets/img/BlockSprites.png) no-repeat -69px -316px;
+}
+
+/* "获取代码"图标 */
+.list-links-code {
+    margin:1px 8px 0 0;
+    height:16px;
+    width:21px;
+    background:url(/assets/img/BlockSprites.png) no-repeat -48px -316px;
+}
+
+/* 列表为空的情况 */
+
+.list-table-empty{
+    text-align:center;
+    border:1px solid #ccc;
+}
+.list-table-empty-c{
+    margin:45px auto;
+    line-height:2em;
+    color:#999;
+}
+
+.ltec-bordered{
+    border-bottom:1px solid #ccc;
+    display:inline-block;
+    height:2em;
+    margin-bottom:3px;
+}
+.ltec-link{
+    font-size:14px;
+    font-weight:bold;
+}
+.ui-listinfo-icon {
+    display:inline-block;
+    width:14px;
+    height:17px;
+    margin-right:5px;
+    margin-bottom:-3px;
+    background:url(/assets/img/BlockSprites.png) no-repeat -141px -315px;
+    _display:inline;
+    zoom:1
+}
+#ie6 .ui-listinfo-icon,
+#ie7 .ui-listinfo-icon {
+    display:inline;
+}
+
+.dn-list-nodata {
+    padding:30px 0;
+    border:1px solid #ccc;
+    text-align:center;
+    border-top:0;
+}
+
+.skin-ad-m-list .dn-list-nodata {
+    padding:0;
+}
+
+.dn-sublist-nodata {
+    text-align:left;
+    font-weight:bold;
+    color:#CDBD99;
+    line-height:23px;
+    padding-left:8px;
+}
+
+.dn-sublist-link {
+    padding:10px 3px;
+    height:20px;
+}
+
+.dn-sublist-loading {
+    padding:10px 0;
+    zoom:1;
+}
+
+.list-float-info{
+    position:absolute;
+    left:300px;
+    top:-10000px;
+    height:30px;
+    padding: 0 5px 0 26px;
+    line-height:30px;
+    border:1px solid #F0DCA5;
+    background:#FFF7DB;
+	z-index:10;
+    width:280px;
+}
+
+.list-float-info-icon{
+    position:absolute;
+    top:7px;
+    left:5px;
+    width:16px;
+    height:16px;
+    vertical-align:middle;
+    background: transparent url(/assets/img/BlockSprites.png) -125px -315px no-repeat;
+}
+
+.dn-sublist-table {
+	zoom:1;
+	clear:both;
+	position:relative;
+}
+
+.list-withme {
+    float:left;
+    line-height:20px;
+}
+.list-withme label {
+    padding-left:2px;
+}
+
+.list-search-form {
+    background: #C7DEED;
+    border-top: 1px solid #A3CDE9;
+    color: #35608C;
+    zoom: 1;
+}
+.list-search-form .form-key {
+    width: auto;
+    padding-left: 0;
+}
+.list-search-form .form-value {
+    width: auto;
+    margin-right: 10px;
+}
+.list-search-form .form-seperator {
+    height: 0;
+    border-top: 1px solid #A3CDE9;
+    border-bottom: 1px solid #D8E8F2;
+    font-size: 0;
+    line-height: 0;
+}
+
+
+/**
+ * 白色边框样式list
+ * added by lixiang 2011.03.24
+ */
+.skin-white-report-table-borderless-body .list-table-foot {
+    background: #FFF;
+    height:40px;
+    border-bottom: none;
+}
+
+
+.skin-white-report-table-borderless-body .list-table-foot .skin-border-pager {
+    height: 22px;
+    margin: 8px 0;
+    overflow: hidden;
+    padding: 0;
+    float: right;
+}
+
+.skin-white-report-table-borderless-body .list-table-foot .border-pager-list-table-info {
+	float: left;
+	margin-top: 8px;
+}
+
+
+.border-pager-list-table-info .table-pagesize-desc {
+	margin-left: 0;
+	margin-right: 8px;
+}
+
+/** 白色边框样式list end **/

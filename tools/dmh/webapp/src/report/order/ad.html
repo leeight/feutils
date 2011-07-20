@@ -1,0 +1,19 @@
+<!-- target:reportOrderAd -->
+<div class="report-header clearfix" ui="type:Form;id:formSearch">
+    <div class="report-title report-title-ad">分广告报告</div>
+    <div name="order_id" ui="type:Hidden;id:orderId;value:@order_id"></div>
+    <div class="report-calendar" name="date_range" ui="type:ReportCalendar;id:reportCalendar;defaultMode:1;converter:&base.dateRangeConverter"></div>
+</div>
+<div class="report-table">
+    <div class="report-table-head">
+        <div class="report-table-headcntr"><h2>历史报告</h2></div>
+    </div>
+    <div class="report-tabs">
+        <div ui="type:Button;id:tabVideo;skin:btnarrowtab">视频</div>
+        <span class="skin-btnarrowtab-sep">|</span>
+        <div ui="type:Button;id:tabNonVideo;skin:btnarrowtab">非视频</div>
+    </div>
+    <div ui="type:PagableList;id:list;fields:&report.order.config.fields.ad_video;select:none"></div>
+    <div ui="type:PagableList;id:list2;fields:&report.order.config.fields.ad_non_video;select:none"></div>
+    <div ui="type:Tab;id:tabAd;tabs:@tabConfig;value:@activeTab"></div>
+</div>

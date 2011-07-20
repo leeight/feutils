@@ -1,0 +1,529 @@
+<!--target:videoEditForm-->
+<div ui="type:Form;id:form;">
+  <div class="edit-form">
+    <!-- import:materialEditTitle -->
+    <!-- import:videoEditFormMain -->
+  </div>
+  <!-- import:materialEditSubmit -->
+</div>
+
+<!--target:floatVideoEditForm-->
+<div ui="type:Form;id:form;">
+  <div class="edit-form">
+    <!-- import:materialEditTitle -->
+    <!-- import:floatVideoEditFormMain -->
+  </div>
+  <!-- import:materialEditSubmit -->
+</div>
+
+<!-- target:videoEditFormPopup -->
+<div ui="type:Form;id:form;">
+  <div class="edit-form">
+    <!-- import:videoEditFormMain -->
+  </div>
+  <!-- import:materialEditSubmit -->
+</div>
+
+<!--target:materialEditSubmit-->
+<div class="edit-submit">
+  <div ui="type:SubmitButton;id:btnSubmit;skin:btnsubmit">${formOK:lang}</div>
+  <div ui="type:Button;id:btnCancel;skin:btnback">${formCancel:lang}</div>
+</div>
+
+<!--target:materialEditTitle-->
+<div class="form-head">
+    <div class="form-headcntr">
+      <h2><span ui="type:Label;id:form-header;text:@form_header"></span></h2>
+    </div>
+</div>
+
+<!--target:videoEditFormMain-->
+<div class="form-main">
+  
+  <div class="form-block-title">
+    <h3>新广告创意</h3>
+  </div>
+  <div class="form-block-wrap">
+    <div class="form-block">
+      <!-- import:videoEditFormMainHead -->
+      <!-- import:videoEditFormMainCommonVideoBody -->
+      <!-- import:videoEditFormMainVideoFoot -->
+    </div>
+  </div>
+</div>
+
+<!--target:floatVideoEditFormMain-->
+<div class="form-main">
+  <div class="form-block-title">
+    <h3>新广告创意</h3>
+  </div>
+  <div class="form-block-wrap">
+    <div class="form-block">
+      <!-- import:videoEditFormMainHead -->
+      <!-- import:videoEditFormMainFloatVideoBody -->
+      <!-- import:videoEditFormMainFloatVideoFoot -->
+    </div>
+  </div>
+</div>
+
+
+<!--target:videoEditFormMainHead-->
+      <div class="form-row">
+        <div class="form-key">产品形式：</div>
+        <div class="form-value">
+          <div ui="type:Label;id:product-type-text;text:@product_type_text"></div>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-key">创意名称：</div>
+        <div class="form-value">
+          <input name="name" type="text" title="创意名称" ui="type:TextInput;id:name;value:@name;rule:required;" />
+        </div>
+      </div>
+<!--target:videoEditFormMainCommonVideoBody-->  
+      <div class="form-row">
+        <div class="form-key">创意类型：</div>
+        <div class="form-value">
+          <div name="m_type" ui="type:RadioBoxGroup;id:m-type;datasource:@type_options;value:@m_type;"></div>
+        </div>
+      </div>
+      
+      <div class="form-row">
+        <div class="form-key">视频文件：</div>
+        <div class="form-value">
+          <div name="src" title="视频文件" ui="type:VideoUploader;id:src;host:@video_host;datasource:@src_datasource;fitsize:@max_preview_width;autoPreview:@src_auto_perview;text:上传视频;rule:ext,flv"></div>
+        </div>
+      </div>
+      <!--<div class="form-row">
+        <div class="form-key ">色彩选择：</div>
+        <div class="form-value">
+          <div name="name" title="色彩选择" ui="type:FloatColorPalette;id:floatCP;width:367;value:3E2F6B"></div>
+        </div>
+      </div>-->
+  
+<!--target:videoEditFormMainFloatVideoBody-->
+      <div id="floatVideo-type-container">
+        <div class="form-row">
+          <div class="form-key">创意类型：</div>
+          <div class="form-value">
+            <div name="m_type" ui="type:RadioBoxGroup;id:m-type;datasource:@type_options;value:@m_type;"></div>
+          </div>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-key">视频文件：</div>
+        <div class="form-value">
+          <div name="src" title="视频文件" ui="type:VideoUploader;id:src;host:@video_host;datasource:@src_datasource;fitsize:@max_preview_width;autoPreview:@src_auto_perview;text:上传视频;rule:ext,flv"></div>
+        </div>
+      </div>
+
+      <!--<div class="form-row">
+        <div class="form-key ">色彩选择：</div>
+        <div class="form-value">
+          <div name="name" title="色彩选择" ui="type:FloatColorPalette;id:floatCP;width:367;value:3E2F6B"></div>
+        </div>
+      </div>-->
+
+<!--target:videoEditFormMainVideoFoot-->
+      <!-- import:standardParamsContainer -->
+      <!-- import:standardWithSearchBoxParamsContainer -->
+      <!-- import:customPlayerParamsContainer -->
+      <!-- import:cornerMarkParamsContainer -->
+      <!-- import:commonVideoParamsContainer -->
+      <!-- import:standardVideoContainer-->
+      <!-- import:standardWithSearchBoxVideoContainer-->
+      <!-- import:customPlayerVideoContainer-->
+
+<!--target:videoEditFormMainFloatVideoFoot-->
+      <!-- import:standardWithSearchBoxParamsContainer -->
+      <!-- import:commonVideoParamsContainer -->
+      <!-- import:standardWithSearchBoxVideoContainer-->
+
+<!--target:standardParamsContainer-->
+      <!-- 标准视频 -->
+      <div id="standard-params-container">
+      </div>
+
+<!--target:standardWithSearchBoxParamsContainer-->
+      <!-- 标准视频带搜索框 -->
+      <div id="standard-with-search-box-params-container">
+        <div class="form-row">
+          <div class="form-key">关键词：</div>
+          <div class="form-value">
+            <input name="query" type="text" title="关键词" ui="type:TextInput;id:query;value:@query;rule:required" />
+          </div>
+        </div>
+      </div>
+
+
+<!--target:customPlayerParamsContainer-->
+      <!-- 非标准视频 -->
+      <div id="custom-player-params-container">
+        <div class="form-row">
+          <div class="form-key">播放器：</div>
+          <div class="form-value">
+            <div name="custom_player_url" title="播放器" ui="type:MediaUploader;id:custom-player-url;url:@upload_url;datasource:@custom_player_url_datasource;fitsize:@max_preview_width;text:上传播放器;rule:ext,swf"></div>
+          </div>
+        </div>
+      </div>
+
+<!--target:cornerMarkParamsContainer-->
+      <!-- 角标视频 -->
+      <div id="corner-mark-params-container">
+        <div class="form-row">
+          <div class="form-key">关键词：</div>
+          <div class="form-value">
+            <input name="query" type="text" title="关键词" ui="type:TextInput;id:corner-mark-query;value:@query;rule:required" />
+          </div>
+        </div>
+      </div>
+
+<!--target:commonVideoParamsContainer-->
+      <!-- 
+        这个内容是没有必要让用户看到的
+        1. 标准播放器直接赋值
+        2. 非标准播放器上传之后直接赋值
+      -->
+      <!-- 这些字段需要有的，但是PM不想看到 -->
+      <div class="form-row" style="display:none">
+        <div class="form-key">播放器尺寸：</div>
+        <div class="form-value">
+          <span class="form-text">宽</span>
+          <input type="text" name="width" ui="type:TextInput;id:width;width:30;value:@width;" />
+          <span class="form-text">*&nbsp;高</span>
+          <input type="text" name="height" ui="type:TextInput;id:height;width:30;value:@height;" />
+          <span class="form-text">(px)</span>
+        </div>
+      </div>
+
+      <!-- import:hasAnchorOverlayUnit -->
+
+<!--target:standardVideoContainer-->
+      <!-- 标准视频浮标区 -->
+      <div id="standard-video-container">
+        <div class="form-row">
+          <div class="form-key">是否定制浮标：</div>
+          <div class="form-value">
+            <input type="checkbox" name="is_set_collapse_src" value="1" title="" ui="type:CheckBox;id:chk-has-collapse-src;datasource:@is_set_collapse_src;target:collapse-src-container" />
+            <div id="collapse-src-container"  style="display:none; float:left; margin-left:5px;">
+              <div name="collapse_src" title="浮标" ui="type:MediaUploader;id:collapse-src;url:@upload_url;datasource:@collapse_src_datasource;fitsize:@max_preview_width;text:上传浮标;rule:ext,jpg,jpeg"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+<!--target:standardWithSearchBoxVideoContainer-->
+      <!-- 标准视频带搜索框浮标区 -->
+      <div id="standard-with-search-box-video-container">
+        <div class="form-row">
+          <div class="form-key">是否定制浮标：</div>
+          <div class="form-value">
+            <input type="checkbox" name="is_set_collapse_src" value="1" title="" ui="type:CheckBox;id:chk-has-collapse-src-with-search;datasource:@is_set_collapse_src;target:collapse-src-container-width-search" />
+            <div id="collapse-src-container-width-search"  style="display:none; float:left; margin-left:5px;">
+              <div name="collapse_src" title="浮标" ui="type:MediaUploader;id:with-search-collapse-src;url:@upload_url;datasource:@collapse_src_datasource;fitsize:@max_preview_width;text:上传浮标;rule:ext,jpg,jpeg"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+<!--target:customPlayerVideoContainer-->
+      <!-- 非标准视频浮标区 -->
+      <div id="custom-player-video-container">
+      </div>
+
+      <!-- 角标视频浮标区 -->
+      <div id="corner-mark-video-container">
+        <div class="form-row">
+          <div class="form-key">是否定制浮标：</div>
+          <div class="form-value">
+            <input type="checkbox" name="is_set_collapse_src" value="1" title="" ui="type:CheckBox;id:chk-has-collapse-src-for-corner-mark;datasource:@is_set_collapse_src;target:collapse-src-container-corner-mark" />
+            <div id="collapse-src-container-corner-mark"  style="display:none; float:left; margin-left:5px;">
+              <div name="collapse_src" title="浮标" ui="type:MediaUploader;id:corner-mark-collapse-src;url:@upload_url;datasource:@collapse_src_datasource;fitsize:@max_preview_width;text:上传浮标;rule:ext,jpg,jpeg"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+<!-- target:hasAnchorOverlayUnit -->
+<div class="form-row">
+  <div class="form-key">点击监控：</div>
+  <div class="form-value">
+      <div name="has_anchor_overlay" ui="type:RadioBoxGroup;id:has-anchor-overlay;datasource:@has_anchor_overlay_options;value:@has_anchor_overlay;"></div>
+  </div>
+</div>
+
+<div id="anchor-overlay-container-dummy"></div>
+<div id="anchor-overlay-container">
+  <div class="form-row">
+    <div class="form-key">点击链接：</div>
+    <div class="form-value">
+      <input name="target_url" type="text" title="点击链接" ui="type:TextInput;id:target-url;value:@target_url;rule:link" />
+      <div class="form-optional">（Flash内部点击链接将失效）</div>
+    </div>
+  </div>
+
+  <div class="form-row">
+    <div class="form-key">目标窗口：</div>
+    <div class="form-value">
+      <div name="target_window" ui="type:RadioBoxGroup;id:target-window;datasource:@target_window_options;value:@target_window;"></div>
+    </div>
+  </div>
+</div>
+
+
+<!--target:floatEditForm-->
+<div ui="type:Form;id:form;">
+  <div class="edit-form">
+    <!-- import:materialEditTitle -->
+    <!-- import:floatEditFormMain -->
+  </div>
+  <!-- import:materialEditSubmit -->
+</div>
+
+<!--target:flashEditForm-->
+<div ui="type:Form;id:form;">
+  <div class="edit-form">
+    <!-- import:materialEditTitle -->
+    <!-- import:flashEditFormMain -->
+  </div>
+  <!-- import:materialEditSubmit -->
+</div>
+
+<!--target:flashEditFormMain-->
+<div class="form-main">
+  
+  <div class="form-block-title">
+    <h3>新广告创意</h3>
+  </div>
+
+  <div class="form-block-wrap">
+    <div class="form-block">
+      
+      <div class="form-row">
+        <div class="form-key">产品形式：</div>
+        <div class="form-value">
+          <div ui="type:Label;id:product-type-text;text:@product_type_text"></div>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-key">创意名称：</div>
+        <div class="form-value">
+          <input name="name" type="text" title="创意名称" ui="type:TextInput;id:name;value:@name;rule:required;" />
+        </div>
+      </div>
+
+      <div id="flash-type-container">
+        <div class="form-row">
+          <div class="form-key">创意类型：</div>
+          <div class="form-value">
+            <div name="m_type" ui="type:RadioBoxGroup;id:m-type;datasource:@type_options;value:@m_type;"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Flash -->
+      <div id="flash-container">
+        <div class="form-row"  id="flash-src-container">
+          <div class="form-key">动画：</div>
+          <div class="form-value">
+            <div name="src" title="动画" ui="type:MediaUploader;id:flash-url;url:@upload_url;datasource:@src_datasource;fitsize:@max_preview_width;text:上传Flash;rule:ext,swf"></div>
+          </div>
+        </div>
+
+        <!-- 这些字段需要有的，但是PM不想看到 -->
+        <div class="form-row" style="display:none">
+          <div class="form-key">动画尺寸：</div>
+          <div class="form-value">
+            <span class="form-text">宽</span>
+            <input type="text" name="width" ui="type:TextInput;id:width;width:30;value:@width;" />
+            <span class="form-text">*&nbsp;高</span>
+            <input type="text" name="height" ui="type:TextInput;id:height;width:30;value:@height;" />
+            <span class="form-text">(px)</span>
+          </div>
+        </div>
+        <!-- 这些字段需要有的，但是PM不想看到 -->
+        <div class="form-row" style="display:none">
+          <div class="form-key">最长展现时间：</div>
+          <div class="form-value">
+            <input type="text" name="max_impression_time" ui="type:TextInput;id:max-impression-time;value:@max_impression_time;width:30" />秒
+          </div>
+        </div>
+        <div id="standard-collapse-src-container">
+          <div class="form-row">
+            <div class="form-key">浮标：</div>
+            <div class="form-value">
+              <div name="collapse_src" title="浮标" ui="type:MediaUploader;id:collapse-src;url:@upload_url;datasource:@collapse_src_datasource;fitsize:@max_preview_width;text:上传浮标;rule:@collapse_ext"></div>
+            </div>
+          </div>
+          <!--<div class="form-row">
+            <div class="form-key">播放时长：</div>
+            <div class="form-value">
+              <input type="text" name="display_time" title="播放时长" ui="type:TextInput;id:display-time;value:@display_time;width:30" />秒
+            </div>
+          </div>  -->
+        </div>
+        <div id="un-standard-collapse-src-container">
+        </div>
+        <!-- import:hasAnchorOverlayUnit -->
+      </div>
+
+      <!-- 富媒体 -->
+      <div id="html-code-container">
+        <div class="form-row">
+          <div class="form-key">代码：</div>
+          <div class="form-value">
+            <textarea name="html_code" title="富媒体代码" ui="type:TextInput;id:html-code;value:@html_code;rule:required;rule:maxLength,15000"></textarea>
+          </div>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+</div>
+
+<!--target:floatEditFormMain-->
+<div class="form-main">
+  <div class="form-block-title">
+    <h3>新广告创意</h3>
+  </div>
+
+  <div class="form-block-wrap">
+    <div class="form-block">
+      
+      <div class="form-row">
+        <div class="form-key">产品形式：</div>
+        <div class="form-value">
+          <div ui="type:Label;id:product-type-text;text:@product_type_text"></div>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-key">创意名称：</div>
+        <div class="form-value">
+          <input name="name" type="text" title="创意名称" ui="type:TextInput;id:name;value:@name;rule:required;" />
+        </div>
+      </div>
+
+      <div id="flash-type-container">
+        <div class="form-row">
+          <div class="form-key">创意类型：</div>
+          <div class="form-value">
+            <input name="m_type" type="text" title="创意类型" ui="type:TextInput;id:m-type;value:@m_type;" />
+          </div>
+        </div>
+      </div>
+
+      <!-- Flash -->
+      <div id="flash-container">
+        <div class="form-row"  id="flash-src-container">
+          <div class="form-key">浮标：</div>
+          <div class="form-value">
+            <div name="src" title="浮标" ui="type:MediaUploader;id:flash-url;url:@upload_url;datasource:@src_datasource;fitsize:@max_preview_width;text:上传浮标;rule:@collapse_ext"></div>
+          </div>
+        </div>
+
+        <!-- 这些字段需要有的，但是PM不想看到 -->
+        <div class="form-row" style="display:none">
+          <div class="form-key">浮标尺寸：</div>
+          <div class="form-value">
+            <span class="form-text">宽</span>
+            <input type="text" name="width" ui="type:TextInput;id:width;width:30;value:@width;" />
+            <span class="form-text">*&nbsp;高</span>
+            <input type="text" name="height" ui="type:TextInput;id:height;width:30;value:@height;" />
+            <span class="form-text">(px)</span>
+          </div>
+        </div>
+        <!-- 这些字段需要有的，但是PM不想看到 -->
+        <div class="form-row" style="display:none">
+          <div class="form-key">最长展现时间：</div>
+          <div class="form-value">
+            <input type="text" name="max_impression_time" ui="type:TextInput;id:max-impression-time;value:@max_impression_time;width:30" />秒
+          </div>
+        </div>
+        <!-- import:hasAnchorOverlayUnit -->
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<!--target:imageEditForm-->
+<div ui="type:Form;id:form;">
+  <div class="edit-form">
+    <!-- import:materialEditTitle -->
+    <!-- import:imageEditFormMain -->
+  </div>
+  <!-- import:materialEditSubmit -->
+</div>
+
+<!--target:imageEditFormMain-->
+<div class="form-main">
+  
+  <div class="form-block-title">
+    <h3>新广告创意</h3>
+  </div>
+
+  <div class="form-block-wrap">
+    <div class="form-block">
+      
+      <div class="form-row">
+        <div class="form-key">产品形式：</div>
+        <div class="form-value">
+          <div ui="type:Label;id:product-type-text;text:@product_type_text"></div>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-key">创意名称：</div>
+        <div class="form-value">
+          <input name="name" type="text" title="创意名称" ui="type:TextInput;id:name;value:@name;rule:required;" />
+        </div>
+      </div>
+      
+      <div class="form-row">
+        <div class="form-key">创意类型：</div>
+        <div class="form-value">
+          <div name="m_type" ui="type:RadioBoxGroup;id:m-type;datasource:@type_options;value:@m_type;"></div>
+        </div>
+      </div>
+
+      <!-- 图片 -->
+      <div id="image-container">
+        <div class="form-row">
+          <div class="form-key">图片：</div>
+          <div class="form-value">
+            <div name="src" title="图片" ui="type:MediaUploader;id:image-url;url:@upload_url;datasource:@src_datasource;fitsize:@max_preview_width;text:上传图片;rule:ext,jpg,jpeg,gif"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Flash -->
+      <div id="flash-container">
+        <div class="form-row">
+          <div class="form-key">动画：</div>
+          <div class="form-value">
+            <div name="src" title="动画" ui="type:MediaUploader;id:flash-url;url:@upload_url;datasource:@src_datasource;fitsize:@max_preview_width;text:上传Flash;rule:ext,swf"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 这些字段需要有的，但是PM不想看到 -->
+      <div class="form-row" style="display:none">
+        <div class="form-key">尺寸：</div>
+        <div class="form-value">
+          <span class="form-text">宽</span>
+          <input type="text" name="width" ui="type:TextInput;id:width;width:30;value:@width;" />
+          <span class="form-text">*&nbsp;高</span>
+          <input type="text" name="height" ui="type:TextInput;id:height;width:30;value:@height;" />
+          <span class="form-text">(px)</span>
+        </div>
+      </div>
+
+      <!-- import:hasAnchorOverlayUnit -->
+      
+    </div>
+  </div>
+</div>
