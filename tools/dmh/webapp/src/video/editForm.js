@@ -75,7 +75,7 @@ video.EditForm = function() {
         ms += parseInt(timeArr[len-1]) * Math.pow(60, timeArr.length - len);
         len = len - 1;
       }
-      return ms;
+      return ms * 1000;
     }
 };
 
