@@ -68,7 +68,14 @@ video.EditForm = function() {
     //将hh:mm:ss.xxx格式的时间转换为具体的毫秒数
     function getMs(timeStr){
       var timeArr = timeStr.split(':');
-      return (parseInt(timeArr[0]) * 3600 + parseInt(timeArr[1]) * 60 + parseFloat(timeArr[2])) * 1000
+      var len = timeArr.length;
+      var ms = parseFloat(timeArr[len-1]);
+      len = len-1;
+      while(len){
+        ms += parseInt(timeArr[len-1]) * Math.pow(60, timeArr.length - len);
+        len = len - 1;
+      }
+      return ms;
     }
 };
 
