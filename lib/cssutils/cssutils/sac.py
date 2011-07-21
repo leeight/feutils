@@ -4,12 +4,12 @@ __all__ = ['CSSParser']
 __docformat__ = 'restructuredtext'
 __version__ = '$Id: parse.py 1754 2009-05-30 14:50:13Z cthedot $'
 
-from . import helper
+import helper
 import codecs
-from . import errorhandler
+import errorhandler
 import os
-from . import tokenize2
-import urllib.request, urllib.parse, urllib.error
+import tokenize2
+import urllib
 import sys
  
     
@@ -115,12 +115,12 @@ class EchoHandler(DocumentHandler):
         super(EchoHandler, self).__init__()
         self._out = []
         
-    out = property(lambda self: ''.join(self._out))
+    out = property(lambda self: u''.join(self._out))
 
     def startDocument(self, encoding):
         super(EchoHandler, self).startDocument(encoding)
-        if 'utf-8' != encoding:
-            self._out.append('@charset "%s";\n' % encoding)
+        if u'utf-8' != encoding:
+            self._out.append(u'@charset "%s";\n' % encoding)
     
 #    def comment(self, text, line=None, col=None):
 #        self._out.append(u'/*%s*/' % text)
@@ -129,30 +129,30 @@ class EchoHandler(DocumentHandler):
         "Receive notification of a import statement in the style sheet."
         # defaultNamespaceURI???
         super(EchoHandler, self).importStyle(uri, media, name, line, col)
-        self._out.append('@import %s%s%s;\n' % (helper.string(uri),
-                                               '%s ' % media if media else '',
-                                               '%s ' % name if name else '')
+        self._out.append(u'@import %s%s%s;\n' % (helper.string(uri),
+                                               u'%s ' % media if media else u'',
+                                               u'%s ' % name if name else u'')
         )
         
         
     def namespaceDeclaration(self, prefix, uri, line=None, col=None):
         super(EchoHandler, self).namespaceDeclaration(prefix, uri, line, col)
-        self._out.append('@namespace %s%s;\n' % ('%s ' % prefix if prefix else '', 
+        self._out.append(u'@namespace %s%s;\n' % (u'%s ' % prefix if prefix else u'', 
                                                 helper.string(uri)))
 
     def startSelector(self, selectors=None, line=None, col=None):
         super(EchoHandler, self).startSelector(selectors, line, col)
         if selectors:
-            self._out.append(', '.join(selectors))
-        self._out.append(' {\n')
+            self._out.append(u', '.join(selectors))
+        self._out.append(u' {\n')
 
     def endSelector(self, selectors=None, line=None, col=None):
-        self._out.append('    }')
+        self._out.append(u'    }')
         
     def property(self, name, value, important=False, line=None, col=None):
         super(EchoHandler, self).property(name, value,  line, col)
-        self._out.append('    %s: %s%s;\n' % (name, value, 
-                                        ' !important' if important else ''))
+        self._out.append(u'    %s: %s%s;\n' % (name, value, 
+                                        u' !important' if important else u''))
   
 
 class Parser(object):
@@ -219,24 +219,24 @@ class Parser(object):
                 return False
                         
         # START PARSING
-        t = next(tokens)
+        t = tokens.next()
         type_, val, line, col = t
         
         encoding = 'utf-8'                
         if 'CHARSET_SYM' == type_:
             # @charset "encoding";
             # S
-            encodingtoken = next(tokens)
-            semicolontoken = next(tokens)
+            encodingtoken = tokens.next()
+            semicolontoken = tokens.next()
             if 'STRING' == type_:
                 encoding = helper.stringvalue(val)
             # ;
             if 'STRING' == encodingtoken[0] and semicolontoken:
                 encoding = helper.stringvalue(encodingtoken[1])    
             else:
-                self._errorHandler.fatal('Invalid @charset')
+                self._errorHandler.fatal(u'Invalid @charset')
                 
-            t = next(tokens)
+            t = tokens.next()
             type_, val, line, col = t
             
         self._handler.startDocument(encoding)
@@ -253,44 +253,44 @@ class Parser(object):
                     while True:
                         # read till end ; 
                         # TODO: or {}
-                        t = next(tokens)
+                        t = tokens.next()
                         type_, val, line, col = t
                         atRule.append(val) 
-                        if ';' == val and not braces:
+                        if u';' == val and not braces:
                             break
-                        elif '{' == val:
+                        elif u'{' == val:
                             braces += 1
-                        elif '}' == val:
+                        elif u'}' == val:
                             braces -= 1
                             if braces == 0:
                                 break
                             
-                    self._handler.ignorableAtRule(''.join(atRule), *start)
+                    self._handler.ignorableAtRule(u''.join(atRule), *start)
 
                 elif 'IMPORT_SYM' == type_:
                     # import URI or STRING media? name?
                     uri, media, name = None, None, None
                     while True:
-                        t = next(tokens)
+                        t = tokens.next()
                         type_, val, line, col = t
                         if 'STRING' == type_:
                             uri = helper.stringvalue(val)
                         elif 'URI' == type_:
                             uri = helper.urivalue(val)
-                        elif ';' == val:
+                        elif u';' == val:
                             break
                     
                     if uri:    
                         self._handler.importStyle(uri, media, name)
                     else:
-                        self._errorHandler.error('Invalid @import'
-                                                 ' declaration at %r' 
+                        self._errorHandler.error(u'Invalid @import'
+                                                 u' declaration at %r' 
                                                  % (start,))
                         
                 elif 'NAMESPACE_SYM' == type_:
                     prefix, uri = None, None
                     while True:
-                        t = next(tokens)
+                        t = tokens.next()
                         type_, val, line, col = t
                         if 'IDENT' == type_:
                             prefix = val
@@ -298,13 +298,13 @@ class Parser(object):
                             uri = helper.stringvalue(val)
                         elif 'URI' == type_:
                             uri = helper.urivalue(val)
-                        elif ';' == val:
+                        elif u';' == val:
                             break
                     if uri:
                         self._handler.namespaceDeclaration(prefix, uri, *start)
                     else:
-                        self._errorHandler.error('Invalid @namespace'
-                                                 ' declaration at %r' 
+                        self._errorHandler.error(u'Invalid @namespace'
+                                                 u' declaration at %r' 
                                                  % (start,))
     
                 else:
@@ -314,20 +314,20 @@ class Parser(object):
                     while True:
                         # selectors[, selector]* {
                         if 'S' == type_:
-                            selector.append(' ')
+                            selector.append(u' ')
                         elif simple(t):
                             pass
-                        elif ',' == val:
-                            selectors.append(''.join(selector).strip())
+                        elif u',' == val:
+                            selectors.append(u''.join(selector).strip())
                             selector = []
-                        elif '{' == val:
-                            selectors.append(''.join(selector).strip())
+                        elif u'{' == val:
+                            selectors.append(u''.join(selector).strip())
                             self._handler.startSelector(selectors, *start)
                             break
                         else:
                             selector.append(val)
                             
-                        t = next(tokens)
+                        t = tokens.next()
                         type_, val, line, col = t
                                             
                     end = None
@@ -337,7 +337,7 @@ class Parser(object):
                         
                         while True:
                             # name:
-                            t = next(tokens)
+                            t = tokens.next()
                             type_, val, line, col = t
                             if 'S' == type_:
                                 pass
@@ -348,15 +348,15 @@ class Parser(object):
                                     self._errorHandler.error('more than one property name', t)
                                 else:
                                     name = val
-                            elif ':' == val:
+                            elif u':' == val:
                                 if not name:
                                     self._errorHandler.error('no property name', t)
                                 break
-                            elif ';' == val:
+                            elif u';' == val:
                                 self._errorHandler.error('premature end of property', t)
                                 end = val
                                 break
-                            elif '}' == val:
+                            elif u'}' == val:
                                 if name:
                                     self._errorHandler.error('premature end of property', t)
                                 end = val
@@ -364,16 +364,16 @@ class Parser(object):
                             else:
                                 self._errorHandler.error('unexpected property name token %r' % val, t)
 
-                        while not ';' == end and not '}' == end:
+                        while not u';' == end and not u'}' == end:
                             # value !;}
-                            t = next(tokens)
+                            t = tokens.next()
                             type_, val, line, col = t
                             
                             if 'S' == type_:
-                                value.append(' ')
+                                value.append(u' ')
                             elif simple(t):
                                 pass
-                            elif '!' == val or ';' == val or '}' == val:
+                            elif u'!' == val or u';' == val or u'}' == val:
                                 value = ''.join(value).strip()
                                 if not value:
                                     self._errorHandler.error('premature end of property (no value)', t)
@@ -382,16 +382,16 @@ class Parser(object):
                             else:
                                 value.append(val)
 
-                        while '!' == end:
+                        while u'!' == end:
                             # !important
-                            t = next(tokens)
+                            t = tokens.next()
                             type_, val, line, col = t
                             
                             if simple(t):
                                 pass
-                            elif 'IDENT' == type_ and not important:
+                            elif u'IDENT' == type_ and not important:
                                 important = True
-                            elif ';' == val or '}' == val:
+                            elif u';' == val or u'}' == val:
                                 end = val
                                 break
                             else:
@@ -400,7 +400,7 @@ class Parser(object):
                         if name and value:
                             self._handler.property(name, value, important)
                             
-                        if '}' == end:
+                        if u'}' == end:
                             self._handler.endSelector(selectors, line=line, col=col)
                             break
                         else:
@@ -410,7 +410,7 @@ class Parser(object):
                     else:
                         self._handler.endSelector(selectors, line=line, col=col)
 
-                t = next(tokens)
+                t = tokens.next()
                 type_, val, line, col = t
 
             except StopIteration:

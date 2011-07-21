@@ -1,10 +1,10 @@
 """StyleSheet implements DOM Level 2 Style Sheets StyleSheet."""
 __all__ = ['StyleSheet']
 __docformat__ = 'restructuredtext'
-__version__ = '$Id$'
+__version__ = '$Id: stylesheet.py 1938 2010-03-21 18:21:18Z cthedot $'
 
 import cssutils
-import urllib.parse
+import urlparse
 
 class StyleSheet(cssutils.util.Base2):
     """
@@ -23,7 +23,7 @@ class StyleSheet(cssutils.util.Base2):
     def __init__(self, type='text/css',
                  href=None,
                  media=None,
-                 title='',
+                 title=u'',
                  ownerNode=None,
                  parentStyleSheet=None,
                  alternate=False,

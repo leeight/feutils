@@ -1,10 +1,10 @@
 """Property is a single CSS property in a CSSStyleDeclaration."""
 __all__ = ['Property']
 __docformat__ = 'restructuredtext'
-__version__ = '$Id$'
+__version__ = '$Id: property.py 1978 2010-05-29 23:40:59Z cthedot $'
 
 from cssutils.helper import Deprecated
-from .value import PropertyValue
+from cssvalue import CSSValue
 import cssutils
 import xml.dom
 
@@ -43,7 +43,7 @@ class Property(cssutils.util.Base):
           ;
 
     """
-    def __init__(self, name=None, value=None, priority='',
+    def __init__(self, name=None, value=None, priority=u'',
                  _mediaQuery=False, parent=None):
         """
         :param name:
@@ -66,31 +66,31 @@ class Property(cssutils.util.Base):
         self.parent = parent
 
         self.__nametoken = None
-        self._name = ''
-        self._literalname = ''
-        self.seqs[1] = PropertyValue(parent=self)
+        self._name = u''
+        self._literalname = u''
+        self.seqs[1] = CSSValue(parent=self)
         if name:
             self.name = name
-            self.propertyValue = value
+            self.cssValue = value
 
-        self._priority = ''
-        self._literalpriority = ''
+        self._priority = u''
+        self._literalpriority = u''
         if priority:
             self.priority = priority
 
     def __repr__(self):
-        return "cssutils.css.%s(name=%r, value=%r, priority=%r)" % (
+        return u"cssutils.css.%s(name=%r, value=%r, priority=%r)" % (
                 self.__class__.__name__,
                 self.literalname,
-                self.propertyValue.cssText,
+                self.cssValue.cssText,
                 self.priority)
 
     def __str__(self):
-        return "<%s.%s object name=%r value=%r priority=%r valid=%r at 0x%x>" \
+        return u"<%s.%s object name=%r value=%r priority=%r valid=%r at 0x%x>" \
                % (self.__class__.__module__,
                   self.__class__.__name__,
                   self.name,
-                  self.propertyValue.cssText,
+                  self.cssValue.cssText,
                   self.priority,
                   self.valid,
                   id(self))
@@ -122,41 +122,41 @@ class Property(cssutils.util.Base):
             if self._mediaQuery and not valuetokens:
                 # MediaQuery may consist of name only
                 self.name = nametokens
-                self.propertyValue = None
+                self.cssValue = None
                 self.priority = None
                 return
 
             # remove colon from nametokens
             colontoken = nametokens.pop()
-            if self._tokenvalue(colontoken) != ':':
+            if self._tokenvalue(colontoken) != u':':
                 wellformed = False
-                self._log.error('Property: No ":" after name found: %s' %
+                self._log.error(u'Property: No ":" after name found: %r' %
                                 self._valuestr(cssText), colontoken)
             elif not nametokens:
                 wellformed = False
-                self._log.error('Property: No property name found: %s' %
+                self._log.error(u'Property: No property name found: %r.' %
                             self._valuestr(cssText), colontoken)
 
             if valuetokens:
-                if self._tokenvalue(valuetokens[-1]) == '!':
+                if self._tokenvalue(valuetokens[-1]) == u'!':
                     # priority given, move "!" to prioritytokens
                     prioritytokens.insert(0, valuetokens.pop(-1))
             else:
                 wellformed = False
-                self._log.error('Property: No property value found: %s' %
+                self._log.error(u'Property: No property value found: %r.' %
                                 self._valuestr(cssText), colontoken)
 
             if wellformed:
                 self.wellformed = True
                 self.name = nametokens
-                self.propertyValue = valuetokens
+                self.cssValue = valuetokens
                 self.priority = prioritytokens
 
                 # also invalid values are set!
                 self.validate()
 
         else:
-            self._log.error('Property: No property name found: %s' %
+            self._log.error(u'Property: No property name found: %r.' %
                             self._valuestr(cssText))
 
     cssText = property(fget=_getCssText, fset=_setCssText,
@@ -181,7 +181,7 @@ class Property(cssutils.util.Base):
                 return 'EOF'
             else:
                 new['wellformed'] = False
-                self._log.error('Property: Unexpected ident.', token)
+                self._log.error(u'Property: Unexpected ident.', token)
                 return expected
 
         newseq = []
@@ -201,7 +201,7 @@ class Property(cssutils.util.Base):
 
         if not new['literalname']:
             wellformed = False
-            self._log.error('Property: No name found: %s' %
+            self._log.error(u'Property: No name found: %r' %
                 self._valuestr(name), token=token)
 
         if wellformed:
@@ -213,14 +213,14 @@ class Property(cssutils.util.Base):
 #            # validate
             if self._name not in cssutils.profile.knownNames:
                 # self.valid = False
-                self._log.warn('Property: Unknown Property name.',
+                self._log.warn(u'Property: Unknown Property name.',
                                token=token, neverraise=True)
             else:
                 pass
 #                self.valid = True
-#                if self.propertyValue:
-#                    self.propertyValue._propertyName = self._name
-#                    #self.valid = self.propertyValue.valid
+#                if self.cssValue:
+#                    self.cssValue._propertyName = self._name
+#                    #self.valid = self.cssValue.valid
         else:
             self.wellformed = False
 
@@ -231,9 +231,12 @@ class Property(cssutils.util.Base):
                            doc="Readonly literal (not normalized) name "
                                "of this property")
 
-    def _setPropertyValue(self, cssText):
+    def _getCSSValue(self):
+        return self.seqs[1]
+
+    def _setCSSValue(self, cssText):
         """
-        See css.PropertyValze
+        See css.CSSValue
 
         :exceptions:
         - :exc:`~xml.dom.SyntaxErr`:
@@ -244,28 +247,33 @@ class Property(cssutils.util.Base):
           type of values than the values allowed by the CSS property.
         """
         if self._mediaQuery and not cssText:
-            self.seqs[1] = PropertyValue(parent=self)
+            self.seqs[1] = CSSValue(parent=self)
         else:
-            self.seqs[1].cssText = cssText
+            try:
+                self.seqs[1].cssText = cssText
+            except xml.dom.SyntaxErr, e:
+                v = CSSValue(parent=self)
+                # try parsing for CSSValue (simply raise if not)
+                # might have been e.g. a CSSVariable before
+                v.cssText = cssText
+                self.seqs[1] = v
+                            
             self.wellformed = self.wellformed and self.seqs[1].wellformed
-    
-    propertyValue = property(lambda self: self.seqs[1], 
-                             _setPropertyValue,
-                             doc="(cssutils) PropertyValue object of property")
 
-    
+    cssValue = property(_getCSSValue, _setCSSValue,
+        doc="(cssutils) CSSValue object of this property")
+
     def _getValue(self):
-        if self.propertyValue:
-            # value without comments
-            return self.propertyValue.value
+        if self.cssValue:
+            return self.cssValue.cssText
         else:
-            return ''
+            return u''
 
     def _setValue(self, value):
-        self._setPropertyValue(value)
+        self._setCSSValue(value)
 
     value = property(_getValue, _setValue,
-                     doc="The textual value of this Properties propertyValue.")
+                     doc="The textual value of this Properties cssValue.")
 
     def _setPriority(self, priority):
         """
@@ -290,30 +298,30 @@ class Property(cssutils.util.Base):
               priority
         """
         if self._mediaQuery:
-            self._priority = ''
-            self._literalpriority = ''
+            self._priority = u''
+            self._literalpriority = u''
             if priority:
-                self._log.error('Property: No priority in a MediaQuery - '
-                                'ignored.')
+                self._log.error(u'Property: No priority in a MediaQuery - '
+                                u'ignored.')
             return
 
-        if isinstance(priority, str) and\
-           'important' == self._normalize(priority):
-            priority = '!%s' % priority
+        if isinstance(priority, basestring) and\
+           u'important' == self._normalize(priority):
+            priority = u'!%s' % priority
 
         # for closures: must be a mutable
-        new = {'literalpriority': '',
+        new = {'literalpriority': u'',
                'wellformed': True}
 
         def _char(expected, seq, token, tokenizer=None):
             # "!"
             val = self._tokenvalue(token)
-            if '!' == expected == val:
+            if u'!' == expected == val:
                 seq.append(val)
                 return 'important'
             else:
                 new['wellformed'] = False
-                self._log.error('Property: Unexpected char.', token)
+                self._log.error(u'Property: Unexpected char.', token)
                 return expected
 
         def _ident(expected, seq, token, tokenizer=None):
@@ -325,7 +333,7 @@ class Property(cssutils.util.Base):
                 return 'EOF'
             else:
                 new['wellformed'] = False
-                self._log.error('Property: Unexpected ident.', token)
+                self._log.error(u'Property: Unexpected ident.', token)
                 return expected
 
         newseq = []
@@ -339,7 +347,7 @@ class Property(cssutils.util.Base):
         # post conditions
         if priority and not new['literalpriority']:
             wellformed = False
-            self._log.info('Property: Invalid priority: %s' %
+            self._log.info(u'Property: Invalid priority: %r.' %
                            self._valuestr(priority))
 
         if wellformed:
@@ -348,8 +356,8 @@ class Property(cssutils.util.Base):
             self._priority = self._normalize(self.literalpriority)
             self.seqs[2] = newseq
             # validate priority
-            if self._priority not in ('', 'important'):
-                self._log.error('Property: No CSS priority value: %s' %
+            if self._priority not in (u'', u'important'):
+                self._log.error(u'Property: No CSS priority value: %r.' %
                                 self._priority)
 
     priority = property(lambda self: self._priority, _setPriority,
@@ -438,12 +446,11 @@ class Property(cssutils.util.Base):
 
         if self.name and self.value:
             
-            cv = self.propertyValue
-            # TODO
-#            if cv.cssValueType == cv.CSS_VARIABLE and not cv.value:
-#                # TODO: false alarms too! 
-#                cssutils.log.warn(u'No value for variable "%s" found, keeping '
-#                                  u'variable.' % cv.name, neverraise=True)
+            cv = self.cssValue
+            if cv.cssValueType == cv.CSS_VARIABLE and not cv.value:
+                # TODO: false alarms too! 
+                cssutils.log.warn(u'No value for variable "%s" found, keeping '
+                                  u'variable.' % cv.name, neverraise=True)
 
             if self.name in cssutils.profile.knownNames:
                 # add valid, matching, validprofiles...
@@ -453,49 +460,36 @@ class Property(cssutils.util.Base):
                                                          profiles)
 
                 if not valid:
-                    self._log.error('Property: Invalid value for '
-                                    '"%s" property: %s'
-                                    % ('/'.join(validprofiles), self.value),
+                    self._log.error(u'Property: Invalid value for '
+                                    u'"%s" property: %s'
+                                    % (u'/'.join(validprofiles), self.value),
                                     token=self.__nametoken,
                                     neverraise=True)
 
                 # TODO: remove logic to profiles!
                 elif valid and not matching:#(profiles and profiles not in validprofiles):
                     if not profiles:
-                        notvalidprofiles = '/'.join(cssutils.profile.defaultProfiles)
+                        notvalidprofiles = u'/'.join(cssutils.profile.defaultProfiles)
                     else:
                         notvalidprofiles = profiles
-                    self._log.warn('Property: Not valid for profile "%s" '
-                                   'but valid "%s" value: %s '
-                                   % (notvalidprofiles, '/'.join(validprofiles),
+                    self._log.warn(u'Property: Not valid for profile "%s" '
+                                   u'but valid "%s" value: %s '
+                                   % (notvalidprofiles, u'/'.join(validprofiles),
                                       self.value),
                                    token = self.__nametoken,
                                    neverraise=True)
                     valid = False
 
                 elif valid:
-                    self._log.debug('Property: Found valid "%s" value: %s'
-                                   % ('/'.join(validprofiles), self.value),
+                    self._log.debug(u'Property: Found valid "%s" value: %s'
+                                   % (u'/'.join(validprofiles), self.value),
                                    token = self.__nametoken,
                                    neverraise=True)
 
-        if self._priority not in ('', 'important'):
+        if self._priority not in (u'', u'important'):
             valid = False
 
         return valid
 
-    valid = property(validate, doc="Check if value of this property is valid "
-                                   "in the properties context.")
-
-
-    @Deprecated('Use ``property.propertyValue`` instead.')
-    def _getCSSValue(self):
-        return self.propertyValue
-        
-    @Deprecated('Use ``property.propertyValue`` instead.')
-    def _setCSSValue(self, cssText):
-        self._setPropertyValue(cssText)
-
-    cssValue = property(_getCSSValue, _setCSSValue,
-                   doc="(DEPRECATED) Use ``property.propertyValue`` instead.")
-
+    valid = property(validate, doc=u"Check if value of this property is valid "
+                                   u"in the properties context.")

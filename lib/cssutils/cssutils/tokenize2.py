@@ -4,10 +4,10 @@
 """
 __all__ = ['Tokenizer', 'CSSProductions']
 __docformat__ = 'restructuredtext'
-__version__ = '$Id$'
+__version__ = '$Id: tokenize2.py 2010 2010-06-20 16:29:28Z cthedot $'
 
-from .cssproductions import *
-from .helper import normalize
+from cssproductions import *
+from helper import normalize
 import itertools
 import re
 
@@ -19,14 +19,14 @@ class Tokenizer(object):
         (Tokenname, value, startline, startcolumn)
     """
     _atkeywords = {
-        '@font-face': CSSProductions.FONT_FACE_SYM,
-        '@import': CSSProductions.IMPORT_SYM,
-        '@media': CSSProductions.MEDIA_SYM,        
-        '@namespace': CSSProductions.NAMESPACE_SYM,
-        '@page': CSSProductions.PAGE_SYM,
-        '@variables': CSSProductions.VARIABLES_SYM
+        u'@font-face': CSSProductions.FONT_FACE_SYM,
+        u'@import': CSSProductions.IMPORT_SYM,
+        u'@media': CSSProductions.MEDIA_SYM,        
+        u'@namespace': CSSProductions.NAMESPACE_SYM,
+        u'@page': CSSProductions.PAGE_SYM,
+        u'@variables': CSSProductions.VARIABLES_SYM
         }
-    _linesep = '\n'
+    _linesep = u'\n'
     unicodesub = re.compile(r'\\[0-9a-fA-F]{1,6}(?:\r\n|[\t|\r|\n|\f|\x20])?').sub
     cleanstring = re.compile(r'\\((\r\n)|[\n|\r|\f])').sub
 
@@ -90,7 +90,7 @@ class Tokenizer(object):
         """Generator: Tokenize text and yield tokens, each token is a tuple 
         of::
         
-            (name, value, line, col)
+            (nname, value, line, col)
         
         The token value will contain a normal string, meaning CSS unicode 
         escapes have been resolved to normal characters. The serializer
@@ -107,7 +107,7 @@ class Tokenizer(object):
             "used by unicodesub"
             num = int(m.group(0)[1:], 16)
             if num < 0x10000:
-                return chr(num)
+                return unichr(num)
             else:
                 return m.group(0)
 
@@ -137,21 +137,19 @@ class Tokenizer(object):
             for pushed in self._pushed:
                 yield pushed
 
-            # speed test for most used CHARs, sadly . not possible :(
+            # speed test for most used CHARs
             c = text[0]
-            if c in ',:;{}>+[]':
+            if c in u'{}:;,':
                 yield ('CHAR', c, line, col)
                 col += 1
                 text = text[1:]
                 
-            else:
+            else:                
                 # check all other productions, at least CHAR must match
                 for name, matcher in productions:
-                    
-                    # TODO: USE bad comment? 
-                    if fullsheet and name == 'CHAR' and text.startswith('/*'):
+                    if fullsheet and name == 'CHAR' and text.startswith(u'/*'):
                         # before CHAR production test for incomplete comment
-                        possiblecomment = '%s*/' % text
+                        possiblecomment = u'%s*/' % text
                         match = self.commentmatcher(possiblecomment)
                         if match and self._doComments:
                             yield ('COMMENT', possiblecomment, line, col)
@@ -168,10 +166,10 @@ class Tokenizer(object):
                                 name, found = 'STRING', '%s%s' % (found, found[0])
                             
                             elif 'FUNCTION' == name and\
-                                 'url(' == _normalize(found):
-                                # url( is a FUNCTION if incomplete sheet
-                                # FUNCTION production MUST BE after URI production
-                                for end in ("')", '")', ')'):
+                                 u'url(' == _normalize(found):
+                                # FUNCTION url( is fixed to URI if fullsheet
+                                # FUNCTION production MUST BE after URI production!
+                                for end in (u"')", u'")', u')'):
                                     possibleuri = '%s%s' % (text, end)
                                     match = self.urimatcher(possibleuri)
                                     if match:
@@ -181,8 +179,8 @@ class Tokenizer(object):
                         if name in ('DIMENSION', 'IDENT', 'STRING', 'URI', 
                                     'HASH', 'COMMENT', 'FUNCTION', 'INVALID',
                                     'UNICODE-RANGE'):
-                            # may contain unicode escape, replace with normal 
-                            # char but do not _normalize (?)
+                            # may contain unicode escape, replace with normal char
+                            # but do not _normalize (?)
                             value = self.unicodesub(_repl, found)
                             if name in ('STRING', 'INVALID'): #'URI'?
                                 # remove \ followed by nl (so escaped) from string
@@ -190,22 +188,18 @@ class Tokenizer(object):
     
                         else:
                             if 'ATKEYWORD' == name:
-                                try:
-                                    # get actual ATKEYWORD SYM
-                                    name = self._atkeywords[_normalize(found)]
-                                except KeyError as e:
-                                    # might also be misplace @charset...
-                                    if '@charset' == found and ' ' == text[len(found):len(found)+1]:
-                                        # @charset needs tailing S!
-                                        name = CSSProductions.CHARSET_SYM
-                                        found += ' '
-                                    else:
-                                        name = 'ATKEYWORD'
+                                # get actual ATKEYWORD SYM
+                                if '@charset' == found and ' ' == text[len(found):len(found)+1]:
+                                    # only this syntax!
+                                    name = CSSProductions.CHARSET_SYM
+                                    found += ' '
+                                else:
+                                    name = self._atkeywords.get(_normalize(found), 'ATKEYWORD')
                                     
                             value = found # should not contain unicode escape (?)
                         
                         if self._doComments or (not self._doComments and 
-                                                name != 'COMMENT'):
+                                              name != 'COMMENT'):
                             yield (name, value, line, col)
                         
                         text = text[len(found):]
@@ -215,8 +209,7 @@ class Tokenizer(object):
                             col = len(found[found.rfind(self._linesep):])
                         else:
                             col += len(found)
-                            
                         break
 
         if fullsheet:
-            yield ('EOF', '', line, col)
+            yield ('EOF', u'', line, col)

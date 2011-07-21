@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 """cssutils - CSS Cascading Style Sheets library for Python
 
-    Copyright (C) 2004-2010 Christof Hoeke
+    Copyright (C) 2004-2009 Christof Hoeke
 
     cssutils is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
@@ -22,7 +22,7 @@ any rendering facilities!
 
 Based upon and partly implementing the following specifications :
 
-`CSS 2.1 <http://www.w3.org/TR/CSS2/>`__
+`CSS 2.1 <http://www.w3.org/TR/CSS21/>`__
     General CSS rules and properties are defined here
 `CSS 2.1 Errata  <http://www.w3.org/Style/css2-updates/CR-CSS21-20070719-errata.html>`__
     A few errata, mainly the definition of CHARSET_SYM tokens
@@ -41,8 +41,7 @@ Based upon and partly implementing the following specifications :
     with cssutils (*should* mind though ;) )
 
 `DOM Level 2 Style CSS <http://www.w3.org/TR/DOM-Level-2-Style/css.html>`__
-    DOM for package css. 0.9.8 removes support for CSSValue and related API, 
-    see PropertyValue and Value API for now
+    DOM for package css
 `DOM Level 2 Style Stylesheets <http://www.w3.org/TR/DOM-Level-2-Style/stylesheets.html>`__
     DOM for package stylesheets
 `CSSOM <http://dev.w3.org/csswg/cssom/>`__
@@ -89,35 +88,32 @@ Usage may be::
 __all__ = ['css', 'stylesheets', 'CSSParser', 'CSSSerializer']
 __docformat__ = 'restructuredtext'
 __author__ = 'Christof Hoeke with contributions by Walter Doerwald'
-__date__ = '$LastChangedDate::                            $:'
+__date__ = '$LastChangedDate:: 2010-11-27 20:13:08 +0100 #$:'
 
-VERSION = '0.9.8dev3'
+VERSION = '0.9.7'
 
-__version__ = '%s $Id$' % VERSION
+__version__ = '%s $Id: __init__.py 2034 2010-11-27 19:13:08Z cthedot $' % VERSION
 
-import sys
-if sys.version_info < (2,6):
-    bytes = str
-
-from . import codec
+import codec
 import os.path
-import urllib.request, urllib.parse, urllib.error
-import urllib.parse
+import urllib
+import urlparse
 import xml.dom
 
 # order of imports is important (partly circular)
-from . import util
-from . import errorhandler
+from helper import Deprecated
+import errorhandler
 log = errorhandler.ErrorHandler()
 
-from . import css
-from . import stylesheets
-from .parse import CSSParser
+import css
+import stylesheets
+import util
+from parse import CSSParser
 
-from .serialize import CSSSerializer
+from serialize import CSSSerializer
 ser = CSSSerializer()
 
-from .profiles import Profiles
+from profiles import Profiles
 profile = Profiles(log=log)
 
 # used by Selector defining namespace prefix '*'
@@ -168,7 +164,7 @@ class DOMImplementationCSS(object):
         raise NotImplementedError
 
     def hasFeature(self, feature, version):
-        return (feature.lower(), str(version)) in self._features
+        return (feature.lower(), unicode(version)) in self._features
 
 xml.dom.registerDOMImplementation('cssutils', DOMImplementationCSS)
 
@@ -185,6 +181,11 @@ def parseUrl(*a, **k):
     return CSSParser().parseUrl(*a, **k)
 parseUrl.__doc__ = CSSParser.parseUrl.__doc__
 
+@Deprecated('Use cssutils.parseFile() instead.')
+def parse(*a, **k):
+    return parseFile(*a, **k)
+parse.__doc__ = CSSParser.parse.__doc__
+
 def parseStyle(cssText, encoding='utf-8'):
     """Parse given `cssText` which is assumed to be the content of
     a HTML style attribute.
@@ -197,9 +198,10 @@ def parseStyle(cssText, encoding='utf-8'):
     :returns:
         :class:`~cssutils.css.CSSStyleDeclaration`
     """
-    if isinstance(cssText, bytes):
+    if isinstance(cssText, str):
         cssText = cssText.decode(encoding)
-    style = css.CSSStyleDeclaration(cssText)
+    style = css.CSSStyleDeclaration()
+    style.cssText = cssText
     return style
 
 # set "ser", default serializer
@@ -222,6 +224,11 @@ def getUrls(sheet):
     for importrule in (r for r in sheet if r.type == r.IMPORT_RULE):
         yield importrule.href
 
+    def getUrl(v):
+        if v.CSS_PRIMITIVE_VALUE == v.cssValueType and\
+           v.CSS_URI == v.primitiveType:
+                return v.getStringValue()
+
     def styleDeclarations(base):
         "recursive generator to find all CSSStyleDeclarations"
         if hasattr(base, 'cssRules'):
@@ -233,28 +240,39 @@ def getUrls(sheet):
 
     for style in styleDeclarations(sheet):
         for p in style.getProperties(all=True):
-            for v in p.propertyValue:
-                if v.type == 'URI':
-                    yield v.uri
+            v = p.cssValue
+            if v.CSS_VALUE_LIST == v.cssValueType:
+                for item in v:
+                    u = getUrl(item)
+                    if u is not None:
+                        yield u
+            elif v.CSS_PRIMITIVE_VALUE == v.cssValueType:
+                u = getUrl(v)
+                if u is not None:
+                    yield u
 
-def replaceUrls(sheetOrStyle, replacer, ignoreImportRules=False):
+def replaceUrls(sheet, replacer, ignoreImportRules=False):
     """Replace all URLs in :class:`cssutils.css.CSSImportRule` or
-    :class:`cssutils.css.CSSValue` objects of given `sheetOrStyle`.
+    :class:`cssutils.css.CSSValue` objects of given `sheet`.
 
-    :param sheetOrStyle:
-        a :class:`cssutils.css.CSSStyleSheet` or a
-        :class:`cssutils.css.CSSStyleDeclaration` which is changed in place
+    :param sheet:
+        :class:`cssutils.css.CSSStyleSheet` which is changed
     :param replacer:
-        a function which is called with a single argument `url` which
-        is the current value of each url() excluding ``url(``, ``)`` and
-        surrounding (single or double) quotes.
+        a function which is called with a single argument `urlstring` which
+        is the current value of each url() excluding ``url(`` and ``)`` and
+        surrounding single or double quotes.
     :param ignoreImportRules:
         if ``True`` does not call `replacer` with URLs from @import rules.
     """
-    if not ignoreImportRules and not isinstance(sheetOrStyle, 
-                                                css.CSSStyleDeclaration):
-        for importrule in (r for r in sheetOrStyle if r.type == r.IMPORT_RULE):
+    if not ignoreImportRules:
+        for importrule in (r for r in sheet if r.type == r.IMPORT_RULE):
             importrule.href = replacer(importrule.href)
+
+    def setProperty(v):
+        if v.CSS_PRIMITIVE_VALUE == v.cssValueType and\
+           v.CSS_URI == v.primitiveType:
+                v.setStringValue(v.CSS_URI,
+                                 replacer(v.getStringValue()))
 
     def styleDeclarations(base):
         "recursive generator to find all CSSStyleDeclarations"
@@ -264,15 +282,15 @@ def replaceUrls(sheetOrStyle, replacer, ignoreImportRules=False):
                     yield s
         elif hasattr(base, 'style'):
             yield base.style
-        elif isinstance(sheetOrStyle, css.CSSStyleDeclaration):
-            # base is a style already
-            yield base
 
-    for style in styleDeclarations(sheetOrStyle):
+    for style in styleDeclarations(sheet):
         for p in style.getProperties(all=True):
-            for v in p.propertyValue:
-                if v.type == v.URI:
-                    v.uri = replacer(v.uri)
+            v = p.cssValue
+            if v.CSS_VALUE_LIST == v.cssValueType:
+                for item in v:
+                    setProperty(item)
+            elif v.CSS_PRIMITIVE_VALUE == v.cssValueType:
+                setProperty(v)
 
 def resolveImports(sheet, target=None):
     """Recurcively combine all rules in given `sheet` into a `target` sheet.
@@ -299,19 +317,19 @@ def resolveImports(sheet, target=None):
 
     def getReplacer(targetbase):
         "Return a replacer which uses base to return adjusted URLs"
-        basesch, baseloc, basepath, basequery, basefrag = urllib.parse.urlsplit(targetbase)
+        basesch, baseloc, basepath, basequery, basefrag = urlparse.urlsplit(targetbase)
         basepath, basepathfilename = os.path.split(basepath)
 
-        def replacer(uri):
-            scheme, location, path, query, fragment = urllib.parse.urlsplit(uri)
-            if not scheme and not location and not path.startswith('/'):
+        def replacer(url):
+            scheme, location, path, query, fragment = urlparse.urlsplit(url)
+            if not scheme and not location and not path.startswith(u'/'):
                 # relative
                 path, filename = os.path.split(path)
                 combined = os.path.normpath(os.path.join(basepath, path, filename))
-                return urllib.request.pathname2url(combined)
+                return urllib.pathname2url(combined)
             else:
                 # keep anything absolute
-                return uri
+                return url
 
         return replacer
 
@@ -319,30 +337,30 @@ def resolveImports(sheet, target=None):
         if rule.type == rule.CHARSET_RULE:
             pass
         elif rule.type == rule.IMPORT_RULE:
-            log.info('Processing @import %r' % rule.href, neverraise=True)
+            log.info(u'Processing @import %r' % rule.href, neverraise=True)
 
             if rule.hrefFound:
                 # add all rules of @import to current sheet
-                target.add(css.CSSComment(cssText='/* START @import "%s" */'
+                target.add(css.CSSComment(cssText=u'/* START @import "%s" */'
                                           % rule.href))
 
                 try:
                     # nested imports
                     importedSheet = resolveImports(rule.styleSheet)
-                except xml.dom.HierarchyRequestErr as e:
-                    log.warn('@import: Cannot resolve target, keeping rule: %s'
+                except xml.dom.HierarchyRequestErr, e:
+                    log.warn(u'@import: Cannot resolve target, keeping rule: %s'
                              % e, neverraise=True)
                     target.add(rule)
                 else:
                     # adjust relative URI references
-                    log.info('@import: Adjusting paths for %r' % rule.href,
+                    log.info(u'@import: Adjusting paths for %r' % rule.href,
                              neverraise=True)
                     replaceUrls(importedSheet,
                                 getReplacer(rule.href),
                                 ignoreImportRules=True)
 
                     # might have to wrap rules in @media if media given
-                    if rule.media.mediaText == 'all':
+                    if rule.media.mediaText == u'all':
                         mediaproxy = None
                     else:
                         keepimport = False
@@ -355,18 +373,18 @@ def resolveImports(sheet, target=None):
                                 keepimport = True
                                 break
                         if keepimport:
-                            log.warn('Cannot combine imported sheet with'
-                                     ' given media as other rules then'
-                                     ' comments or stylerules found %r,'
-                                     ' keeping %r' % (r,
+                            log.warn(u'Cannot combine imported sheet with'
+                                     u' given media as other rules then'
+                                     u' comments or stylerules found %r,'
+                                     u' keeping %r' % (r,
                                                        rule.cssText),
                                      neverraise=True)
                             target.add(rule)
                             continue
 
                         # wrap in @media if media is not `all`
-                        log.info('@import: Wrapping some rules in @media '
-                                 ' to keep media: %s'
+                        log.info(u'@import: Wrapping some rules in @media '
+                                 u' to keep media: %s'
                                  % rule.media.mediaText, neverraise=True)
                         mediaproxy = css.CSSMediaRule(rule.media.mediaText)
 
@@ -382,9 +400,11 @@ def resolveImports(sheet, target=None):
 
             else:
                 # keep @import as it is
-                log.error('Cannot get referenced stylesheet %r, keeping rule'
+                log.error(u'Cannot get referenced stylesheet %r, keeping rule'
                           % rule.href, neverraise=True)
                 target.add(rule)
+
+
 
         else:
             target.add(rule)
@@ -392,5 +412,59 @@ def resolveImports(sheet, target=None):
     return target
 
 
+#def resolveVariables(sheet):
+#    """Replace all variable references with values defined in
+#    :class:`cssutils.css.CSSVariablesRule`. If no value can be found the
+#    variable reference is kept.
+#
+#    :param sheet:
+#        in this given :class:`cssutils.css.CSSStyleSheet` all variables
+#        are resolved.
+#    :returns: the sheet
+#    """
+#    def resolve(r):
+#        for p in r.style.getProperties(all=True):
+#            v = p.cssValue
+#
+#            if v.cssValueType == v.CSS_VALUE_LIST:
+#                newvalue = []
+#                for vi in v:
+#                    if vi.cssValueType == vi.CSS_VARIABLE:
+#                        if vi.value:
+#                            log.info(u'Replacing variable "%s" with %r' %
+#                                     (vi.name, vi.value), neverraise=True)
+#                            newvalue.append(vi.value)
+#                        else:
+#                            log.error(u'No value found for variable "%s"' %
+#                                     vi.name, neverraise=True)
+#                            newvalue.append(vi.cssText)
+#                    else:
+#                        newvalue.append(vi.cssText)
+#
+#                p.value = ' '.join(newvalue)
+#
+#            elif v.cssValueType == v.CSS_VARIABLE:
+#                if v.value:
+#                    log.info(u'Replacing variable "%s" with %r' %
+#                              (v.name, v.value), neverraise=True)
+#                    p.value = v.value
+#                else:
+#                    log.error(u'No value found for variable "%s"' %
+#                             v.name, neverraise=True)
+#
+#    for m in sheet.cssRules.rulesOfType(css.CSSRule.MEDIA_RULE):
+#        for r in m.cssRules.rulesOfType(css.CSSRule.STYLE_RULE):
+#            resolve(r)
+#
+#    for r in sheet.cssRules.rulesOfType(css.CSSRule.STYLE_RULE):
+#        resolve(r)
+#
+#    # remove @variables rules
+#    for r in sheet.cssRules.rulesOfType(css.CSSRule.VARIABLES_RULE):
+#        sheet.deleteRule(r)
+#
+#    return sheet
+
+
 if __name__ == '__main__':
-    print(__doc__)
+    print __doc__

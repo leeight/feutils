@@ -1,7 +1,7 @@
 """CSSRule implements DOM Level 2 CSS CSSRule."""
 __all__ = ['CSSRule']
 __docformat__ = 'restructuredtext'
-__version__ = '$Id$'
+__version__ = '$Id: cssrule.py 1949 2010-03-26 22:16:33Z cthedot $'
 
 import cssutils
 import xml.dom
@@ -42,16 +42,16 @@ class CSSRule(cssutils.util.Base2):
     """:class:`cssutils.css.CSSVariablesRule` - experimental rule
     not in the offical spec"""
 
-    _typestrings = {UNKNOWN_RULE: 'UNKNOWN_RULE', 
-                    STYLE_RULE: 'STYLE_RULE',
-                    CHARSET_RULE: 'CHARSET_RULE', 
-                    IMPORT_RULE: 'IMPORT_RULE',
-                    MEDIA_RULE: 'MEDIA_RULE', 
-                    FONT_FACE_RULE: 'FONT_FACE_RULE', 
-                    PAGE_RULE: 'PAGE_RULE',                     
-                    NAMESPACE_RULE: 'NAMESPACE_RULE',
-                    COMMENT: 'COMMENT',
-                    VARIABLES_RULE: 'VARIABLES_RULE'
+    _typestrings = {UNKNOWN_RULE: u'UNKNOWN_RULE', 
+                    STYLE_RULE: u'STYLE_RULE',
+                    CHARSET_RULE: u'CHARSET_RULE', 
+                    IMPORT_RULE: u'IMPORT_RULE',
+                    MEDIA_RULE: u'MEDIA_RULE', 
+                    FONT_FACE_RULE: u'FONT_FACE_RULE', 
+                    PAGE_RULE: u'PAGE_RULE',                     
+                    NAMESPACE_RULE: u'NAMESPACE_RULE',
+                    COMMENT: u'COMMENT',
+                    VARIABLES_RULE: u'VARIABLES_RULE'
                     }
 
     def __init__(self, parentRule=None, parentStyleSheet=None, readonly=False):
@@ -70,12 +70,12 @@ class CSSRule(cssutils.util.Base2):
                                   self._normalize(self.atkeyword)):
             self._atkeyword = akw
         else:
-            self._log.error('%s: Invalid atkeyword for this rule: %r' %
+            self._log.error(u'%s: Invalid atkeyword for this rule: %r' %
                             (self._normalize(self.atkeyword), akw),
                             error=xml.dom.InvalidModificationErr)
 
     atkeyword = property(lambda self: self._atkeyword, _setAtkeyword,
-                         doc="Literal keyword of an @rule (e.g. ``@IMport``).")
+                         doc=u"Literal keyword of an @rule (e.g. ``@IMport``).")
 
     def _setCssText(self, cssText):
         """
@@ -96,19 +96,19 @@ class CSSRule(cssutils.util.Base2):
         """
         self._checkReadonly()
 
-    cssText = property(lambda self: '', _setCssText,
-                       doc="(DOM) The parsable textual representation of the "
-                           "rule. This reflects the current state of the rule "
-                           "and not its initial value.")
+    cssText = property(lambda self: u'', _setCssText,
+                       doc=u"(DOM) The parsable textual representation of the "
+                           u"rule. This reflects the current state of the rule "
+                           u"and not its initial value.")
 
     parent = property(lambda self: self._parent,
-                      doc="The Parent Node of this CSSRule or None.")
+                      doc=u"The Parent Node of this CSSRule or None.")
 
     parentRule = property(lambda self: self._parentRule,
-                          doc="If this rule is contained inside another rule "
-                          "(e.g. a style rule inside an @media block), this "
-                          "is the containing rule. If this rule is not nested "
-                          "inside any other rules, this returns None.")
+                          doc=u"If this rule is contained inside another rule "
+                          u"(e.g. a style rule inside an @media block), this "
+                          u"is the containing rule. If this rule is not nested "
+                          u"inside any other rules, this returns None.")
 
     def _getParentStyleSheet(self):
         # rules contained in other rules (@media) use that rules parent
@@ -118,14 +118,14 @@ class CSSRule(cssutils.util.Base2):
             return self._parentStyleSheet
 
     parentStyleSheet = property(_getParentStyleSheet,
-                                doc="The style sheet that contains this rule.")
+                                doc=u"The style sheet that contains this rule.")
 
     type = property(lambda self: self.UNKNOWN_RULE,
-                    doc="The type of this rule, as defined by a CSSRule "
-                        "type constant.")
+                    doc=u"The type of this rule, as defined by a CSSRule "
+                        u"type constant.")
 
     typeString = property(lambda self: CSSRule._typestrings[self.type],
-                          doc="Descriptive name of this rule's type.")
+                          doc=u"Descriptive name of this rule's type.")
 
     wellformed = property(lambda self: False,
-                          doc="If the rule is wellformed.")
+                          doc=u"If the rule is wellformed.")

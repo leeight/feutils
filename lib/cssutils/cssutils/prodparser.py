@@ -57,7 +57,7 @@ class Choice(object):
 
         try:
             self.optional = options['optional']
-        except KeyError as e:
+        except KeyError, e:
             for p in self._prods:
                 if p.optional:
                     self.optional = True
@@ -100,12 +100,12 @@ class Choice(object):
             else:
                 if not optional:
                     # None matched but also None is optional
-                    raise ParseError('No match in %s' % self)
+                    raise ParseError(u'No match in %s' % self)
         elif token:
-            raise Exhausted('Extra token')
+            raise Exhausted(u'Extra token')
 
     def __str__(self):
-        return 'Choice(%s)' % ', '.join([str(x) for x in self._prods])
+        return u'Choice(%s)' % u', '.join([str(x) for x in self._prods])
 
 
 class Sequence(object):
@@ -132,7 +132,7 @@ class Sequence(object):
                 self._max = sys.maxsize
             except AttributeError:
                 # py<2.6
-                self._max = sys.maxsize
+                self._max = sys.maxint
 
         self._prodcount = len(self._prods)
         self.reset()
@@ -197,22 +197,22 @@ class Sequence(object):
                 continue
 
             elif round < self._min:
-                raise Missing('Missing token for production %s' % p)
+                raise Missing(u'Missing token for production %s' % p)
 
             elif not token:
                 if self._roundstarted:
-                    raise Missing('Missing token for production %s' % p)
+                    raise Missing(u'Missing token for production %s' % p)
                 else:
                     raise Done()
 
             else:
-                raise NoMatch('No matching production for token')
+                raise NoMatch(u'No matching production for token')
 
         if token:
-            raise Exhausted('Extra token')
+            raise Exhausted(u'Extra token')
 
     def __str__(self):
-        return 'Sequence(%s)' % ', '.join([str(x) for x in self._prods])
+        return u'Sequence(%s)' % u', '.join([str(x) for x in self._prods])
 
 
 class Prod(object):
@@ -313,7 +313,7 @@ class ProdParser(object):
         """Build a generator which is the only thing that is parsed!
         old classes may use lists etc
         """
-        if isinstance(text, str):
+        if isinstance(text, basestring):
             # DEFAULT, to tokenize strip space
             return tokenizer.tokenize(text.strip())
         
@@ -348,7 +348,7 @@ class ProdParser(object):
             for token in tokens:
                 if token[0] == self.types.S:
                     try:
-                        next_ = next(tokens)
+                        next_ = tokens.next()
                     except StopIteration:
                         yield token
                     else:
@@ -408,7 +408,7 @@ class ProdParser(object):
         """
         tokens = self._texttotokens(text) 
         if not tokens:
-            self._log.error('No content to parse.')
+            self._log.error(u'No content to parse.')
             # TODO: return???
 
         seq = cssutils.util.Seq(readonly=False)
@@ -425,7 +425,7 @@ class ProdParser(object):
         defaultS = True
         while True:
             try:
-                token = next(tokens)
+                token = tokens.next()
             except StopIteration:
                 break
             type_, val, line, col = token
@@ -448,7 +448,7 @@ class ProdParser(object):
             elif type_ == self.types.INVALID:
                 # invalidate parse
                 wellformed = False
-                self._log.error('Invalid token: %r' % (token,))
+                self._log.error(u'Invalid token: %r' % (token,))
                 break
             elif type_ == 'EOF':
                 # do nothing? (self.types.EOF == True!)
@@ -462,7 +462,7 @@ class ProdParser(object):
                         # find next matching production
                         try:
                             prod = prods[-1].nextProd(token)
-                        except (Exhausted, NoMatch) as e:
+                        except (Exhausted, NoMatch), e:
                             # try next
                             prod = None
                         if isinstance(prod, Prod):
@@ -477,9 +477,9 @@ class ProdParser(object):
                                 prods.pop()
                             else:
                                 raise ParseError('No match')
-                except ParseError as e:
+                except ParseError, e:
                     wellformed = False
-                    self._log.error('%s: %s: %r' % (name, e, token))
+                    self._log.error(u'%s: %s: %r' % (name, e, token))
                     break
                 else:                    
                     # process prod
@@ -517,21 +517,21 @@ class ProdParser(object):
                 # all productions exhausted?
                 try:
                     prod = prods[-1].nextProd(token=None)
-                except Done as e:
+                except Done, e:
                     # ok
                     prod = None
     
-                except Missing as e:
+                except Missing, e:
                     prod = None
                     # last was a S operator which may End a Sequence, then ok
                     if hasattr(lastprod, 'mayEnd') and not lastprod.mayEnd:
                         wellformed = False
-                        self._log.error('%s: %s' % (name, e))
+                        self._log.error(u'%s: %s' % (name, e))
     
-                except ParseError as e:
+                except ParseError, e:
                     prod = None
                     wellformed = False
-                    self._log.error('%s: %s' % (name, e))
+                    self._log.error(u'%s: %s' % (name, e))
     
                 else:
                     if prods[-1].optional:
@@ -542,7 +542,7 @@ class ProdParser(object):
     
                 if prod and not prod.optional:
                     wellformed = False
-                    self._log.error('%s: Missing token for production %r'
+                    self._log.error(u'%s: Missing token for production %r'
                                     % (name, str(prod)))
                     break
                 elif len(prods) > 1:
@@ -564,13 +564,13 @@ class PreDef(object):
 
     @staticmethod
     def calc(toSeq=None, nextSor=False):
-        return Prod(name='calcfunction',
-                    match=lambda t, v: 'calc(' == cssutils.helper.normalize(v),
+        return Prod(name=u'calcfunction',
+                    match=lambda t, v: u'calc(' == cssutils.helper.normalize(v),
                     toSeq=toSeq,
                     nextSor=nextSor)
 
     @staticmethod
-    def char(name='char', char=',', toSeq=None, 
+    def char(name='char', char=u',', toSeq=None, 
              stop=False, stopAndKeep=False,
              optional=True, nextSor=False):
         "any CHAR"
@@ -580,19 +580,18 @@ class PreDef(object):
 
     @staticmethod
     def comma():
-        return PreDef.char('comma', ',')
+        return PreDef.char(u'comma', u',')
 
     @staticmethod
-    def dimension(nextSor=False, stop=False):
-        return Prod(name='dimension',
+    def dimension(nextSor=False):
+        return Prod(name=u'dimension',
                     match=lambda t, v: t == PreDef.types.DIMENSION,
                     toSeq=lambda t, tokens: (t[0], cssutils.helper.normalize(t[1])),
-                    stop=stop,
                     nextSor=nextSor)
 
     @staticmethod
     def function(toSeq=None, nextSor=False):
-        return Prod(name='function',
+        return Prod(name=u'function',
                     match=lambda t, v: t == PreDef.types.FUNCTION,
                     toSeq=toSeq,
                     nextSor=nextSor)
@@ -600,53 +599,38 @@ class PreDef(object):
     @staticmethod
     def funcEnd(stop=False):
         ")"
-        return PreDef.char('end FUNC ")"', ')',
+        return PreDef.char(u'end FUNC ")"', u')',
                            stop=stop)
 
     @staticmethod
-    def hexcolor(stop=False, nextSor=False):
-        "#123 or #123456"
-        return Prod(name='HEX color',
-                    match=lambda t, v: t == PreDef.types.HASH and (
-                                       len(v) == 4 or len(v) == 7),
-                    stop=stop,
-                    nextSor=nextSor)
-    
-    @staticmethod
-    def ident(stop=False, toStore=None, nextSor=False):
-        return Prod(name='ident',
+    def ident(toStore=None, nextSor=False):
+        return Prod(name=u'ident',
                     match=lambda t, v: t == PreDef.types.IDENT,
-                    stop=stop,
                     toStore=toStore,
                     nextSor=nextSor)
 
     @staticmethod
-    def number(stop=False, toSeq=None, nextSor=False):
-        return Prod(name='number',
+    def number(nextSor=False):
+        return Prod(name=u'number',
                     match=lambda t, v: t == PreDef.types.NUMBER,
-                    stop=stop, 
-                    toSeq=toSeq,
                     nextSor=nextSor)
 
     @staticmethod
-    def percentage(stop=False, toSeq=None, nextSor=False):
-        return Prod(name='percentage',
-                    match=lambda t, v: t == PreDef.types.PERCENTAGE,
-                    stop=stop,
-                    toSeq=toSeq,
-                    nextSor=nextSor)
-
-    @staticmethod
-    def string(stop=False, nextSor=False):
+    def string(nextSor=False):
         "string delimiters are removed by default"
-        return Prod(name='string',
+        return Prod(name=u'string',
                     match=lambda t, v: t == PreDef.types.STRING,
                     toSeq=lambda t, tokens: (t[0], cssutils.helper.stringvalue(t[1])),
-                    stop=stop,
                     nextSor=nextSor)
 
     @staticmethod
-    def S(name='whitespace', toSeq=None, optional=False):
+    def percentage(nextSor=False):
+        return Prod(name=u'percentage',
+                    match=lambda t, v: t == PreDef.types.PERCENTAGE,
+                    nextSor=nextSor)
+
+    @staticmethod
+    def S(name=u'whitespace', toSeq=None, optional=False):
         return Prod(name=name,
                     match=lambda t, v: t == PreDef.types.S,
                     toSeq=toSeq,
@@ -654,37 +638,40 @@ class PreDef(object):
                     mayEnd=True)
 
     @staticmethod
-    def unary(stop=False, toSeq=None, nextSor=False):
+    def unary():
         "+ or -"
-        return Prod(name='unary +-', match=lambda t, v: v in ('+', '-'),
-                    optional=True,
-                    stop=stop, 
-                    toSeq=toSeq,
-                    nextSor=nextSor)
+        return Prod(name=u'unary +-', match=lambda t, v: v in (u'+', u'-'),
+                    optional=True)
 
     @staticmethod
-    def uri(stop=False, nextSor=False):
+    def uri(nextSor=False):
         "'url(' and ')' are removed and URI is stripped"
-        return Prod(name='URI',
+        return Prod(name=u'URI',
                     match=lambda t, v: t == PreDef.types.URI,
                     toSeq=lambda t, tokens: (t[0], cssutils.helper.urivalue(t[1])),
-                    stop=stop,
                     nextSor=nextSor)
 
     @staticmethod
-    def unicode_range(stop=False, nextSor=False):
+    def hexcolor(nextSor=False):
+        "#123456"
+        return Prod(name='HEX color',
+                    match=lambda t, v: t == PreDef.types.HASH and (
+                                       len(v) == 4 or len(v) == 7),
+                    nextSor=nextSor
+                    )
+    
+    @staticmethod
+    def unicode_range(nextSor=False):
         "u+123456-abc normalized to lower `u`"
         return Prod(name='unicode-range',
                     match=lambda t, v: t == PreDef.types.UNICODE_RANGE,
                     toSeq=lambda t, tokens: (t[0], t[1].lower()),
-                    stop=stop,
                     nextSor=nextSor
                     )
         
     @staticmethod
-    def variable(toSeq=None, stop=False, nextSor=False):
-        return Prod(name='variable',
-                    match=lambda t, v: 'var(' == cssutils.helper.normalize(v),
+    def variable(toSeq=None, nextSor=False):
+        return Prod(name=u'variable',
+                    match=lambda t, v: u'var(' == cssutils.helper.normalize(v),
                     toSeq=toSeq,
-                    stop=stop,
                     nextSor=nextSor)

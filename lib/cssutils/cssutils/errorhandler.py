@@ -16,10 +16,11 @@ log
 """
 __all__ = ['ErrorHandler']
 __docformat__ = 'restructuredtext'
-__version__ = '$Id$'
+__version__ = '$Id: errorhandler.py 1981 2010-05-30 12:00:51Z cthedot $'
 
+from helper import Deprecated
 import logging
-import urllib.request, urllib.error, urllib.parse
+import urllib2
 import xml.dom
 
 class _ErrorHandler(object):
@@ -70,7 +71,7 @@ class _ErrorHandler(object):
             raise AttributeError(
                 '(errorhandler) No Attribute %r found' % name)
 
-    def __handle(self, msg='', token=None, error=xml.dom.SyntaxErr,
+    def __handle(self, msg=u'', token=None, error=xml.dom.SyntaxErr,
                  neverraise=False, args=None):
         """
         handles all calls
@@ -83,11 +84,11 @@ class _ErrorHandler(object):
                     value, line, col = token[1], token[2], token[3]
                 else:
                     value, line, col = token.value, token.line, token.col
-                msg = '%s [%s:%s: %s]' % (
+                msg = u'%s [%s:%s: %s]' % (
                     msg, line, col, value)
     
             if error and self.raiseExceptions and not neverraise:
-                if isinstance(error, urllib.error.HTTPError) or isinstance(error, urllib.error.URLError):
+                if isinstance(error, urllib2.HTTPError) or isinstance(error, urllib2.URLError):
                     raise
                 elif issubclass(error, xml.dom.DOMException): 
                     error.line = line
@@ -99,6 +100,14 @@ class _ErrorHandler(object):
     def setLog(self, log):
         """set log of errorhandler's log"""
         self._log = log
+
+    @Deprecated('Use setLog() instead.')
+    def setlog(self, log):
+        self.setLog(log)
+
+    @Deprecated('Use setLevel() instead.')
+    def setloglevel(self, level):
+        self.setLevel(level)
 
 
 class ErrorHandler(_ErrorHandler):

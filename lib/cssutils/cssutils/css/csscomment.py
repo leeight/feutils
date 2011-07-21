@@ -5,9 +5,9 @@ Implements CSSRule which is also extended for a CSSComment rule type.
 """
 __all__ = ['CSSComment']
 __docformat__ = 'restructuredtext'
-__version__ = '$Id$'
+__version__ = '$Id: csscomment.py 1949 2010-03-26 22:16:33Z cthedot $'
 
-from . import cssrule
+import cssrule
 import cssutils
 import xml.dom
 
@@ -31,12 +31,12 @@ class CSSComment(cssrule.CSSRule):
         self._readonly = readonly
 
     def __repr__(self):
-        return "cssutils.css.%s(cssText=%r)" % (
+        return u"cssutils.css.%s(cssText=%r)" % (
                 self.__class__.__name__, 
                 self.cssText)
 
     def __str__(self):
-        return "<cssutils.css.%s object cssText=%r at 0x%x>" % (
+        return u"<cssutils.css.%s object cssText=%r at 0x%x>" % (
                 self.__class__.__name__, 
                 self.cssText, 
                 id(self))
@@ -70,18 +70,18 @@ class CSSComment(cssrule.CSSRule):
         if not commenttoken or\
            self._type(commenttoken) != self._prods.COMMENT or\
            unexpected:
-            self._log.error('CSSComment: Not a CSSComment: %r' %
+            self._log.error(u'CSSComment: Not a CSSComment: %r' %
                 self._valuestr(cssText),
                 error=xml.dom.InvalidModificationErr)
         else:
             self._cssText = self._tokenvalue(commenttoken)
 
     cssText = property(_getCssText, _setCssText,
-        doc="The parsable textual representation of this rule.")
+        doc=u"The parsable textual representation of this rule.")
 
     type = property(lambda self: self.COMMENT, 
-                    doc="The type of this rule, as defined by a CSSRule "
-                        "type constant.")
+                    doc=u"The type of this rule, as defined by a CSSRule "
+                        u"type constant.")
     
     # constant but needed:
     wellformed = property(lambda self: True)

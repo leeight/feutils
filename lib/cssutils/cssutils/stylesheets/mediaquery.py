@@ -5,7 +5,7 @@ A cssutils implementation, not defined in official DOM.
 """
 __all__ = ['MediaQuery']
 __docformat__ = 'restructuredtext'
-__version__ = '$Id$'
+__version__ = '$Id: mediaquery.py 1738 2009-05-02 13:03:28Z cthedot $'
 
 import cssutils
 import re
@@ -35,14 +35,14 @@ class MediaQuery(cssutils.util.Base):
           | scan | grid
           
     """
-    MEDIA_TYPES = ['all', 'braille', 'embossed', 'handheld',
-        'print', 'projection', 'screen', 'speech', 'tty', 'tv']
+    MEDIA_TYPES = [u'all', u'braille', u'embossed', u'handheld',
+        u'print', u'projection', u'screen', u'speech', u'tty', u'tv']
 
     # From the HTML spec (see MediaQuery):
     # "[...] character that isn't a US ASCII letter [a-zA-Z] (Unicode
     # decimal 65-90, 97-122), digit [0-9] (Unicode hex 30-39), or hyphen (45)."
     # so the following is a valid mediaType
-    __mediaTypeMatch = re.compile(r'^[-a-zA-Z0-9]+$', re.U).match
+    __mediaTypeMatch = re.compile(ur'^[-a-zA-Z0-9]+$', re.U).match
 
     def __init__(self, mediaText=None, readonly=False):
         """
@@ -52,7 +52,7 @@ class MediaQuery(cssutils.util.Base):
         super(MediaQuery, self).__init__()
 
         self.seq = []
-        self._mediaType = ''
+        self._mediaType = u''
         if mediaText:
             self.mediaText = mediaText # sets self._mediaType too
 
@@ -86,7 +86,7 @@ class MediaQuery(cssutils.util.Base):
         self._checkReadonly()
         tokenizer = self._tokenize2(mediaText)
         if not tokenizer:
-            self._log.error('MediaQuery: No MediaText given.')
+            self._log.error(u'MediaQuery: No MediaText given.')
         else:
             # for closures: must be a mutable
             new = {'mediatype': None,
@@ -97,7 +97,7 @@ class MediaQuery(cssutils.util.Base):
                 val = self._tokenvalue(token)
                 nval = self._normalize(val)
                 if expected.endswith('mediatype'):
-                    if nval in ('only', 'not'):
+                    if nval in (u'only', u'not'):
                         # only or not
                         seq.append(val)
                         return 'mediatype'
@@ -107,22 +107,22 @@ class MediaQuery(cssutils.util.Base):
                         seq.append(val)
                         return 'and'
                 elif 'and' == nval and expected.startswith('and'):
-                    seq.append('and')
+                    seq.append(u'and')
                     return 'feature'
                 else:
                     new['wellformed'] = False
                     self._log.error(
-                        'MediaQuery: Unexpected syntax.', token=token)
+                        u'MediaQuery: Unexpected syntax.', token=token)
                     return expected
 
             def _char(expected, seq, token, tokenizer=None):
                 # starting a feature which basically is a CSS Property
                 # but may simply be a property name too
                 val = self._tokenvalue(token)
-                if val == '(' and expected == 'feature':
+                if val == u'(' and expected == 'feature':
                     proptokens = self._tokensupto2(
                         tokenizer, funcendonly=True)
-                    if proptokens and ')' == self._tokenvalue(proptokens[-1]):
+                    if proptokens and u')' == self._tokenvalue(proptokens[-1]):
                         proptokens.pop()
                     property = cssutils.css.Property(_mediaQuery=True)
                     property.cssText = proptokens
@@ -131,7 +131,7 @@ class MediaQuery(cssutils.util.Base):
                 else:
                     new['wellformed'] = False
                     self._log.error(
-                        'MediaQuery: Unexpected syntax, expected "and" but found "%s".' %
+                        u'MediaQuery: Unexpected syntax, expected "and" but found "%s".' %
                         val, token)
                     return expected
 
@@ -147,7 +147,7 @@ class MediaQuery(cssutils.util.Base):
             # post conditions
             if not new['mediatype']:
                 wellformed = False
-                self._log.error('MediaQuery: No mediatype found: %s' %
+                self._log.error(u'MediaQuery: No mediatype found: %s' %
                     self._valuestr(mediaText))
 
             if wellformed:
@@ -177,12 +177,12 @@ class MediaQuery(cssutils.util.Base):
 
         if not MediaQuery.__mediaTypeMatch(nmediaType):
             self._log.error(
-                'MediaQuery: Syntax Error in media type "%s".' % mediaType,
+                u'MediaQuery: Syntax Error in media type "%s".' % mediaType,
                 error=xml.dom.SyntaxErr)
         else:
             if nmediaType not in MediaQuery.MEDIA_TYPES:
                 self._log.warn(
-                    'MediaQuery: Unknown media type "%s".' % mediaType,
+                    u'MediaQuery: Unknown media type "%s".' % mediaType,
                     error=xml.dom.InvalidCharacterErr)
                 return
 
@@ -191,8 +191,8 @@ class MediaQuery(cssutils.util.Base):
 
             # update seq
             for i, x in enumerate(self.seq):
-                if isinstance(x, str):
-                    if self._normalize(x) in ('only', 'not'):
+                if isinstance(x, basestring):
+                    if self._normalize(x) in (u'only', u'not'):
                         continue
                     else:
                         self.seq[i] = mediaType

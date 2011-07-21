@@ -8,7 +8,7 @@
 __all__ = ['CSSValue', 'CSSPrimitiveValue', 'CSSValueList', 'RGBColor',
            'CSSVariable']
 __docformat__ = 'restructuredtext'
-__version__ = '$Id$'
+__version__ = '$Id: cssvalue.py 2018 2010-11-01 15:51:24Z cthedot $'
 
 from cssutils.prodparser import *
 import cssutils
@@ -16,7 +16,6 @@ import cssutils.helper
 import math
 import re
 import xml.dom
-import collections
 
 
 class CSSValue(cssutils.util._NewBase):
@@ -55,18 +54,18 @@ class CSSValue(cssutils.util._NewBase):
         self.parent = parent
         if cssText is not None: # may be 0
             if type(cssText) in (int, float):
-                cssText = str(cssText) # if it is a number
+                cssText = unicode(cssText) # if it is a number
             self.cssText = cssText
 
         self._readonly = readonly
 
     def __repr__(self):
-        return "cssutils.css.%s(%r)" % (self.__class__.__name__,
+        return u"cssutils.css.%s(%r)" % (self.__class__.__name__,
                                          self.cssText)
 
     def __str__(self):
-        return "<cssutils.css.%s object cssValueTypeString=%r cssText=%r at "\
-               "0x%x>" % (self.__class__.__name__, 
+        return u"<cssutils.css.%s object cssValueTypeString=%r cssText=%r at "\
+               u"0x%x>" % (self.__class__.__name__, 
                            self.cssValueTypeString,
                            self.cssText, 
                            id(self))
@@ -117,7 +116,7 @@ class CSSValue(cssutils.util._NewBase):
         self._checkReadonly()
         
         # used as operator is , / or S
-        nextSor = ',/'
+        nextSor = u',/'
         
         term = Choice(Sequence(PreDef.unary(),
                                Choice(PreDef.number(nextSor=nextSor),
@@ -131,21 +130,21 @@ class CSSValue(cssutils.util._NewBase):
                       # special case IE only expression
                       Prod(name='expression',
                            match=lambda t, v: t == self._prods.FUNCTION and (
-                              cssutils.helper.normalize(v) in ('expression(',
-                                                               'alpha(',
-                                                               'blur(',
-                                                               'chroma(',
-                                                               'dropshadow(',
-                                                               'fliph(',
-                                                               'flipv(',
-                                                               'glow(',
-                                                               'gray(',
-                                                               'invert(',
-                                                               'mask(',
-                                                               'shadow(',                                                               
-                                                               'wave(',
-                                                               'xray(') or
-                              v.startswith('progid:DXImageTransform.Microsoft.')                               
+                              cssutils.helper.normalize(v) in (u'expression(',
+                                                               u'alpha(',
+                                                               u'blur(',
+                                                               u'chroma(',
+                                                               u'dropshadow(',
+                                                               u'fliph(',
+                                                               u'flipv(',
+                                                               u'glow(',
+                                                               u'gray(',
+                                                               u'invert(',
+                                                               u'mask(',
+                                                               u'shadow(',                                                               
+                                                               u'wave(',
+                                                               u'xray(') or
+                              v.startswith(u'progid:DXImageTransform.Microsoft.')                               
                            ),
                            nextSor=nextSor,
                            toSeq=lambda t, tokens: (ExpressionValue._functionName,
@@ -214,7 +213,7 @@ class CSSValue(cssutils.util._NewBase):
                                        minmax=lambda: (0, None))) 
         # parse
         wellformed, seq, store, notused = ProdParser().parse(cssText,
-                                                             'CSSValue',
+                                                             u'CSSValue',
                                                              valueprods,
                                                              keepS=True)
         if wellformed:
@@ -229,7 +228,7 @@ class CSSValue(cssutils.util._NewBase):
                 if item.type == self._prods.S:
                     pass
 
-                elif (item.value, item.type) == (',', 'operator'):
+                elif (item.value, item.type) == (u',', 'operator'):
                     # , separared counts as a single STRING for now
                     # URI or STRING value might be a single CHAR too!
                     newseq.appendItem(item)
@@ -239,11 +238,11 @@ class CSSValue(cssutils.util._NewBase):
                         if firstvalue[1] == self._prods.IDENT:
                             firstvalue = firstvalue[0], 'STRING'
                     
-                elif item.value == '/':
+                elif item.value == u'/':
                     # / separated items count as one
                     newseq.appendItem(item)
                 
-                elif item.value == '-' or item.value == '+':
+                elif item.value == u'-' or item.value == u'+':
                     # combine +- and following number or other
                     i += 1
                     try:
@@ -272,7 +271,7 @@ class CSSValue(cssutils.util._NewBase):
 
             if not firstvalue:
                 self._log.error(
-                        'CSSValue: Unknown syntax or no value: %r.' % 
+                        u'CSSValue: Unknown syntax or no value: %r.' % 
                         self._valuestr(cssText))
             else:
                 # ok and set
@@ -285,8 +284,8 @@ class CSSValue(cssutils.util._NewBase):
 
                 if count == 1:
                     # inherit, primitive or variable
-                    if isinstance(firstvalue[0], str) and\
-                       'inherit' == cssutils.helper.normalize(firstvalue[0]):
+                    if isinstance(firstvalue[0], basestring) and\
+                       u'inherit' == cssutils.helper.normalize(firstvalue[0]):
                         self.__class__ = CSSValue
                         self._cssValueType = CSSValue.CSS_INHERIT
                     elif 'CSSVariable' == firstvalue[1]:
@@ -326,7 +325,7 @@ class CSSValue(cssutils.util._NewBase):
                         """
                         if commalist:
                             newseq.replace(-1,
-                                           CSSPrimitiveValue(cssText=''.join(
+                                           CSSPrimitiveValue(cssText=u''.join(
                                                     commalist)),
                                            CSSPrimitiveValue,
                                            newseq[-1].line,
@@ -368,11 +367,11 @@ class CSSValue(cssutils.util._NewBase):
 
                             nexttocommalist = False
                                 
-                        elif ',' == item.value:
+                        elif u',' == item.value:
                             if not commalist:
                                 # save last item to commalist
                                 commalist.append(itemValue(self._seq[i - 1]))
-                            commalist.append(',')
+                            commalist.append(u',')
                             nexttocommalist = True
                             
                         else:
@@ -516,7 +515,7 @@ class CSSPrimitiveValue(CSSValue):
                                                 readonly=readonly)
 
     def __str__(self):
-        return "<cssutils.css.%s object primitiveType=%s cssText=%r at 0x%x>"\
+        return u"<cssutils.css.%s object primitiveType=%s cssText=%r at 0x%x>"\
                % (self.__class__.__name__, 
                   self.primitiveTypeString,
                   self.cssText,
@@ -539,7 +538,7 @@ class CSSPrimitiveValue(CSSValue):
                   'CSS_UNICODE_RANGE'
                   ]
 
-    _reNumDim = re.compile(r'([+-]?\d*\.\d+|[+-]?\d+)(.*)$', re.I | re.U | re.X)
+    _reNumDim = re.compile(ur'([+-]?\d*\.\d+|[+-]?\d+)(.*)$', re.I | re.U | re.X)
     
     def _unitDIMENSION(value):
         """Check val for dimension name."""
@@ -563,7 +562,7 @@ class CSSPrimitiveValue(CSSValue):
                  'rgb(': 'CSS_RGBCOLOR',
                  'rgba(': 'CSS_RGBACOLOR',
                  }
-        return units.get(re.findall(r'^(.*?\()',
+        return units.get(re.findall(ur'^(.*?\()',
                                     cssutils.helper.normalize(value.cssText),
                                     re.U)[0],
                          'CSS_UNKNOWN')
@@ -586,7 +585,7 @@ class CSSPrimitiveValue(CSSValue):
         val, type_ = self._value
         # try get by type_
         pt = self.__unitbytype.get(type_, 'CSS_UNKNOWN')
-        if isinstance(pt, collections.Callable):
+        if callable(pt):
             # multiple options, check value too
             pt = pt(val)
         self._primitiveType = getattr(self, pt)
@@ -611,7 +610,7 @@ class CSSPrimitiveValue(CSSValue):
         try:
             return self._unitnames[type]
         except (IndexError, TypeError):
-            return '%r (UNKNOWN TYPE)' % type
+            return u'%r (UNKNOWN TYPE)' % type
 
     def _getNumDim(self, value=None):
         "Split self._value in numerical and dimension part."
@@ -621,14 +620,14 @@ class CSSPrimitiveValue(CSSValue):
         try:
             val, dim = CSSPrimitiveValue._reNumDim.findall(value)[0]
         except IndexError:
-            val, dim = value, ''
+            val, dim = value, u''
         try:
             val = float(val)
             if val == int(val):
                 val = int(val)
         except ValueError:
             raise xml.dom.InvalidAccessErr(
-                'CSSPrimitiveValue: No float value %r' % self._value[0])
+                u'CSSPrimitiveValue: No float value %r' % self._value[0])
 
         return val, dim
 
@@ -653,7 +652,7 @@ class CSSPrimitiveValue(CSSValue):
         """
         if unitType is not None and unitType not in self._floattypes:
             raise xml.dom.InvalidAccessErr(
-                'unitType Parameter is not a float type')
+                u'unitType Parameter is not a float type')
 
         val, dim = self._getNumDim()
         
@@ -663,7 +662,7 @@ class CSSPrimitiveValue(CSSValue):
                 val = self._converter[self.primitiveType, unitType](val)
             except KeyError:
                 raise xml.dom.InvalidAccessErr(
-                'CSSPrimitiveValue: Cannot coerce primitiveType %r to %r'
+                u'CSSPrimitiveValue: Cannot coerce primitiveType %r to %r'
                 % (self.primitiveTypeString,
                    self._getCSSPrimitiveTypeString(unitType)))
 
@@ -697,13 +696,13 @@ class CSSPrimitiveValue(CSSValue):
         self._checkReadonly()
         if unitType not in self._floattypes:
             raise xml.dom.InvalidAccessErr(
-               'CSSPrimitiveValue: unitType %r is not a float type' % 
+               u'CSSPrimitiveValue: unitType %r is not a float type' % 
                self._getCSSPrimitiveTypeString(unitType))
         try:
             val = float(floatValue)
-        except ValueError as e:
+        except ValueError, e:
             raise xml.dom.InvalidAccessErr(
-               'CSSPrimitiveValue: floatValue %r is not a float' % 
+               u'CSSPrimitiveValue: floatValue %r is not a float' % 
                floatValue)
 
         oldval, dim = self._getNumDim()
@@ -713,7 +712,7 @@ class CSSPrimitiveValue(CSSValue):
                 val = self._converter[unitType, self.primitiveType](val)
             except KeyError:
                 raise xml.dom.InvalidAccessErr(
-                'CSSPrimitiveValue: Cannot coerce primitiveType %r to %r'
+                u'CSSPrimitiveValue: Cannot coerce primitiveType %r to %r'
                 % (self.primitiveTypeString,
                    self._getCSSPrimitiveTypeString(unitType)))
 
@@ -734,7 +733,7 @@ class CSSPrimitiveValue(CSSValue):
         """
         if self.primitiveType not in self._stringtypes:
             raise xml.dom.InvalidAccessErr(
-                'CSSPrimitiveValue %r is not a string type'
+                u'CSSPrimitiveValue %r is not a string type'
                 % self.primitiveTypeString)
 
         if CSSPrimitiveValue.CSS_ATTR == self.primitiveType:
@@ -772,17 +771,17 @@ class CSSPrimitiveValue(CSSValue):
         # self not stringType
         if self.primitiveType not in self._stringtypes:
             raise xml.dom.InvalidAccessErr(
-                'CSSPrimitiveValue %r is not a string type'
+                u'CSSPrimitiveValue %r is not a string type'
                 % self.primitiveTypeString)
         # given stringType is no StringType
         if stringType not in self._stringtypes:
             raise xml.dom.InvalidAccessErr(
-                'CSSPrimitiveValue: stringType %s is not a string type'
+                u'CSSPrimitiveValue: stringType %s is not a string type'
                 % self._getCSSPrimitiveTypeString(stringType))
 
         if self._primitiveType != stringType:
             raise xml.dom.InvalidAccessErr(
-                'CSSPrimitiveValue: Cannot coerce primitiveType %r to %r'
+                u'CSSPrimitiveValue: Cannot coerce primitiveType %r to %r'
                 % (self.primitiveTypeString,
                    self._getCSSPrimitiveTypeString(stringType)))
 
@@ -791,7 +790,7 @@ class CSSPrimitiveValue(CSSValue):
         elif CSSPrimitiveValue.CSS_URI == self._primitiveType:
             self.cssText = cssutils.helper.uri(stringValue)
         elif CSSPrimitiveValue.CSS_ATTR == self._primitiveType:
-            self.cssText = 'attr(%s)' % stringValue
+            self.cssText = u'attr(%s)' % stringValue
         else:
             self.cssText = stringValue
         self._primitiveType = stringType
@@ -805,7 +804,7 @@ class CSSPrimitiveValue(CSSValue):
         **Not implemented.**
         """
         if not self.CSS_COUNTER == self.primitiveType:
-            raise xml.dom.InvalidAccessErr('Value is not a counter type')
+            raise xml.dom.InvalidAccessErr(u'Value is not a counter type')
         # TODO: use Counter class
         raise NotImplementedError()
 
@@ -816,7 +815,7 @@ class CSSPrimitiveValue(CSSValue):
         can be achieved using the RGBColor interface.
         """
         if self.primitiveType not in self._rbgtypes:
-            raise xml.dom.InvalidAccessErr('Value is not a RGBColor value')
+            raise xml.dom.InvalidAccessErr(u'Value is not a RGBColor value')
         return RGBColor(self._value[0])
 
     def getRectValue(self):
@@ -828,7 +827,7 @@ class CSSPrimitiveValue(CSSValue):
         **Not implemented.**
         """
         if self.primitiveType not in self._recttypes:
-            raise xml.dom.InvalidAccessErr('value is not a Rect value')
+            raise xml.dom.InvalidAccessErr(u'value is not a Rect value')
         # TODO: use Rect class
         raise NotImplementedError()
 
@@ -870,8 +869,8 @@ class CSSValueList(CSSValue):
             yield item.value
 
     def __str__(self):
-        return "<cssutils.css.%s object cssValueType=%r cssText=%r length=%r "\
-               "at 0x%x>" % (self.__class__.__name__,
+        return u"<cssutils.css.%s object cssValueType=%r cssText=%r length=%r "\
+               u"at 0x%x>" % (self.__class__.__name__,
                               self.cssValueTypeString,
                               self.cssText,
                               self.length,
@@ -893,13 +892,13 @@ class CSSValueList(CSSValue):
             return None
 
     length = property(lambda self: len(self.__items()),
-                      doc="(DOM attribute) The number of CSSValues in the "
-                          "list.")
+                      doc=u"(DOM attribute) The number of CSSValues in the "
+                          u"list.")
             
 
 class CSSFunction(CSSPrimitiveValue):
     """A CSS function value like rect() etc."""
-    _functionName = 'CSSFunction'
+    _functionName = u'CSSFunction'
     primitiveType = CSSPrimitiveValue.CSS_UNKNOWN
     
     def __init__(self, cssText=None, parent=None, readonly=False):
@@ -920,7 +919,7 @@ class CSSFunction(CSSPrimitiveValue):
         self._readonly = readonly
     
     def _productiondefinition(self):
-        """Return definition used for parsing."""
+        """Return defintion used for parsing."""
         types = self._prods # rename!
         
         value = Sequence(PreDef.unary(),
@@ -974,7 +973,7 @@ class CSSFunction(CSSPrimitiveValue):
                 item = seq[i]
                 if item.type == self._prods.S:
                     pass
-                elif item.value == '+' or item.value == '-':
+                elif item.value == u'+' or item.value == u'-':
                     i += 1
                     next = seq[i]
                     newval = next.value
@@ -1005,7 +1004,7 @@ class CSSFunction(CSSPrimitiveValue):
 class RGBColor(CSSFunction):
     """A CSS color like RGB, RGBA or a simple value like `#000` or `red`."""
     
-    _functionName = 'Function rgb()'
+    _functionName = u'Function rgb()'
     
     def __init__(self, cssText=None, parent=None, readonly=False):
         """
@@ -1031,11 +1030,11 @@ class RGBColor(CSSFunction):
         self._readonly = readonly
     
     def __repr__(self):
-        return "cssutils.css.%s(%r)" % (self.__class__.__name__,
+        return u"cssutils.css.%s(%r)" % (self.__class__.__name__,
                                          self.cssText)
 
     def __str__(self):
-        return "<cssutils.css.%s object colorType=%r cssText=%r at 0x%x>" % (
+        return u"<cssutils.css.%s object colorType=%r cssText=%r at 0x%x>" % (
                 self.__class__.__name__,
                 self.colorType,
                 self.cssText,
@@ -1072,7 +1071,7 @@ class RGBColor(CSSFunction):
                             )     
         # store: colorType, parts
         wellformed, seq, store, unusedtokens = ProdParser().parse(cssText,
-                                                            'RGBColor',
+                                                            u'RGBColor',
                                                             colorprods,
                                                             keepS=True,
                                                             store={'parts': []})
@@ -1097,7 +1096,7 @@ class RGBColor(CSSFunction):
 
 class CalcValue(CSSFunction):
     """Calc Function"""
-    _functionName = 'Function calc()'
+    _functionName = u'Function calc()'
     
     def _productiondefinition(self):
         """Return defintion used for parsing."""
@@ -1118,7 +1117,7 @@ class CalcValue(CSSFunction):
                                                                                                                  tokens)))
                                                   ),
                                              Prod(name='part',
-                                                  match=lambda t, v: v != ')',
+                                                  match=lambda t, v: v != u')',
                                                   toSeq=lambda t, tokens: (t[0], t[1])),
                                                   ),
                                       minmax=lambda: (0, None)),
@@ -1132,13 +1131,13 @@ class CalcValue(CSSFunction):
         return super(CalcValue, self)._setCssText(cssText)
     
     cssText = property(_getCssText, _setCssText,
-                       doc="A string representation of the current value.")
+                       doc=u"A string representation of the current value.")
 
 
 class ExpressionValue(CSSFunction):
     """Special IE only CSSFunction which may contain *anything*.
     Used for expressions and ``alpha(opacity=100)`` currently."""
-    _functionName = 'Expression (IE only)'
+    _functionName = u'Expression (IE only)'
     
     def _productiondefinition(self):
         """Return defintion used for parsing."""
@@ -1159,7 +1158,7 @@ class ExpressionValue(CSSFunction):
                                                                                                                  tokens)))
                                                   ),
                                              Prod(name='part',
-                                                  match=lambda t, v: v != ')',
+                                                  match=lambda t, v: v != u')',
                                                   toSeq=lambda t, tokens: (t[0], t[1])),
                                                   ),
                                       minmax=lambda: (0, None)),
@@ -1174,7 +1173,7 @@ class ExpressionValue(CSSFunction):
         return super(ExpressionValue, self)._setCssText(cssText)
     
     cssText = property(_getCssText, _setCssText,
-                       doc="A string representation of the current value.")
+                       doc=u"A string representation of the current value.")
 
 
 class CSSVariable(CSSValue):
@@ -1194,10 +1193,10 @@ class CSSVariable(CSSValue):
                                           readonly=readonly)
         
     def __repr__(self):
-        return "cssutils.css.%s(%r)" % (self.__class__.__name__, self.cssText)
+        return u"cssutils.css.%s(%r)" % (self.__class__.__name__, self.cssText)
 
     def __str__(self):
-        return "<cssutils.css.%s object name=%r value=%r at 0x%x>" % (
+        return u"<cssutils.css.%s object name=%r value=%r at 0x%x>" % (
                 self.__class__.__name__,
                 self.name,
                 self.value,
@@ -1217,7 +1216,7 @@ class CSSVariable(CSSValue):
         # store: name of variable
         store = {'ident': None}
         wellformed, seq, store, unusedtokens = ProdParser().parse(cssText,
-                                                                  'CSSVariable',
+                                                                  u'CSSVariable',
                                                                   funcProds,
                                                                   keepS=True)
         if wellformed:
@@ -1227,7 +1226,7 @@ class CSSVariable(CSSValue):
             
     cssText = property(lambda self: cssutils.ser.do_css_CSSVariable(self),
                        _setCssText,
-                       doc="A string representation of the current variable.")
+                       doc=u"A string representation of the current variable.")
 
     cssValueType = CSSValue.CSS_VARIABLE
 

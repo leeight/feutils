@@ -12,7 +12,7 @@ open issues
 """
 __all__ = ['CSSProductions', 'MACROS', 'PRODUCTIONS']
 __docformat__ = 'restructuredtext'
-__version__ = '$Id$'
+__version__ = '$Id: cssproductions.py 1855 2009-10-07 17:03:19Z cthedot $'
 
 # a complete list of css3 macros
 MACROS = {
@@ -68,36 +68,33 @@ MACROS = {
 # used by cssutils, a mix of CSS3 and some CSS2.1 productions.
 # The productions are **ordered**:
 PRODUCTIONS = [
-    # UTF8_BOM or UTF8_BOM_SIG will only be checked at beginning of CSS
-    ('BOM', '\xfe\xff|\xef\xbb\xbf'), 
+    ('BOM', r'\xFEFF'), # will only be checked at beginning of CSS
     
     ('S', r'{s}+'), # 1st in list of general productions
     ('URI', r'{U}{R}{L}\({w}({string}|{url}*){w}\)'),
     ('FUNCTION', r'{ident}\('),
     ('UNICODE-RANGE', r'{U}\+[0-9A-Fa-f?]{1,6}(\-[0-9A-Fa-f]{1,6})?'),
     ('IDENT', r'{ident}'),
-    ('DIMENSION', r'{num}{ident}'),
-    ('PERCENTAGE', r'{num}\%'),
-    ('NUMBER', r'{num}'),
-    ('HASH', r'\#{name}'),
-    ('COMMENT', r'{comment}'), #r'\/\*[^*]*\*+([^/][^*]*\*+)*\/'),
     ('STRING', r'{string}'),
     ('INVALID', r'{invalid}'), # from CSS2.1
+    ('HASH', r'\#{name}'),
+    ('PERCENTAGE', r'{num}\%'),
+    ('DIMENSION', r'{num}{ident}'),
+    ('NUMBER', r'{num}'),
+    # valid ony at start so not checked everytime
+    #('CHARSET_SYM', r'@charset '), # from Errata includes ending space!
+    # checked specially if fullsheet is parsed
+    ('COMMENT', r'{comment}'), #r'\/\*[^*]*\*+([^/][^*]*\*+)*\/'),
     ('ATKEYWORD', r'@{ident}'), # other keywords are done in the tokenizer
+    ('CDO', r'\<\!\-\-'),
+    ('CDC', r'\-\-\>'),
     ('INCLUDES', '\~\='),
     ('DASHMATCH', r'\|\='),
     ('PREFIXMATCH', r'\^\='),
     ('SUFFIXMATCH', r'\$\='),
     ('SUBSTRINGMATCH', r'\*\='),
-    ('CDO', r'\<\!\-\-'),
-    ('CDC', r'\-\-\>'),
     ('CHAR', r'[^"\']') # MUST always be last
-    # valid ony at start so not checked everytime
-    #('CHARSET_SYM', r'@charset '), # from Errata includes ending space!
-    # checked specially if fullsheet is parsed
     ]
-
-
 
 class CSSProductions(object):
     """

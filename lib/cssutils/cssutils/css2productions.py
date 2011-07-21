@@ -8,7 +8,7 @@ http://www.w3.org/TR/css3-syntax/#grammar0
 """
 __all__ = ['CSSProductions', 'MACROS', 'PRODUCTIONS']
 __docformat__ = 'restructuredtext'
-__version__ = '$Id$'
+__version__ = '$Id: css2productions.py 1394 2008-07-27 13:29:22Z cthedot $'
 
 # option case-insensitive
 MACROS = {

@@ -9,7 +9,7 @@ TODO:
 """
 __all__ = ['CSSCapture']
 __docformat__ = 'restructuredtext'
-__version__ = '$Id$'
+__version__ = '$Id: csscapture.py 1547 2008-12-10 20:42:26Z cthedot $'
 
 from cssutils.script import CSSCapture
 import logging
@@ -55,14 +55,14 @@ def main(args=None):
         if options.saveto:
             saveto = options.saveto
         else:
-            saveto = '_CSSCapture_SAVED'
+            saveto = u'_CSSCapture_SAVED'
         c.saveto(saveto, saveraw=options.saveraw, minified=options.minified)
     else:
         for i, s in enumerate(stylesheetlist):
-            print('''%s.
+            print u'''%s.
     encoding: %r
     title: %r
-    href: %r''' % (i + 1, s.encoding, s.title, s.href))
+    href: %r''' % (i + 1, s.encoding, s.title, s.href)
 
 
 if __name__ == "__main__":

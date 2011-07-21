@@ -6,10 +6,10 @@ TODO:
 """
 __all__ = ['MediaList']
 __docformat__ = 'restructuredtext'
-__version__ = '$Id$'
+__version__ = '$Id: medialist.py 1987 2010-05-30 15:42:22Z cthedot $'
 
 from cssutils.css import csscomment
-from .mediaquery import MediaQuery
+from mediaquery import MediaQuery
 import cssutils
 import xml.dom
 
@@ -43,7 +43,7 @@ class MediaList(cssutils.util.Base, cssutils.util.ListSeq):
         self._wellformed = False
 
         if isinstance(mediaText, list):
-            mediaText = ','.join(mediaText)
+            mediaText = u','.join(mediaText)
 
         self._parentRule = parentRule
         
@@ -98,7 +98,7 @@ class MediaList(cssutils.util.Base, cssutils.util.ListSeq):
                     newseq.append(mq)
                 else:
                     wellformed = False
-                    self._log.error('MediaList: Invalid MediaQuery: %s' %
+                    self._log.error(u'MediaList: Invalid MediaQuery: %s' %
                                     self._valuestr(mqtokens))
             else:
                 break
@@ -106,7 +106,7 @@ class MediaList(cssutils.util.Base, cssutils.util.ListSeq):
         # post condition
         if expected:
             wellformed = False
-            self._log.error('MediaList: Cannot end with ",".')
+            self._log.error(u'MediaList: Cannot end with ",".')
 
         if wellformed:
             del self[:]
@@ -165,24 +165,24 @@ class MediaList(cssutils.util.Base, cssutils.util.ListSeq):
             if newmt in mts:
                 self.deleteMedium(newmt)
                 self.seq.append(newMedium)
-            elif 'all' == newmt:
+            elif u'all' == newmt:
                 # remove all except handheld (Opera)
                 h = None
                 for mq in self:
-                    if mq.mediaType == 'handheld':
+                    if mq.mediaType == u'handheld':
                         h = mq
                 del self[:]
                 self.seq.append(newMedium)
                 if h:
                     self.append(h)
-            elif 'all' in mts:
+            elif u'all' in mts:
 
-                if 'handheld' == newmt:
+                if u'handheld' == newmt:
                     self.seq.append(newMedium)
-                    self._log.info('MediaList: Already specified "all" but still setting new medium: %r' %
+                    self._log.info(u'MediaList: Already specified "all" but still setting new medium: %r' %
                                    newMedium, error=xml.dom.InvalidModificationErr, neverraise=True)
                 else:
-                    self._log.info('MediaList: Ignoring new medium %r as already specified "all" (set ``mediaText`` instead).' %
+                    self._log.info(u'MediaList: Ignoring new medium %r as already specified "all" (set ``mediaText`` instead).' %
                                    newMedium, error=xml.dom.InvalidModificationErr)
             else:
                 self.seq.append(newMedium)
@@ -215,7 +215,7 @@ class MediaList(cssutils.util.Base, cssutils.util.ListSeq):
                 del self[i]
                 break
         else:
-            self._log.error('"%s" not in this MediaList' % oldMedium,
+            self._log.error(u'"%s" not in this MediaList' % oldMedium,
                             error=xml.dom.NotFoundErr)
 
     def item(self, index):
@@ -229,7 +229,7 @@ class MediaList(cssutils.util.Base, cssutils.util.ListSeq):
             return None
 
     parentRule = property(lambda self: self._parentRule,
-                          doc="The CSSRule (e.g. an @media or @import rule "
-                              "this list is part of or None")
+                          doc=u"The CSSRule (e.g. an @media or @import rule "
+                              u"this list is part of or None")
     
     wellformed = property(lambda self: self._wellformed)

@@ -2,7 +2,7 @@
 Partly also http://dev.w3.org/csswg/cssom/#the-cssrulelist."""
 __all__ = ['CSSRuleList']
 __docformat__ = 'restructuredtext'
-__version__ = '$Id$'
+__version__ = '$Id: cssrulelist.py 1949 2010-03-26 22:16:33Z cthedot $'
 
 class CSSRuleList(list):
     """The CSSRuleList object represents an (ordered) list of statements.
@@ -43,7 +43,7 @@ class CSSRuleList(list):
             return None
 
     length = property(lambda self: len(self),
-                      doc="(DOM) The number of CSSRules in the list.")
+                      doc=u"(DOM) The number of CSSRules in the list.")
 
     def rulesOfType(self, type):
         """Yield the rules which have the given `type` only, one of the 

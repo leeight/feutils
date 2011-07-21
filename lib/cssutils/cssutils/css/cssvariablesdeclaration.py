@@ -7,7 +7,7 @@ __version__ = '$Id: cssstyledeclaration.py 1819 2009-08-01 20:52:43Z cthedot $'
 
 from cssutils.prodparser import *
 from cssutils.helper import normalize
-from .value import PropertyValue
+from cssvalue import CSSValue
 import cssutils
 import itertools
 import xml.dom
@@ -16,7 +16,7 @@ class CSSVariablesDeclaration(cssutils.util._NewBase):
     """The CSSVariablesDeclaration interface represents a single block of
     variable declarations. 
     """
-    def __init__(self, cssText='', parentRule=None, readonly=False):
+    def __init__(self, cssText=u'', parentRule=None, readonly=False):
         """
         :param cssText:
             Shortcut, sets CSSVariablesDeclaration.cssText
@@ -49,11 +49,11 @@ class CSSVariablesDeclaration(cssutils.util._NewBase):
         self._readonly = readonly
 
     def __repr__(self):
-        return "cssutils.css.%s(cssText=%r)" % (self.__class__.__name__,
+        return u"cssutils.css.%s(cssText=%r)" % (self.__class__.__name__,
                                                  self.cssText)
 
     def __str__(self):
-        return "<cssutils.css.%s object length=%r at 0x%x>" % (
+        return u"<cssutils.css.%s object length=%r at 0x%x>" % (
                 self.__class__.__name__,
                 self.length,
                 id(self))
@@ -64,7 +64,7 @@ class CSSVariablesDeclaration(cssutils.util._NewBase):
         :param variableName:
             a string
         """
-        return normalize(variableName) in list(self.keys())
+        return normalize(variableName) in self.keys()
     
     def __getitem__(self, variableName):
         """Retrieve the value of variable ``variableName`` from this 
@@ -80,13 +80,13 @@ class CSSVariablesDeclaration(cssutils.util._NewBase):
 
     def __iter__(self):
         """Iterator of names of set variables."""
-        for name in list(self.keys()):
+        for name in self.keys():
             yield name
 
     def keys(self):
         """Analoguous to standard dict returns variable names which are set in
         this declaration."""
-        return list(self._vars.keys())
+        return self._vars.keys()
     
     def _getCssText(self):
         """Return serialized property cssText."""
@@ -127,29 +127,28 @@ class CSSVariablesDeclaration(cssutils.util._NewBase):
 
         vardeclaration = Sequence(
             PreDef.ident(),
-            PreDef.char(':', ':', toSeq=False),
+            PreDef.char(u':', u':', toSeq=False),
             #PreDef.S(toSeq=False, optional=True),
-            Prod(name='term', match=lambda t, v: True,
-                 toSeq=lambda t, tokens: ('value', 
-                                          PropertyValue(itertools.chain([t], 
-                                                                        tokens), 
-                                          parent=self)
+            Prod(name=u'term', match=lambda t, v: True,
+                 toSeq=lambda t, tokens: (u'value', 
+                                          CSSValue(itertools.chain([t], 
+                                                   tokens), parent=self)
                  )
             )            
         )
         prods = Sequence(vardeclaration,                         
                          Sequence(PreDef.S(optional=True),
-                                  PreDef.char(';', ';', toSeq=False),
+                                  PreDef.char(u';', u';', toSeq=False),
                                   PreDef.S(optional=True),
                                   vardeclaration,
                                   minmax=lambda: (0, None)),
                          PreDef.S(optional=True),
-                         PreDef.char(';', ';', toSeq=False, optional=True) 
+                         PreDef.char(u';', u';', toSeq=False, optional=True) 
                          )
         # parse
         wellformed, seq, store, notused = \
             ProdParser().parse(cssText, 
-                               'CSSVariableDeclaration',
+                               u'CSSVariableDeclaration',
                                prods)
         if wellformed:
             newseq = self._tempSeq()
@@ -158,9 +157,9 @@ class CSSVariablesDeclaration(cssutils.util._NewBase):
             # seq contains only name: value pairs plus comments etc
             nameitem = None
             for item in seq:
-                if 'IDENT' == item.type:
+                if u'IDENT' == item.type:
                     nameitem = item
-                elif 'value' == item.type:
+                elif u'value' == item.type:
                     nname = normalize(nameitem.value)
                     if nname in newvars:
                         # replace var with same name
@@ -190,16 +189,16 @@ class CSSVariablesDeclaration(cssutils.util._NewBase):
             self.wellformed = True
 
     cssText = property(_getCssText, _setCssText,
-        doc="(DOM) A parsable textual representation of the declaration "
-            "block excluding the surrounding curly braces.")
+        doc=u"(DOM) A parsable textual representation of the declaration "
+            u"block excluding the surrounding curly braces.")
 
     def _setParentRule(self, parentRule):
         self._parentRule = parentRule
     
     parentRule = property(lambda self: self._parentRule, _setParentRule,
-                          doc="(DOM) The CSS rule that contains this"
-                              " declaration block or None if this block"
-                              " is not attached to a CSSRule.")
+                          doc=u"(DOM) The CSS rule that contains this"
+                              u" declaration block or None if this block"
+                              u" is not attached to a CSSRule.")
 
     def getVariableValue(self, variableName):
         """Used to retrieve the value of a variable if it has been explicitly
@@ -214,8 +213,8 @@ class CSSVariablesDeclaration(cssutils.util._NewBase):
         """
         try:
             return self._vars[normalize(variableName)].cssText
-        except KeyError as e:
-            return ''
+        except KeyError, e:
+            return u''
 
     def removeVariable(self, variableName):
         """Used to remove a variable if it has been explicitly set within this
@@ -235,8 +234,8 @@ class CSSVariablesDeclaration(cssutils.util._NewBase):
         normalname = variableName
         try:
             r = self._vars[normalname]
-        except KeyError as e:
-            return ''
+        except KeyError, e:
+            return u''
         else: 
             self.seq._readonly = False
             if normalname in self._vars:
@@ -254,7 +253,7 @@ class CSSVariablesDeclaration(cssutils.util._NewBase):
         :param variableName:
             The name of the CSS variable. 
         :param value:
-            The new value of the variable, may also be a PropertyValue object.
+            The new value of the variable, may also be a CSSValue object.
 
         :exceptions:
             - :exc:`~xml.dom.SyntaxErr`:
@@ -269,20 +268,20 @@ class CSSVariablesDeclaration(cssutils.util._NewBase):
         # check name
         wellformed, seq, store, unused = \
             ProdParser().parse(normalize(variableName),
-                               'variableName',
+                               u'variableName',
                                Sequence(PreDef.ident()))
         if not wellformed:
-            self._log.error('Invalid variableName: %r: %r'
+            self._log.error(u'Invalid variableName: %r: %r'
                             % (variableName, value))
         else:
             # check value
-            if isinstance(value, PropertyValue):
+            if isinstance(value, CSSValue):
                 v = value 
             else:
-                v = PropertyValue(cssText=value, parent=self)
+                v = CSSValue(cssText=value, parent=self)
                                 
             if not v.wellformed:
-                self._log.error('Invalid variable value: %r: %r'
+                self._log.error(u'Invalid variable value: %r: %r'
                                 % (variableName, value))
             else:
                 # update seq
@@ -320,11 +319,11 @@ class CSSVariablesDeclaration(cssutils.util._NewBase):
             string if no variable exists at this position.
         """
         try:
-            return list(self.keys())[index]
+            return self.keys()[index]
         except IndexError:
-            return ''
+            return u''
 
     length = property(lambda self: len(self._vars),
-        doc="The number of variables that have been explicitly set in this"
-            " variable declaration block. The range of valid indices is 0"
-            " to length-1 inclusive.")
+        doc=u"The number of variables that have been explicitly set in this"
+            u" variable declaration block. The range of valid indices is 0"
+            u" to length-1 inclusive.")

@@ -52,7 +52,7 @@ or without option -m::
 """
 __all__ = ['csscombine']
 __docformat__ = 'restructuredtext'
-__version__ = '$Id$'
+__version__ = '$Id: csscombine.py 1890 2009-11-26 23:30:14Z cthedot $'
 
 from cssutils.script import csscombine
 import optparse
@@ -76,15 +76,15 @@ def main(args=None):
     options, path = parser.parse_args()
 
     if options.url:
-        print(csscombine(url=options.url,
+        print csscombine(url=options.url,
                          sourceencoding=options.sourceencoding, 
                          targetencoding=options.targetencoding,
-                         minify=options.minify))
+                         minify=options.minify)
     elif path:
-        print(csscombine(path=path[0],
+        print csscombine(path=path[0],
                          sourceencoding=options.sourceencoding, 
                          targetencoding=options.targetencoding,
-                         minify=options.minify))
+                         minify=options.minify)
     else:
         parser.error('no path or URL (-u) given')
 

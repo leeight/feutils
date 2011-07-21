@@ -1,9 +1,9 @@
 """CSSUnknownRule implements DOM Level 2 CSS CSSUnknownRule."""
 __all__ = ['CSSUnknownRule']
 __docformat__ = 'restructuredtext'
-__version__ = '$Id$'
+__version__ = '$Id: cssunknownrule.py 1949 2010-03-26 22:16:33Z cthedot $'
 
-from . import cssrule
+import cssrule
 import cssutils
 import xml.dom
 
@@ -16,7 +16,7 @@ class CSSUnknownRule(cssrule.CSSRule):
 
         @xxx until ';' or block {...}
     """
-    def __init__(self, cssText='', parentRule=None, 
+    def __init__(self, cssText=u'', parentRule=None, 
                  parentStyleSheet=None, readonly=False):
         """
         :param cssText:
@@ -31,12 +31,12 @@ class CSSUnknownRule(cssrule.CSSRule):
         self._readonly = readonly
 
     def __repr__(self):
-        return "cssutils.css.%s(cssText=%r)" % (
+        return u"cssutils.css.%s(cssText=%r)" % (
                 self.__class__.__name__,
                 self.cssText)
         
     def __str__(self):
-        return "<cssutils.css.%s object cssText=%r at 0x%x>" % (
+        return u"<cssutils.css.%s object cssText=%r at 0x%x>" % (
                 self.__class__.__name__,
                 self.cssText,
                 id(self))
@@ -64,7 +64,7 @@ class CSSUnknownRule(cssrule.CSSRule):
         tokenizer = self._tokenize2(cssText)
         attoken = self._nexttoken(tokenizer, None)
         if not attoken or self._type(attoken) != self._prods.ATKEYWORD:
-            self._log.error('CSSUnknownRule: No CSSUnknownRule found: %s' %
+            self._log.error(u'CSSUnknownRule: No CSSUnknownRule found: %s' %
                 self._valuestr(cssText),
                 error=xml.dom.InvalidModificationErr)
         else:
@@ -76,10 +76,10 @@ class CSSUnknownRule(cssrule.CSSRule):
             def CHAR(expected, seq, token, tokenizer=None):
                 type_, val, line, col = token
                 if expected != 'EOF':
-                    if val in '{[(':
+                    if val in u'{[(':
                         new['nesting'].append(val)
-                    elif val in '}])':
-                        opening = {'}': '{', ']': '[', ')': '('}[val]
+                    elif val in u'}])':
+                        opening = {u'}': u'{', u']': u'[', u')': u'('}[val]
                         try:
                             if new['nesting'][-1] == opening:
                                 new['nesting'].pop()
@@ -87,17 +87,17 @@ class CSSUnknownRule(cssrule.CSSRule):
                                 raise IndexError()
                         except IndexError:
                             new['wellformed'] = False
-                            self._log.error('CSSUnknownRule: Wrong nesting of '
-                                            '{, [ or (.', token=token)
+                            self._log.error(u'CSSUnknownRule: Wrong nesting of '
+                                            u'{, [ or (.', token=token)
     
-                    if val in '};' and not new['nesting']:
+                    if val in u'};' and not new['nesting']:
                         expected = 'EOF' 
     
                     seq.append(val, type_, line=line, col=col)
                     return expected
                 else:
                     new['wellformed'] = False
-                    self._log.error('CSSUnknownRule: Expected end of rule.',
+                    self._log.error(u'CSSUnknownRule: Expected end of rule.',
                                     token=token)
                     return expected
 
@@ -106,26 +106,26 @@ class CSSUnknownRule(cssrule.CSSRule):
                 type_, val, line, col = token
                 val = self._tokenvalue(token)
                 if expected != 'EOF':
-                    new['nesting'].append('(')
+                    new['nesting'].append(u'(')
                     seq.append(val, type_, line=line, col=col)
                     return expected
                 else:
                     new['wellformed'] = False
-                    self._log.error('CSSUnknownRule: Expected end of rule.',
+                    self._log.error(u'CSSUnknownRule: Expected end of rule.',
                                     token=token)
                     return expected                
 
             def EOF(expected, seq, token, tokenizer=None):
                 "close all blocks and return 'EOF'"
                 for x in reversed(new['nesting']):
-                    closing = {'{': '}', '[': ']', '(': ')'}[x]
+                    closing = {u'{': u'}', u'[': u']', u'(': u')'}[x]
                     seq.append(closing, closing)
                 new['nesting'] = []
                 return 'EOF'
                 
             def INVALID(expected, seq, token, tokenizer=None):
                 # makes rule invalid
-                self._log.error('CSSUnknownRule: Bad syntax.',
+                self._log.error(u'CSSUnknownRule: Bad syntax.',
                                 token=token, error=xml.dom.SyntaxErr)
                 new['wellformed'] = False
                 return expected
@@ -138,7 +138,7 @@ class CSSUnknownRule(cssrule.CSSRule):
                     return expected
                 else:
                     new['wellformed'] = False
-                    self._log.error('CSSUnknownRule: Expected end of rule.',
+                    self._log.error(u'CSSUnknownRule: Expected end of rule.',
                                     token=token)
                     return expected                
 
@@ -150,7 +150,7 @@ class CSSUnknownRule(cssrule.CSSRule):
                     return expected
                 else:
                     new['wellformed'] = False
-                    self._log.error('CSSUnknownRule: Expected end of rule.',
+                    self._log.error(u'CSSUnknownRule: Expected end of rule.',
                                     token=token)
                     return expected                
 
@@ -161,7 +161,7 @@ class CSSUnknownRule(cssrule.CSSRule):
                     return expected
                 else:
                     new['wellformed'] = False
-                    self._log.error('CSSUnknownRule: Expected end of rule.',
+                    self._log.error(u'CSSUnknownRule: Expected end of rule.',
                                     token=token)
                     return expected                
 
@@ -186,11 +186,11 @@ class CSSUnknownRule(cssrule.CSSRule):
             # post conditions
             if expected != 'EOF':
                 wellformed = False
-                self._log.error('CSSUnknownRule: No ending ";" or "}" found: '
-                                '%r' % self._valuestr(cssText))
+                self._log.error(u'CSSUnknownRule: No ending ";" or "}" found: '
+                                u'%r' % self._valuestr(cssText))
             elif new['nesting']:
                 wellformed = False
-                self._log.error('CSSUnknownRule: Unclosed "{", "[" or "(": %r'
+                self._log.error(u'CSSUnknownRule: Unclosed "{", "[" or "(": %r'
                                 % self._valuestr(cssText))
 
             # set all
@@ -199,11 +199,11 @@ class CSSUnknownRule(cssrule.CSSRule):
                 self._setSeq(newseq)
 
     cssText = property(fget=_getCssText, fset=_setCssText,
-                       doc="(DOM) The parsable textual representation.")
+                       doc=u"(DOM) The parsable textual representation.")
     
     type = property(lambda self: self.UNKNOWN_RULE, 
-                    doc="The type of this rule, as defined by a CSSRule "
-                        "type constant.")
+                    doc=u"The type of this rule, as defined by a CSSRule "
+                        u"type constant.")
     
     wellformed = property(lambda self: bool(self.atkeyword))
     

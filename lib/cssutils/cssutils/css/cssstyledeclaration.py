@@ -51,10 +51,10 @@ TODO:
 """
 __all__ = ['CSSStyleDeclaration', 'Property']
 __docformat__ = 'restructuredtext'
-__version__ = '$Id$'
+__version__ = '$Id: cssstyledeclaration.py 1949 2010-03-26 22:16:33Z cthedot $'
 
-from .cssproperties import CSS2Properties
-from .property import Property
+from cssproperties import CSS2Properties
+from property import Property
 import cssutils
 import xml.dom
 
@@ -94,7 +94,7 @@ class CSSStyleDeclaration(CSS2Properties, cssutils.util.Base2):
     
         [Property: Value Priority?;]* [Property: Value Priority?]?
     """
-    def __init__(self, cssText='', parentRule=None, readonly=False):
+    def __init__(self, cssText=u'', parentRule=None, readonly=False):
         """
         :param cssText:
             Shortcut, sets CSSStyleDeclaration.cssText
@@ -177,17 +177,17 @@ class CSSStyleDeclaration(CSS2Properties, cssutils.util.Base2):
         if n in known:
             super(CSSStyleDeclaration, self).__setattr__(n, v)
         else:
-            raise AttributeError('Unknown CSS Property, '
-                                 '``CSSStyleDeclaration.setProperty("%s", '
-                                 '...)`` MUST be used.' % n)
+            raise AttributeError(u'Unknown CSS Property, '
+                                 u'``CSSStyleDeclaration.setProperty("%s", '
+                                 u'...)`` MUST be used.' % n)
 
     def __repr__(self):
-        return "cssutils.css.%s(cssText=%r)" % (
+        return u"cssutils.css.%s(cssText=%r)" % (
                 self.__class__.__name__,
-                self.getCssText(separator=' '))
+                self.getCssText(separator=u' '))
 
     def __str__(self):
-        return "<cssutils.css.%s object length=%r (all: %r) at 0x%x>" % (
+        return u"<cssutils.css.%s object length=%r (all: %r) at 0x%x>" % (
                 self.__class__.__name__,
                 self.length,
                 len(self.getProperties(all=True)),
@@ -288,15 +288,15 @@ class CSSStyleDeclaration(CSS2Properties, cssutils.util.Base2):
             
             tokens = self._tokensupto2(tokenizer, starttoken=token,
                                        semicolon=True)
-            if self._tokenvalue(tokens[-1]) == ';':
+            if self._tokenvalue(tokens[-1]) == u';':
                 tokens.pop()
             property = Property(parent=self)
             property.cssText = tokens
             if property.wellformed:
                 seq.append(property, 'Property')                
             else:
-                self._log.error('CSSStyleDeclaration: Syntax Error in '
-                                'Property: %s' % self._valuestr(tokens))
+                self._log.error(u'CSSStyleDeclaration: Syntax Error in '
+                                u'Property: %s' % self._valuestr(tokens))
             # does not matter in this case
             return expected 
 
@@ -305,7 +305,7 @@ class CSSStyleDeclaration(CSS2Properties, cssutils.util.Base2):
             ignored = self._tokenvalue(token) + self._valuestr(
                                 self._tokensupto2(tokenizer, 
                                                   propertyvalueendonly=True))
-            self._log.error('CSSStyleDeclaration: Unexpected token, ignoring '
+            self._log.error(u'CSSStyleDeclaration: Unexpected token, ignoring '
                             'upto %r.' % ignored,token)
             # does not matter in this case
             return expected
@@ -325,9 +325,9 @@ class CSSStyleDeclaration(CSS2Properties, cssutils.util.Base2):
         self._setSeq(newseq)
         
     cssText = property(_getCssText, _setCssText,
-                       doc="(DOM) A parsable textual representation of the "
-                           "declaration block excluding the surrounding curly "
-                           "braces.")
+                       doc=u"(DOM) A parsable textual representation of the "
+                           u"declaration block excluding the surrounding curly "
+                           u"braces.")
 
     def getCssText(self, separator=None):
         """
@@ -446,8 +446,8 @@ class CSSStyleDeclaration(CSS2Properties, cssutils.util.Base2):
         """
         nname = self._normalize(name)
         if nname in self._SHORTHANDPROPERTIES:
-            self._log.info('CSSValue for shorthand property "%s" should be '
-                           'None, this may be implemented later.' % 
+            self._log.info(u'CSSValue for shorthand property "%s" should be '
+                           u'None, this may be implemented later.' % 
                            nname, neverraise=True)
 
         p = self.getProperty(name, normalize)
@@ -475,7 +475,7 @@ class CSSStyleDeclaration(CSS2Properties, cssutils.util.Base2):
         if p:
             return p.value
         else:
-            return ''
+            return u''
         
     def getPropertyPriority(self, name, normalize=True):
         """
@@ -496,7 +496,7 @@ class CSSStyleDeclaration(CSS2Properties, cssutils.util.Base2):
         if p:
             return p.priority
         else:
-            return ''
+            return u''
 
     def removeProperty(self, name, normalize=True):
         """
@@ -546,7 +546,7 @@ class CSSStyleDeclaration(CSS2Properties, cssutils.util.Base2):
         self._setSeq(newseq)
         return r
 
-    def setProperty(self, name, value=None, priority='', normalize=True):
+    def setProperty(self, name, value=None, priority=u'', normalize=True):
         """(DOM) Set a property value and priority within this declaration
         block.
 
@@ -588,7 +588,7 @@ class CSSStyleDeclaration(CSS2Properties, cssutils.util.Base2):
         else:
             newp = Property(name, value, priority)
         if not newp.wellformed:
-            self._log.warn('Invalid Property: %s: %s %s'
+            self._log.warn(u'Invalid Property: %s: %s %s'
                            % (name, value, priority))
         else:
             nname = self._normalize(name)
@@ -634,12 +634,12 @@ class CSSStyleDeclaration(CSS2Properties, cssutils.util.Base2):
         try:
             return names[index]
         except IndexError:
-            return ''
+            return u''
 
     length = property(lambda self: len(list(self.__nnames())),
-                      doc="(DOM) The number of distinct properties that have "
-                          "been explicitly in this declaration block. The "
-                          "range of valid indices is 0 to length-1 inclusive. "
-                          "These are properties with a different ``name`` "
-                          "only. :meth:`item` and :attr:`length` work on the "
-                          "same set here.")
+                      doc=u"(DOM) The number of distinct properties that have "
+                          u"been explicitly in this declaration block. The "
+                          u"range of valid indices is 0 to length-1 inclusive. "
+                          u"These are properties with a different ``name`` "
+                          u"only. :meth:`item` and :attr:`length` work on the "
+                          u"same set here.")

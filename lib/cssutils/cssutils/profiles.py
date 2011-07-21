@@ -8,7 +8,6 @@ __docformat__ = 'restructuredtext'
 __version__ = '$Id: cssproperties.py 1116 2008-03-05 13:52:23Z cthedot $'
 
 import re
-import types
 
 class NoSuchProfileException(Exception):
     """Raised if no profile with given name is found"""
@@ -26,12 +25,10 @@ class Profiles(object):
 
     :attr:`~cssutils.profiles.Profiles.CSS_LEVEL_2`
         Properties defined by CSS2.1
-    :attr:`~cssutils.profiles.Profiles.CSS3_BASIC_USER_INTERFACE`
-        Currently resize and outline properties only
-    :attr:`~cssutils.profiles.Profiles.CSS3_BOX`
-        Currently overflow related properties only
     :attr:`~cssutils.profiles.Profiles.CSS3_COLOR`
         CSS 3 color properties
+    :attr:`~cssutils.profiles.Profiles.CSS3_BOX`
+        Currently overflow related properties only
     :attr:`~cssutils.profiles.Profiles.CSS3_PAGED_MEDIA`
         As defined at http://www.w3.org/TR/css3-page/ (at 090307)
 
@@ -46,14 +43,11 @@ class Profiles(object):
     macros.
     """
     CSS_LEVEL_2 = 'CSS Level 2.1'
-    CSS3_BACKGROUNDS_AND_BORDERS = 'CSS Backgrounds and Borders Module Level 3'
-    CSS3_BASIC_USER_INTERFACE = 'CSS3 Basic User Interface Module'
     CSS3_BOX = CSS_BOX_LEVEL_3 = 'CSS Box Module Level 3'
     CSS3_COLOR = CSS_COLOR_LEVEL_3 = 'CSS Color Module Level 3'
     CSS3_FONTS = 'CSS Fonts Module Level 3'
     CSS3_FONT_FACE = 'CSS Fonts Module Level 3 @font-face properties'
     CSS3_PAGED_MEDIA = 'CSS3 Paged Media Module'
-    CSS3_TEXT = 'CSS Text Level 3'
 
     _TOKEN_MACROS = {
         'ident': r'[-]?{nmstart}{nmchar}*',
@@ -89,7 +83,6 @@ class Profiles(object):
         'time': r'0|{num}m?s',
         'frequency': r'0|{num}k?Hz',
         'percentage': r'{num}%',
-        'shadow': '(inset)?{w}{length}{w}{length}{w}{length}?{w}{length}?{w}{color}?'
         }
 
     def __init__(self, log=None):
@@ -102,12 +95,6 @@ class Profiles(object):
         self.addProfile(self.CSS_LEVEL_2,
                         properties[self.CSS_LEVEL_2],
                         macros[self.CSS_LEVEL_2])
-        self.addProfile(self.CSS3_BACKGROUNDS_AND_BORDERS,
-                        properties[self.CSS3_BACKGROUNDS_AND_BORDERS],
-                        macros[self.CSS3_BACKGROUNDS_AND_BORDERS])
-        self.addProfile(self.CSS3_BASIC_USER_INTERFACE,
-                        properties[self.CSS3_BASIC_USER_INTERFACE],
-                        macros[self.CSS3_BASIC_USER_INTERFACE])
         self.addProfile(self.CSS3_BOX,
                         properties[self.CSS3_BOX],
                         macros[self.CSS3_BOX])
@@ -127,10 +114,6 @@ class Profiles(object):
         self.addProfile(self.CSS3_PAGED_MEDIA,
                         properties[self.CSS3_PAGED_MEDIA],
                         macros[self.CSS3_PAGED_MEDIA])
-        
-        self.addProfile(self.CSS3_TEXT,
-                        properties[self.CSS3_TEXT],
-                        macros[self.CSS3_TEXT])
 
         self.__update_knownNames()
 
@@ -138,7 +121,7 @@ class Profiles(object):
         """Expand macros in token dictionary"""
         def macro_value(m):
             return '(?:%s)' % macros[m.groupdict()['macro']]
-        for key, value in list(dictionary.items()):
+        for key, value in dictionary.items():
             if not hasattr(value, '__call__'):
                 while re.search(r'{[a-z][a-z0-9-]*}', value):
                     value = re.sub(r'{(?P<macro>[a-z][a-z0-9-]*)}',
@@ -148,10 +131,8 @@ class Profiles(object):
 
     def _compile_regexes(self, dictionary):
         """Compile all regular expressions into callable objects"""
-        for key, value in list(dictionary.items()):
-            # might be a function (font-family) as regex is too slow
-            if not hasattr(value, '__call__') and not isinstance(value, 
-                                                                 types.FunctionType):
+        for key, value in dictionary.items():
+            if not hasattr(value, '__call__'):
                 value = re.compile('^(?:%s)$' % value, re.I).match
             dictionary[key] = value
 
@@ -159,8 +140,8 @@ class Profiles(object):
 
     def __update_knownNames(self):
         self._knownNames = []
-        for properties in list(self._profiles.values()):
-            self._knownNames.extend(list(properties.keys()))
+        for properties in self._profiles.values():
+            self._knownNames.extend(properties.keys())
 
     def _getDefaultProfiles(self):
         "If not explicitly set same as Profiles.profiles but in reverse order."
@@ -171,20 +152,20 @@ class Profiles(object):
 
     def _setDefaultProfiles(self, profiles):
         "profiles may be a single or a list of profile names"
-        if isinstance(profiles, str):
+        if isinstance(profiles, basestring):
             self._defaultProfiles = (profiles,)
         else:
             self._defaultProfiles = profiles
 
     defaultProfiles = property(_getDefaultProfiles,
                                _setDefaultProfiles,
-                               doc="Names of profiles to use for validation."
-                                   "To use e.g. the CSS2 profile set "
-                                   "``cssutils.profile.defaultProfiles = "
-                                   "cssutils.profile.CSS_LEVEL_2``")
+                               doc=u"Names of profiles to use for validation."
+                                   u"To use e.g. the CSS2 profile set "
+                                   u"``cssutils.profile.defaultProfiles = "
+                                   u"cssutils.profile.CSS_LEVEL_2``")
 
     profiles = property(lambda self: self._profileNames,
-                        doc='Names of all profiles in order as defined.')
+                        doc=u'Names of all profiles in order as defined.')
 
     knownNames = property(lambda self: self._knownNames,
                                doc="All known property names of all profiles.")
@@ -243,7 +224,7 @@ class Profiles(object):
                 del self._profiles[profile]
                 del self._profileNames[self._profileNames.index(profile)]
             except KeyError:
-                raise NoSuchProfileException('No profile %r.' % profile)
+                raise NoSuchProfileException(u'No profile %r.' % profile)
 
         self.__update_knownNames()
 
@@ -256,13 +237,13 @@ class Profiles(object):
         """
         if not profiles:
             profiles = self.profiles
-        elif isinstance(profiles, str):
+        elif isinstance(profiles, basestring):
             profiles = (profiles, )
         try:
             for profile in sorted(profiles):
                 for name in sorted(self._profiles[profile].keys()):
                     yield name
-        except KeyError as e:
+        except KeyError, e:
             raise NoSuchProfileException(e)
 
     def validate(self, name, value):
@@ -282,7 +263,7 @@ class Profiles(object):
                 try:
                     # custom validation errors are caught
                     r = bool(self._profiles[profile][name](value))
-                except Exception as e:
+                except Exception, e:
                     self._log.error(e, error=Exception)
                     return False
                 if r:
@@ -317,8 +298,9 @@ class Profiles(object):
         else:
             if not profiles:
                 profiles = self.defaultProfiles
-            elif isinstance(profiles, str):
+            elif isinstance(profiles, basestring):
                 profiles = (profiles, )
+
             for profilename in profiles:
                 # check given profiles
                 if name in self._profiles[profilename]:
@@ -326,7 +308,7 @@ class Profiles(object):
                     try:
                         if validate(value):
                             return True, True, [profilename]
-                    except Exception as e:
+                    except Exception, e:
                         self._log.error(e, error=Exception)
 
             for profilename in (p for p in self._profileNames
@@ -337,13 +319,13 @@ class Profiles(object):
                     try:
                         if validate(value):
                             return True, False, [profilename]
-                    except Exception as e:
+                    except Exception, e:
                         self._log.error(e, error=Exception)
 
             names = []
-            for profilename, properties in list(self._profiles.items()):
+            for profilename, properties in self._profiles.items():
                 # return profile to which name belongs
-                if name in list(properties.keys()):
+                if name in properties.keys():
                     names.append(profilename)
             names.sort()
             return False, False, names
@@ -351,64 +333,30 @@ class Profiles(object):
 
 properties = {}
 macros = {}
-
-def _fontFamilyValidator(families):
-    """Check if ``font-family`` value is valid, regex is too slow.
-    
-    Splits on ``,`` and checks each family separately. 
-    Somehow naive as font-family name could contain a "," but this is unlikely.
-    Still should be a TODO.
-    """
-    match = properties[Profiles.CSS_LEVEL_2]['__FONT_FAMILY_SINGLE']
-    for f in families.split(','):
-        if not match(f.strip()):
-            return False
-    return True
-
-def _fontValidator(font):
-    """Check if font value is valid, regex is too slow.
-    
-    Checks everything before ``,`` on basic font value. Everything after should
-    be a valid font-family value.
-    """
-    if ',' in font:
-        # split off until 1st family
-        font1, families2 = font.split(',', 1)
-    else:
-        font1, families2 = font, None 
-                
-    if not properties[Profiles.CSS_LEVEL_2]['__FONT_WITH_1_FAMILY'](font1.strip()):
-        return False
-    
-    if families2 and not _fontFamilyValidator(families2):
-        return False
-    
-    return True
-
 """
 Define some regular expression fragments that will be used as
 macros within the CSS property value regular expressions.
 """
 macros[Profiles.CSS_LEVEL_2] = {
+    'border-style': 'none|hidden|dotted|dashed|solid|double|groove|ridge|inset|outset',
+    'border-color': '{color}',
+    'border-width': '{length}|thin|medium|thick',
+
     'background-color': r'{color}|transparent|inherit',
     'background-image': r'{uri}|none|inherit',
     #'background-position': r'({percentage}|{length})(\s*({percentage}|{length}))?|((top|center|bottom)\s*(left|center|right)?)|((left|center|right)\s*(top|center|bottom)?)|inherit',
     'background-position': r'({percentage}|{length}|left|center|right)(\s*({percentage}|{length}|top|center|bottom))?|((top|center|bottom)\s*(left|center|right)?)|((left|center|right)\s*(top|center|bottom)?)|inherit',
     'background-repeat': r'repeat|repeat-x|repeat-y|no-repeat|inherit',
     'background-attachment': r'scroll|fixed|inherit',
+
     'shape': r'rect\(({w}({length}|auto}){w},){3}{w}({length}|auto){w}\)',
-    'counter': r'counter\({w}{ident}{w}(?:,{w}{list-style-type}{w})?\)',
+    'counter': r'counter\({w}{identifier}{w}(?:,{w}{list-style-type}{w})?\)',
     'identifier': r'{ident}',
-    'family-name': r'{string}|{ident}({w}{ident})*',
+    'family-name': r'{string}|{identifier}({w}{identifier})*',
     'generic-family': r'serif|sans-serif|cursive|fantasy|monospace',
     'absolute-size': r'(x?x-)?(small|large)|medium',
     'relative-size': r'smaller|larger',
-    
-    #[[ <family-name> | <generic-family> ] [, <family-name>| <generic-family>]* ] | inherit
-    #'font-family': r'(({family-name}|{generic-family})({w},{w}({family-name}|{generic-family}))*)|inherit',
-    # EXTREMELY SLOW REGEX
-    #'font-family': r'({family-name}({w},{w}{family-name})*)|inherit',
-    
+    'font-family': r'(({family-name}|{generic-family}){w},{w})*({family-name}|{generic-family})|inherit',
     'font-size': r'{absolute-size}|{relative-size}|{positivelength}|{percentage}|inherit',
     'font-style': r'normal|italic|oblique|inherit',
     'font-variant': r'normal|small-caps|inherit',
@@ -418,13 +366,18 @@ macros[Profiles.CSS_LEVEL_2] = {
     'list-style-position': r'inside|outside|inherit',
     'list-style-type': r'disc|circle|square|decimal|decimal-leading-zero|lower-roman|upper-roman|lower-greek|lower-(latin|alpha)|upper-(latin|alpha)|armenian|georgian|none|inherit',
     'margin-width': r'{length}|{percentage}|auto',
+    'outline-color': r'{color}|invert|inherit',
+    'outline-style': r'{border-style}|inherit',
+    'outline-width': r'{border-width}|inherit',
     'padding-width': r'{length}|{percentage}',
-    'specific-voice': r'{ident}',
+    'specific-voice': r'{identifier}',
     'generic-voice': r'male|female|child',
-    'content': r'{string}|{uri}|{counter}|attr\({w}{ident}{w}\)|open-quote|close-quote|no-open-quote|no-close-quote',
+    'content': r'{string}|{uri}|{counter}|attr\({w}{identifier}{w}\)|open-quote|close-quote|no-open-quote|no-close-quote',
+    'border-attrs': r'{border-width}|{border-style}|{border-color}',
     'background-attrs': r'{background-color}|{background-image}|{background-repeat}|{background-attachment}|{background-position}',
     'list-attrs': r'{list-style-type}|{list-style-position}|{list-style-image}',
     'font-attrs': r'{font-style}|{font-variant}|{font-weight}',
+    'outline-attrs': r'{outline-color}|{outline-style}|{outline-width}',
     'text-attrs': r'underline|overline|line-through|blink',
     'overflow': r'visible|hidden|scroll|auto|inherit',
 }
@@ -442,40 +395,50 @@ properties[Profiles.CSS_LEVEL_2] = {
     # Each piece should only be allowed one time
     'background': r'{background-attrs}(\s+{background-attrs})*|inherit',
     'border-collapse': r'collapse|separate|inherit',
+    'border-color': r'({border-color}|transparent)(\s+({border-color}|transparent)){0,3}|inherit',
     'border-spacing': r'{length}(\s+{length})?|inherit',
+    'border-style': r'{border-style}(\s+{border-style}){0,3}|inherit',
+    'border-top': r'{border-attrs}(\s+{border-attrs})*|inherit',
+    'border-right': r'{border-attrs}(\s+{border-attrs})*|inherit',
+    'border-bottom': r'{border-attrs}(\s+{border-attrs})*|inherit',
+    'border-left': r'{border-attrs}(\s+{border-attrs})*|inherit',
+    'border-top-color': r'{border-color}|transparent|inherit',
+    'border-right-color': r'{border-color}|transparent|inherit',
+    'border-bottom-color': r'{border-color}|transparent|inherit',
+    'border-left-color': r'{border-color}|transparent|inherit',
+    'border-top-style': r'{border-style}|inherit',
+    'border-right-style': r'{border-style}|inherit',
+    'border-bottom-style': r'{border-style}|inherit',
+    'border-left-style': r'{border-style}|inherit',
+    'border-top-width': r'{border-width}|inherit',
+    'border-right-width': r'{border-width}|inherit',
+    'border-bottom-width': r'{border-width}|inherit',
+    'border-left-width': r'{border-width}|inherit',
+    'border-width': r'{border-width}(\s+{border-width}){0,3}|inherit',
+    'border': r'{border-attrs}(\s+{border-attrs})*|inherit',
     'bottom': r'{length}|{percentage}|auto|inherit',
     'caption-side': r'top|bottom|inherit',
     'clear': r'none|left|right|both|inherit',
     'clip': r'{shape}|auto|inherit',
     'color': r'{color}|inherit',
     'content': r'none|normal|{content}(\s+{content})*|inherit',
-    'counter-increment': r'({ident}(\s+{integer})?)(\s+({ident}(\s+{integer})))*|none|inherit',
-    'counter-reset': r'({ident}(\s+{integer})?)(\s+({ident}(\s+{integer})))*|none|inherit',
+    'counter-increment': r'({identifier}(\s+{integer})?)(\s+({identifier}(\s+{integer})))*|none|inherit',
+    'counter-reset': r'({identifier}(\s+{integer})?)(\s+({identifier}(\s+{integer})))*|none|inherit',
     'cue-after': r'{uri}|none|inherit',
     'cue-before': r'{uri}|none|inherit',
     'cue': r'({uri}|none|inherit){1,2}|inherit',
-    #'cursor': r'((({uri}{w},{w})*)?(auto|crosshair|default|pointer|move|(e|ne|nw|n|se|sw|s|w)-resize|text|wait|help|progress))|inherit',
+    'cursor': r'((({uri}{w},{w})*)?(auto|crosshair|default|pointer|move|(e|ne|nw|n|se|sw|s|w)-resize|text|wait|help|progress))|inherit',
     'direction': r'ltr|rtl|inherit',
     'display': r'inline|block|list-item|run-in|inline-block|table|inline-table|table-row-group|table-header-group|table-footer-group|table-row|table-column-group|table-column|table-cell|table-caption|none|inherit',
     'elevation': r'{angle}|below|level|above|higher|lower|inherit',
     'empty-cells': r'show|hide|inherit',
     'float': r'left|right|none|inherit',
-    
-    # regex too slow:
-    # 'font-family': r'{font-family}', 
-    'font-family': _fontFamilyValidator,
-    '__FONT_FAMILY_SINGLE': r'{family-name}',
-    
+    'font-family': r'{font-family}',
     'font-size': r'{font-size}',
     'font-style': r'{font-style}',
     'font-variant': r'{font-variant}',
     'font-weight': r'{font-weight}',
-    
-    # regex too slow and wrong too:
-    # 'font': r'({font-attrs}\s+)*{font-size}({w}/{w}{line-height})?\s+{font-family}|caption|icon|menu|message-box|small-caption|status-bar|inherit',
-    'font': _fontValidator,
-    '__FONT_WITH_1_FAMILY': r'(({font-attrs}\s+)*{font-size}({w}/{w}{line-height})?\s+{family-name})|caption|icon|menu|message-box|small-caption|status-bar|inherit',
-
+    'font': r'({font-attrs}\s+)*{font-size}({w}/{w}{line-height})?\s+{font-family}|caption|icon|menu|message-box|small-caption|status-bar|inherit',
     'height': r'{length}|{percentage}|auto|inherit',
     'left': r'{length}|{percentage}|auto|inherit',
     'letter-spacing': r'normal|{length}|inherit',
@@ -494,6 +457,10 @@ properties[Profiles.CSS_LEVEL_2] = {
     'min-height': r'{length}|{percentage}|none|inherit',
     'min-width': r'{length}|{percentage}|none|inherit',
     'orphans': r'{integer}|inherit',
+    'outline-color': r'{outline-color}',
+    'outline-style': r'{outline-style}',
+    'outline-width': r'{outline-width}',
+    'outline': r'{outline-attrs}(\s+{outline-attrs})*|inherit',
     'overflow': r'{overflow}',
     'padding-top': r'{padding-width}|inherit',
     'padding-right': r'{padding-width}|inherit',
@@ -537,74 +504,6 @@ properties[Profiles.CSS_LEVEL_2] = {
     'z-index': r'auto|{integer}|inherit',
 }
 
-
-macros[Profiles.CSS3_BACKGROUNDS_AND_BORDERS] = {
-    'border-style': 'none|hidden|dotted|dashed|solid|double|groove|ridge|inset|outset',
-    'border-width': '{length}|thin|medium|thick',
-    'b1': r'{border-width}?({w}{border-style})?({w}{color})?',
-    'b2': r'{border-width}?({w}{color})?({w}{border-style})?',
-    'b3': r'{border-style}?({w}{border-width})?({w}{color})?',
-    'b4': r'{border-style}?({w}{color})?({w}{border-width})?',
-    'b5': r'{color}?({w}{border-style})?({w}{border-width})?',
-    'b6': r'{color}?({w}{border-width})?({w}{border-style})?',
-    'border-attrs': r'{b1}|{b2}|{b3}|{b4}|{b5}|{b6}',
-    'border-radius-part': '({length}|{percentage})(\s+({length}|{percentage}))?'                                                    
-    }
-properties[Profiles.CSS3_BACKGROUNDS_AND_BORDERS] = {                                                     
-    'border-color': r'({color}|transparent)(\s+({color}|transparent)){0,3}|inherit',
-    'border-style': r'{border-style}(\s+{border-style}){0,3}|inherit',
-    'border-top': r'{border-attrs}|inherit',
-    'border-right': r'{border-attrs}|inherit',
-    'border-bottom': r'{border-attrs}|inherit',
-    'border-left': r'{border-attrs}|inherit',
-    'border-top-color': r'{color}|transparent|inherit',
-    'border-right-color': r'{color}|transparent|inherit',
-    'border-bottom-color': r'{color}|transparent|inherit',
-    'border-left-color': r'{color}|transparent|inherit',
-    'border-top-style': r'{border-style}|inherit',
-    'border-right-style': r'{border-style}|inherit',
-    'border-bottom-style': r'{border-style}|inherit',
-    'border-left-style': r'{border-style}|inherit',
-    'border-top-width': r'{border-width}|inherit',
-    'border-right-width': r'{border-width}|inherit',
-    'border-bottom-width': r'{border-width}|inherit',
-    'border-left-width': r'{border-width}|inherit',
-    'border-width': r'{border-width}(\s+{border-width}){0,3}|inherit',
-    'border': r'{border-attrs}|inherit',
-    'border-top-right-radius': '{border-radius-part}', 
-    'border-bottom-right-radius': '{border-radius-part}', 
-    'border-bottom-left-radius': '{border-radius-part}', 
-    'border-top-left-radius': '{border-radius-part}',
-    'border-radius': '({length}{w}|{percentage}{w}){1,4}(/{w}({length}{w}|{percentage}{w}){1,4})?',
-    'box-shadow': 'none|{shadow}({w},{w}{shadow})*', 
-    }
-
-# CSS3 Basic User Interface Module
-macros[Profiles.CSS3_BASIC_USER_INTERFACE] = {
-    'border-style': macros[Profiles.CSS3_BACKGROUNDS_AND_BORDERS]['border-style'],
-    'border-width': macros[Profiles.CSS3_BACKGROUNDS_AND_BORDERS]['border-width'],
-    'outline-1': r'{outline-color}(\s+{outline-style})?(\s+{outline-width})?',
-    'outline-2': r'{outline-color}(\s+{outline-width})?(\s+{outline-style})?',
-    'outline-3': r'{outline-style}(\s+{outline-color})?(\s+{outline-width})?',
-    'outline-4': r'{outline-style}(\s+{outline-width})?(\s+{outline-color})?',
-    'outline-5': r'{outline-width}(\s+{outline-color})?(\s+{outline-style})?',
-    'outline-6': r'{outline-width}(\s+{outline-style})?(\s+{outline-color})?',
-    'outline-color': r'{color}|invert|inherit',
-    'outline-style': r'auto|{border-style}|inherit',
-    'outline-width': r'{border-width}|inherit',
-    }
-properties[Profiles.CSS3_BASIC_USER_INTERFACE] = {
-    'cursor': r'((({uri}{w}({number}{w}{number}{w})?,{w})*)?(auto|default|none|context-menu|help|pointer|progress|wait|cell|crosshair|text|vertical-text|alias|copy|move|no-drop|not-allowed|(e|n|ne|nw|s|se|sw|w|ew|ns|nesw|nwse|col|row)-resize|all-scroll))|inherit',    
-    'nav-index': r'auto|{number}|inherit',
-    'outline-color': r'{outline-color}',
-    'outline-style': r'{outline-style}',
-    'outline-width': r'{outline-width}',
-    'outline-offset': r'{length}|inherit',
-    #'outline': r'{outline-attrs}(\s+{outline-attrs})*|inherit',
-    'outline': r'{outline-1}|{outline-2}|{outline-3}|{outline-4}|{outline-5}|{outline-6}|inherit',
-    'resize': 'none|both|horizontal|vertical|inherit',
-    }
-
 # CSS Box Module Level 3
 macros[Profiles.CSS3_BOX] = {
     'overflow': macros[Profiles.CSS_LEVEL_2]['overflow']
@@ -632,7 +531,7 @@ properties[Profiles.CSS3_COLOR] = {
 
 # CSS Fonts Module Level 3 http://www.w3.org/TR/css3-fonts/
 macros[Profiles.CSS3_FONTS] = {
-    'family-name': r'{string}|{ident}', 
+    'family-name': r'{string}|{ident}', # but STRING is effectively an IDENT??? 
     'font-face-name': 'local\({w}{family-name}{w}\)',
     'font-stretch-names': r'(ultra-condensed|extra-condensed|condensed|semi-condensed|semi-expanded|expanded|extra-expanded|ultra-expanded)',
     'unicode-range': r'[uU]\+[0-9A-Fa-f?]{1,6}(\-[0-9A-Fa-f]{1,6})?'
@@ -652,11 +551,7 @@ properties[Profiles.CSS3_FONT_FACE] = {
 
 # CSS3 Paged Media
 macros[Profiles.CSS3_PAGED_MEDIA] = {
-    'page-size': 'a5|a4|a3|b5|b4|letter|legal|ledger',
-    'page-orientation': 'portrait|landscape',
-    'page-1': '{page-size}(?:{w}{page-orientation})?',
-    'page-2': '{page-orientation}(?:{w}{page-size})?',
-    'page-size-orientation': '{page-1}|{page-2}',
+    'pagesize': 'a5|a4|a3|b5|b4|letter|legal|ledger',
     'pagebreak': 'auto|always|avoid|left|right'
     }
 properties[Profiles.CSS3_PAGED_MEDIA] = {
@@ -668,14 +563,8 @@ properties[Profiles.CSS3_PAGED_MEDIA] = {
     'page-break-before': '{pagebreak}|inherit',
     'page-break-after': '{pagebreak}|inherit',
     'page-break-inside': 'auto|avoid|inherit',
-    'size': '({length}{w}){1,2}|auto|{page-size-orientation}',
+    'size': '({length}{w}){1,2}|auto|{pagesize}{w}(?:portrait|landscape)',
     'widows': r'{integer}|inherit'
-    }
-
-macros[Profiles.CSS3_TEXT] = {
-    }
-properties[Profiles.CSS3_TEXT] = {
-    'text-shadow': 'none|{shadow}({w},{w}{shadow})*', 
     }
 
 

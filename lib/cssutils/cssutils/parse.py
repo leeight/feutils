@@ -2,18 +2,14 @@
 """A validating CSSParser"""
 __all__ = ['CSSParser']
 __docformat__ = 'restructuredtext'
-__version__ = '$Id$'
+__version__ = '$Id: parse.py 2010 2010-06-20 16:29:28Z cthedot $'
 
-from .helper import path2url
+from helper import Deprecated, path2url
 import codecs
 import cssutils
 import os
-import sys
-from . import tokenize2
-import urllib.request, urllib.parse, urllib.error
-
-if sys.version_info < (2,6):
-    bytes = str
+import tokenize2
+import urllib
 
 class CSSParser(object):
     """Parse a CSS StyleSheet from URL, string or file and return a DOM Level 2
@@ -94,8 +90,7 @@ class CSSParser(object):
             :class:`~cssutils.css.CSSStyleSheet`.
         """
         self.__parseSetting(True)
-        # TODO: py3 needs bytes here!
-        if isinstance(cssText, bytes):
+        if isinstance(cssText, str):
             cssText = codecs.getdecoder('css')(cssText, encoding=encoding)[0]
 
         sheet = cssutils.css.CSSStyleSheet(href=href,
@@ -153,11 +148,10 @@ class CSSParser(object):
         :returns:
             :class:`~cssutils.css.CSSStyleSheet`.
         """
-        encoding, enctype, text = cssutils.util._readUrl(href, 
-                                                         fetcher=self.__fetcher,
+        encoding, enctype, text = cssutils.util._readUrl(href,
                                                          overrideEncoding=encoding)
         if enctype == 5:
-            # do not use if defaulting to UTF-8
+            # do not used if defaulting to UTF-8
             encoding = None
             
         if text is not None:
@@ -187,3 +181,7 @@ class CSSParser(object):
         """
         self.__fetcher = fetcher
 
+    @Deprecated('Use cssutils.CSSParser().parseFile() instead.')
+    def parse(self, filename, encoding=None,
+              href=None, media=None, title=None):
+        self.parseFile(filename, encoding, href, media, title)
