@@ -69,9 +69,9 @@ def convert(crop, filename, bin='ffmpeg', start=0, frames=0, size='306x228', bps
     '-ar', '22050',
     '-ac', '1',
     '-ab', '8k',
-    '-vcodec', 'flv',
-    '-f', 'flv',
-    '-acodec', 'libmp3lame',
+#    '-vcodec', 'flv',
+#    '-f', 'flv',
+#    '-acodec', 'libmp3lame',
     '-b', bps, #比特率
     '-ss', start #开始位置
   ]
