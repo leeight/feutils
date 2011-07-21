@@ -13,7 +13,7 @@ $vframes = $_POST['vframes'];
 
 $size = isset($_POST['video_size']) ? $_POST['video_size'] : '306x228';
 
-$bsp = $_POST['video_bps'];
+$bps = $_POST['video_bps'];
 
 $ss = $_POST['timePerFrame'] * $_POST['video_satrt_frame_count'] / 1000;
 
@@ -26,16 +26,30 @@ if(!isset($filename)) {
 
 $action = isset($action) ? $action : 'convert';
 
-$args = array('python',
-	'video.py -f '. $vframes .' -p ' . $ss .' -c '. $crop . ' -s '. $size .' -b '. $bsp .' -o '.$action, 'upload/'.$filename
+$queryArr = Array(
+	"frames"=>$vframes, 
+	"crop"=>$crop, 
+	"start"=>$ss, 
+	"size"=>$size, 
+	"bps"=>$bps, 
+	"o"=>$action,
+	"filename"=>$filename,
+	"bin"=>'ffmpeg'
 );
 
 echo	'{' .
 		'	success:"true",' .
 		'	message:{},' .
 		'	result:{';
-				system(implode(' ', $args), $status);
-echo			'print:\''.implode(' ', $args).'\''.
+echo			convertVideo($queryArr).
+				'print:\'end\''.
 	 		'}' .
 		'}';
+
+function convertVideo($queryArr){
+	$handle = fopen("http://127.0.0.1:8999/?".http_build_query($queryArr), "rb");
+	$contents = stream_get_contents($handle);
+	fclose($handle);
+	return $contents;
+}
 ?>

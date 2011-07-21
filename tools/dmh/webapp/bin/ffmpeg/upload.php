@@ -11,9 +11,9 @@ $tmp_name = $_FILES["filedata"]["tmp_name"];
 //上传的本地文件名
 $filename = $_FILES["filedata"]["name"];
 //不包含后缀文件抛弃
-if(stristr($filename, '.') == false){
-	die('文件类型不合法或后缀名错误，请上传视频文件！');
-}
+//if(stristr($filename, '.') == false){
+//	die('文件类型不合法或后缀名错误，请上传视频文件！');
+//}
 //拆分文件名和后缀
 $fileprename = explode('.', $filename);
 
@@ -35,13 +35,14 @@ echo '<script type="text/javascript">'.str_replace("\\","",$callback) . '(' .
 		'	success:true,' .
 		'	message:{},' .
 		'	result:{';
-				splitVideo($upload_dir.$targetname);
-echo			'size:\''.$kSize.'\',' .
+echo			splitVideo($upload_dir.$targetname).
+				'size:\''.$kSize.'\',' .
 				'filename:\''.$filename.'\',' .
 				'serverVideoFileName:\''.$targetname.'\''.
 	 		'}' .
 		'});' .
 	'</script>';
+
 
 /**
  * 文件上传
@@ -88,11 +89,10 @@ function uploadfile($type, $name, $ext, $size, $error, $tmp_name, $targetname, $
 
 function splitVideo($filename){
 	
-	$args = array('python',
-		'video.py -o split', $filename
-	);
-	
-	system(implode(' ', $args), $status);
+	$handle = fopen("http://127.0.0.1:8999/?o=split&filename=".$filename, "rb");
+	$contents = stream_get_contents($handle);
+	fclose($handle);
+	return $contents;
 }
 
 ?>
