@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+## 提供一些便捷的工具
+
+[ $# -eq 1 ] && {
+  [ "$1" = "add" ] && {
+    svn st | grep "^?" | awk '{print $2}' | xargs -i svn add {}
+  }
+} || {
+  echo "Usage"
+  echo "  Fsvn <command> [arguments]"
+}
