@@ -60,7 +60,7 @@ def convert(crop, filename, bin='ffmpeg', start=0, frames=0, size='306x228', bps
   videoInfo['gen_video_path'] = output
   
   if platform.system() == 'Linux':
-    bin = '/home/maoquan/public_html/bin/ffmpeg/' + bin
+    bin = '/home/maoquan/local/bin/' + bin
   
   # XXX 参数的顺序对结果有影响，不要随意调整参数的顺序.
   args = [
@@ -132,7 +132,7 @@ def split_video(video):
   bin = 'ffmpeg'
   
   if platform.system() == 'Linux':
-    bin = '/home/maoquan/public_html/bin/ffmpeg/' + bin
+    bin = '/home/maoquan/local/bin/' + bin
   
   target = os.path.join(target, '%d.jpg')
   args = [
