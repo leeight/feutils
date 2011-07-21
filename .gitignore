@@ -2,3 +2,4 @@
 ant
 ffmpeg
 dmh
+*.pyc
