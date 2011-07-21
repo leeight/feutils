@@ -59,6 +59,9 @@ def convert(crop, filename, bin='ffmpeg', start=0, frames=0, size='306x228', bps
   
   videoInfo['gen_video_path'] = output
   
+  if platform.system() == 'Linux':
+    bin = '/home/maoquan/public_html/bin/ffmpeg/' + bin
+  
   # XXX 参数的顺序对结果有影响，不要随意调整参数的顺序.
   args = [
     bin,
@@ -126,9 +129,14 @@ def split_video(video):
 
   videoInfo['target'] = target.replace('\\', '/')
   
+  bin = 'ffmpeg'
+  
+  if platform.system() == 'Linux':
+    bin = '/home/maoquan/public_html/bin/ffmpeg/' + bin
+  
   target = os.path.join(target, '%d.jpg')
   args = [
-    'ffmpeg',
+    bin,
     '-i', video,
     target
   ]
@@ -166,9 +174,6 @@ def main(http):
   for param in paramArr:
     name, query = param.split('=')
     paramMap[name] = query
-  
-  if platform.system() == 'Linux':
-    paramMap['bin'] = '/home/maoquan/public_html/bin/ffmpeg/' + paramMap['bin']
   
   if paramMap['o'] == 'split':
     videoInfo = split_video(paramMap['filename'])
