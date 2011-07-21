@@ -26,10 +26,10 @@ video.EditForm = function() {
 		width : 788,
 		height : 588,
 		time : '00:00:18.90',
-		target : '20110719/test1-1311066081/170121',
+		target : '20110721/test1-1311215197/102637',
         size : '2249kb',
         filename : 'test1.wmv',
-        serverVideoFileName : 'test1-1311066081.wmv'
+        serverVideoFileName : 'test1-1311157707.wmv'
 	};
     //如果后端没有返回视频尺寸，则在前端重新获取
     if(!me.videoInfo.width || !me.videoInfo.height){
@@ -119,8 +119,6 @@ video.EditForm.prototype = {
       this.videoSizeInputControl = this.form.c('txtVideoSize');
       //视频转换的后台接口
       this.requester = video.data.convert;
-      
-      
     },
     
     /** @inheritDoc */
@@ -230,16 +228,10 @@ video.EditForm.prototype = {
     onSubmitFinish : function(data){
       
       var me = this,
-          debugPyDom,
           debugFfmpegDom;
           
       
-      //填充调试信息
-      if(debugPyDom = baidu.g('debug_py')){
-        
-          debugPyDom.innerHTML = data.result.print;
-      }
-      
+      //填充调试信息   
       if(debugFfmpegDom = baidu.g('debug_ffmpeg')){
 	      debugFfmpegDom.innerHTML = data.result.command;
       }
