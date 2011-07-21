@@ -41,7 +41,7 @@ def run_command(args, videoInfo):
       -ss
   '''
   videoInfo['command'] = ' '.join(args)
-  
+  print videoInfo['command']
   proc = subprocess.Popen(args, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
   
   return proc
