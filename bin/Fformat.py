@@ -4,7 +4,7 @@
 # ***************************************************************************
 # 
 # Copyright (c) 2011 Baidu.com, Inc. All Rights Reserved
-# $Id: Fformat.py 81878 2011-07-22 03:07:02Z  $ 
+# $Id: Fformat.py 81900 2011-07-22 04:18:27Z  $ 
 # 格式化一些文件，比如js,css,json等等
 # **************************************************************************/
  
@@ -20,31 +20,26 @@ sys.path.insert(0, os.path.join(LIB_HOME, 'cssutils'))
 
 __author__ = 'leeight <liyubei@baidu.com>'
 __date__ = '2011/07/21 23:40:46'
-__revision = '$Revision: 81878 $'
+__revision = '$Revision: 81900 $'
 
-def format_js(input, output):
-  pass
+def format_js(input, options):
+  import jsbeautifier
+  string = jsbeautifier.beautify_file(input)
+  options.output.write(string)
 
-def format_css(input, output):
+def format_css(input, options):
   import cssutils
   sheet = cssutils.parseString(input)
   string = sheet.cssText
+  options.output.write(string)
 
-  if output:
-    open(output, "w").write(string)
-  else:
-    print string
-
-def format_json(input, output):
+def format_json(input, options):
   import json
   object = json.loads(open(input).read())
   string = json.dumps(object, indent = 4)
-  if output:
-    open(output, 'w').write(string)
-  else:
-    print string
+  options.output.write(string)
 
-def format_html(input, output):
+def format_html(input, options):
   pass
 
 def main():
@@ -62,9 +57,11 @@ def main():
     parser.print_help()
   else:
     input = args[0]
+    options.output = open(options.output, 'w') if \
+                     options.output else sys.stdout
     handler = None
     if options.type:
-      globals()['format_' + options.type](input, options.output)
+      globals()['format_' + options.type](input, options)
     else:
       if input.endswith(".js"):
         handler = format_js
@@ -78,7 +75,7 @@ def main():
         logging.error("unsupport format")
 
     if handler:
-      handler(input, options.output)
+      handler(input, options)
 
 
 
