@@ -55,10 +55,7 @@ function uploadfile($type, $name, $ext, $size, $error, $tmp_name, $targetname, $
     $file_path = $upload_dir.$targetname;
     
     if(!is_dir($upload_dir)) {
-        if(!mkdir($upload_dir))
-            die("文件上传目录不存在并且无法创建文件上传目录");
-        if(!chmod($upload_dir,0755))
-            die("文件上传目录的权限无法设定为可读可写");
+        createDir($upload_dir);
     }
     
     if($size>$MAX_SIZE)
@@ -93,6 +90,12 @@ function splitVideo($filename){
 	$contents = stream_get_contents($handle);
 	fclose($handle);
 	return $contents;
+}
+
+function createDir($dirname){
+	$handle = fopen("http://127.0.0.1:8999/?o=mkdir&dirname=".$dirname, "rb");
+	$contents = stream_get_contents($handle);
+	fclose($handle);
 }
 
 ?>
