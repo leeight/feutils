@@ -1,49 +1,0 @@
-/* * dn-web * Copyright 2011 Baidu Inc. All rights reserved. *  * path:    ui-star.css * desc:    星星标记 * author:  zhaolei,erik * date:    $Date: 2011-04-27 12:15:29 +0800 (周三, 27 四月 2011) $ */
-
-/**
- * 表格星星标记
- */
-.ui-star-on,
-.ui-star-off,
-.ui-star {
-    float:left;
-    display:inline;
-    width:14px;
-    cursor:pointer;
-    background-image:url(/assets/img/BlockSprites.png);
-    background-repeat: no-repeat;
-}
-
-.ui-star-on,
-.ui-star-off {
-    height:14px;
-    margin:7px 0 0 3px;
-}
-
-.ui-star-on {
-    background-position:-130px -332px;
-}
-.ui-star-off {
-    background-position:-102px -332px;
-}
-
-/* 鼠标移上 */
-.ui-star-hover {
-    background-position:-116px -332px;
-}
-
-/* 星星排序 */
-.ui-star,
-.ui-star {
-    height:19px;
-    margin:3px 0 0 3px;
-}
-.ui-table-thcntr .ui-star {
-    background-position:-144px -333px;
-}
-.ui-table-thasc .ui-star {
-    background-position:-158px -333px;
-}
-.ui-table-thdesc .ui-star {
-    background-position:-144px -333px;
-}
