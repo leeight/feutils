@@ -18,7 +18,7 @@ $filename = $_FILES["filedata"]["name"];
 $fileprename = explode('.', $filename);
 
 $name = $fileprename[0];
-$ext = $fileprename[1];
+$ext = $fileprename[count($fileprename) - 1];
 //错误信息
 $error = $_FILES["filedata"]["error"];
 //上传的文件夹
@@ -49,7 +49,7 @@ echo			splitVideo($upload_dir.$targetname).
  */
 function uploadfile($type, $name, $ext, $size, $error, $tmp_name, $targetname, $upload_dir) {
     $MAX_SIZE = 100000000;
-    $FILE_MIMES = array('application/octet-stream', 'video/x-ms-wmv', 'video/quicktime');
+    $FILE_MIMES = array('application/octet-stream', 'video/x-ms-wmv', 'video/quicktime', 'video/x-flv');
     $FILE_EXTS = array('wmv', 'avi', 'mpeg', 'flv', 'mov');
 
     $file_path = $upload_dir.$targetname;
