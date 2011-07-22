@@ -180,7 +180,7 @@ def mkdir(dirname):
   
   if not os.path.exists(dirname):
     videoInfo['createDir'] = 'true'
-    os.makedirs(dirname, 0755) #因为上传文件由php负责从临时文件夹移动到目标文件夹，因此设为0755权限
+    os.makedirs(dirname, 777) #因为上传文件由php负责从临时文件夹移动到目标文件夹，因此设为777权限
   else:
     videoInfo['createDir'] = 'false'
   return videoInfo
