@@ -65,7 +65,7 @@ function uploadfile($type, $name, $ext, $size, $error, $tmp_name, $targetname, $
         die("请选择上传的文件");
 
     if(!in_array($type,$FILE_MIMES) || !in_array($ext,$FILE_EXTS))
-        die("请上传符合要求的文件类型");
+        die("请上传符合要求的文件类型，当前文件类型：". $type);
 
     if(!move_uploaded_file($tmp_name, $file_path))
         die("复制文件失败，请重新上传");
