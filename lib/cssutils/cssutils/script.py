@@ -2,7 +2,7 @@
 """
 __all__ = ['CSSCapture', 'csscombine']
 __docformat__ = 'restructuredtext'
-__version__ = '$Id: parse.py 1323 2008-07-06 18:13:57Z cthedot $'
+__version__ = '$Id: script.py 81879 2011-07-22 03:07:15Z  $'
 
 import HTMLParser
 import codecs

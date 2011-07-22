@@ -3,7 +3,7 @@
 """cssutils serializer"""
 __all__ = ['CSSSerializer', 'Preferences']
 __docformat__ = 'restructuredtext'
-__version__ = '$Id: serialize.py 2016 2010-07-06 20:49:41Z cthedot $'
+__version__ = '$Id: serialize.py 81879 2011-07-22 03:07:15Z  $'
 
 from cssutils.helper import Deprecated, normalize
 import codecs

@@ -17,7 +17,7 @@ TODO
 """
 __all__ = ['SelectorList']
 __docformat__ = 'restructuredtext'
-__version__ = '$Id: selectorlist.py 1949 2010-03-26 22:16:33Z cthedot $'
+__version__ = '$Id: selectorlist.py 81879 2011-07-22 03:07:15Z  $'
 
 from selector import Selector
 import cssutils

@@ -1,7 +1,7 @@
 """CSSUnknownRule implements DOM Level 2 CSS CSSUnknownRule."""
 __all__ = ['CSSUnknownRule']
 __docformat__ = 'restructuredtext'
-__version__ = '$Id: cssunknownrule.py 1949 2010-03-26 22:16:33Z cthedot $'
+__version__ = '$Id: cssunknownrule.py 81879 2011-07-22 03:07:15Z  $'
 
 import cssrule
 import cssutils

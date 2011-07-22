@@ -7,6 +7,5 @@
     svn st | grep "^?" | awk '{print $2}' | xargs -i svn add {}
   }
 } || {
-  echo "Usage"
-  echo "  Fsvn <command> [arguments]"
+  echo "Usage: Fsvn [options] <command>"
 }

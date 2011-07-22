@@ -16,7 +16,7 @@ log
 """
 __all__ = ['ErrorHandler']
 __docformat__ = 'restructuredtext'
-__version__ = '$Id: errorhandler.py 1981 2010-05-30 12:00:51Z cthedot $'
+__version__ = '$Id: errorhandler.py 81879 2011-07-22 03:07:15Z  $'
 
 from helper import Deprecated
 import logging

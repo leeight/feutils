@@ -2,7 +2,7 @@
 Partly also http://dev.w3.org/csswg/cssom/#the-cssrulelist."""
 __all__ = ['CSSRuleList']
 __docformat__ = 'restructuredtext'
-__version__ = '$Id: cssrulelist.py 1949 2010-03-26 22:16:33Z cthedot $'
+__version__ = '$Id: cssrulelist.py 81879 2011-07-22 03:07:15Z  $'
 
 class CSSRuleList(list):
     """The CSSRuleList object represents an (ordered) list of statements.

@@ -7,7 +7,7 @@ TODO
 """
 __all__ = ['Selector']
 __docformat__ = 'restructuredtext'
-__version__ = '$Id: selector.py 1949 2010-03-26 22:16:33Z cthedot $'
+__version__ = '$Id: selector.py 81879 2011-07-22 03:07:15Z  $'
 
 from cssutils.util import _SimpleNamespaces
 from cssutils.helper import Deprecated

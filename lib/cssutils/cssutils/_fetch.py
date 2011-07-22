@@ -1,7 +1,7 @@
 """Default URL reading functions"""
 __all__ = ['_defaultFetcher']
 __docformat__ = 'restructuredtext'
-__version__ = '$Id: tokenize2.py 1547 2008-12-10 20:42:26Z cthedot $'
+__version__ = '$Id: _fetch.py 81879 2011-07-22 03:07:15Z  $'
 
 from cssutils import VERSION
 import encutils

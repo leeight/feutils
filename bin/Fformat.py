@@ -4,7 +4,7 @@
 # ***************************************************************************
 # 
 # Copyright (c) 2011 Baidu.com, Inc. All Rights Reserved
-# $Id$ 
+# $Id: Fformat.py 81878 2011-07-22 03:07:02Z  $ 
 # 格式化一些文件，比如js,css,json等等
 # **************************************************************************/
  
@@ -20,7 +20,7 @@ sys.path.insert(0, os.path.join(LIB_HOME, 'cssutils'))
 
 __author__ = 'leeight <liyubei@baidu.com>'
 __date__ = '2011/07/21 23:40:46'
-__revision = '$Revision$'
+__revision = '$Revision: 81878 $'
 
 def format_js(input, output):
   pass

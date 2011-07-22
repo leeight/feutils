@@ -5,7 +5,7 @@ Implements CSSRule which is also extended for a CSSComment rule type.
 """
 __all__ = ['CSSComment']
 __docformat__ = 'restructuredtext'
-__version__ = '$Id: csscomment.py 1949 2010-03-26 22:16:33Z cthedot $'
+__version__ = '$Id: csscomment.py 81879 2011-07-22 03:07:15Z  $'
 
 import cssrule
 import cssutils

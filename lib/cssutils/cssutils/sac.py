@@ -2,7 +2,7 @@
 """A validating CSSParser"""
 __all__ = ['CSSParser']
 __docformat__ = 'restructuredtext'
-__version__ = '$Id: parse.py 1754 2009-05-30 14:50:13Z cthedot $'
+__version__ = '$Id: sac.py 81879 2011-07-22 03:07:15Z  $'
 
 import helper
 import codecs

@@ -16,7 +16,7 @@ TODO:
 """
 __all__ = ['ProdParser', 'Sequence', 'Choice', 'Prod', 'PreDef']
 __docformat__ = 'restructuredtext'
-__version__ = '$Id: parse.py 1418 2008-08-09 19:27:50Z cthedot $'
+__version__ = '$Id: prodparser.py 81879 2011-07-22 03:07:15Z  $'
 
 import cssutils
 import sys

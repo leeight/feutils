@@ -52,7 +52,7 @@ or without option -m::
 """
 __all__ = ['csscombine']
 __docformat__ = 'restructuredtext'
-__version__ = '$Id: csscombine.py 1890 2009-11-26 23:30:14Z cthedot $'
+__version__ = '$Id: csscombine.py 81879 2011-07-22 03:07:15Z  $'
 
 from cssutils.script import csscombine
 import optparse

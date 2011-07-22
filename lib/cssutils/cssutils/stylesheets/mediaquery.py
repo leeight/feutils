@@ -5,7 +5,7 @@ A cssutils implementation, not defined in official DOM.
 """
 __all__ = ['MediaQuery']
 __docformat__ = 'restructuredtext'
-__version__ = '$Id: mediaquery.py 1738 2009-05-02 13:03:28Z cthedot $'
+__version__ = '$Id: mediaquery.py 81879 2011-07-22 03:07:15Z  $'
 
 import cssutils
 import re

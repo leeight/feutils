@@ -2,7 +2,7 @@
 ``name`` property from http://www.w3.org/TR/css3-cascade/#cascading."""
 __all__ = ['CSSImportRule']
 __docformat__ = 'restructuredtext'
-__version__ = '$Id: cssimportrule.py 1990 2010-05-30 16:52:39Z cthedot $'
+__version__ = '$Id: cssimportrule.py 81879 2011-07-22 03:07:15Z  $'
 
 import cssrule
 import cssutils

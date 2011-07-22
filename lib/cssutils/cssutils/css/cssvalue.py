@@ -8,7 +8,7 @@
 __all__ = ['CSSValue', 'CSSPrimitiveValue', 'CSSValueList', 'RGBColor',
            'CSSVariable']
 __docformat__ = 'restructuredtext'
-__version__ = '$Id: cssvalue.py 2018 2010-11-01 15:51:24Z cthedot $'
+__version__ = '$Id: cssvalue.py 81879 2011-07-22 03:07:15Z  $'
 
 from cssutils.prodparser import *
 import cssutils

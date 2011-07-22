@@ -12,7 +12,7 @@ open issues
 """
 __all__ = ['CSSProductions', 'MACROS', 'PRODUCTIONS']
 __docformat__ = 'restructuredtext'
-__version__ = '$Id: cssproductions.py 1855 2009-10-07 17:03:19Z cthedot $'
+__version__ = '$Id: cssproductions.py 81879 2011-07-22 03:07:15Z  $'
 
 # a complete list of css3 macros
 MACROS = {

@@ -4,7 +4,7 @@
 """
 __all__ = ['Tokenizer', 'CSSProductions']
 __docformat__ = 'restructuredtext'
-__version__ = '$Id: tokenize2.py 2010 2010-06-20 16:29:28Z cthedot $'
+__version__ = '$Id: tokenize2.py 81879 2011-07-22 03:07:15Z  $'
 
 from cssproductions import *
 from helper import normalize

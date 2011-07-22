@@ -2,7 +2,7 @@
 """utility script to parse given filenames or string
 """
 __docformat__ = 'restructuredtext'
-__version__ = '$Id: cssparse.py 1434 2008-08-13 10:12:45Z cthedot $'
+__version__ = '$Id: cssparse.py 81879 2011-07-22 03:07:15Z  $'
 
 import cssutils
 import logging

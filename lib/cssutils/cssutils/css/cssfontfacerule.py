@@ -5,7 +5,7 @@ added http://www.w3.org/TR/css3-fonts/.
 """
 __all__ = ['CSSFontFaceRule']
 __docformat__ = 'restructuredtext'
-__version__ = '$Id: cssfontfacerule.py 1951 2010-03-28 18:06:56Z cthedot $'
+__version__ = '$Id: cssfontfacerule.py 81879 2011-07-22 03:07:15Z  $'
 
 from cssstyledeclaration import CSSStyleDeclaration
 import cssrule

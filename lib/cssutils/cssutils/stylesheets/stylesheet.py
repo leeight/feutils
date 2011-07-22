@@ -1,7 +1,7 @@
 """StyleSheet implements DOM Level 2 Style Sheets StyleSheet."""
 __all__ = ['StyleSheet']
 __docformat__ = 'restructuredtext'
-__version__ = '$Id: stylesheet.py 1938 2010-03-21 18:21:18Z cthedot $'
+__version__ = '$Id: stylesheet.py 81879 2011-07-22 03:07:15Z  $'
 
 import cssutils
 import urlparse

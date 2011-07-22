@@ -2,7 +2,7 @@
 """
 __all__ = ['CSSNamespaceRule']
 __docformat__ = 'restructuredtext'
-__version__ = '$Id: cssnamespacerule.py 1983 2010-05-30 12:08:46Z cthedot $'
+__version__ = '$Id: cssnamespacerule.py 81879 2011-07-22 03:07:15Z  $'
 
 from cssutils.helper import Deprecated
 import cssrule

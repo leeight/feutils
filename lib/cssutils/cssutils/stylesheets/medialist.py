@@ -6,7 +6,7 @@ TODO:
 """
 __all__ = ['MediaList']
 __docformat__ = 'restructuredtext'
-__version__ = '$Id: medialist.py 1987 2010-05-30 15:42:22Z cthedot $'
+__version__ = '$Id: medialist.py 81879 2011-07-22 03:07:15Z  $'
 
 from cssutils.css import csscomment
 from mediaquery import MediaQuery

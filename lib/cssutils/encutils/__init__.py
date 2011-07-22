@@ -75,7 +75,7 @@ __all__ = ['buildlog',
            'EncodingInfo']
 __docformat__ = 'restructuredtext'
 __author__ = 'Christof Hoeke, Robert Siemer'
-__version__ = '$Id: __init__.py 1712 2009-04-23 12:46:03Z cthedot $'
+__version__ = '$Id: __init__.py 81879 2011-07-22 03:07:15Z  $'
 
 import HTMLParser
 import StringIO

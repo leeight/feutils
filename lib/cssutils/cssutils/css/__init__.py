@@ -46,7 +46,7 @@ __all__ = [
     'CSSValue', 'CSSPrimitiveValue', 'CSSValueList'
     ]
 __docformat__ = 'restructuredtext'
-__version__ = '$Id: __init__.py 1928 2010-03-20 22:40:37Z cthedot $'
+__version__ = '$Id: __init__.py 81879 2011-07-22 03:07:15Z  $'
 
 from cssstylesheet import *
 from cssrulelist import *

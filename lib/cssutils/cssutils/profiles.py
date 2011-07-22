@@ -5,7 +5,7 @@ thanks!
 """
 __all__ = ['Profiles']
 __docformat__ = 'restructuredtext'
-__version__ = '$Id: cssproperties.py 1116 2008-03-05 13:52:23Z cthedot $'
+__version__ = '$Id: profiles.py 81879 2011-07-22 03:07:15Z  $'
 
 import re
 

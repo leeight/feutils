@@ -48,7 +48,7 @@ TODO: CSS2Properties DOMImplementation
 """
 __all__ = ['CSS2Properties']
 __docformat__ = 'restructuredtext'
-__version__ = '$Id: cssproperties.py 1638 2009-01-13 20:39:33Z cthedot $'
+__version__ = '$Id: cssproperties.py 81879 2011-07-22 03:07:15Z  $'
 
 import cssutils.profiles
 import re

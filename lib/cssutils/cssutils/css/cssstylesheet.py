@@ -9,7 +9,7 @@ TODO:
 """
 __all__ = ['CSSStyleSheet']
 __docformat__ = 'restructuredtext'
-__version__ = '$Id: cssstylesheet.py 2015 2010-07-06 18:43:53Z cthedot $'
+__version__ = '$Id: cssstylesheet.py 81879 2011-07-22 03:07:15Z  $'
 
 from cssutils.helper import Deprecated
 from cssutils.util import _Namespaces, _SimpleNamespaces, _readUrl

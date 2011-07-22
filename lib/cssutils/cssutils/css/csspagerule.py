@@ -1,7 +1,7 @@
 """CSSPageRule implements DOM Level 2 CSS CSSPageRule."""
 __all__ = ['CSSPageRule']
 __docformat__ = 'restructuredtext'
-__version__ = '$Id: csspagerule.py 1951 2010-03-28 18:06:56Z cthedot $'
+__version__ = '$Id: csspagerule.py 81879 2011-07-22 03:07:15Z  $'
 
 from cssstyledeclaration import CSSStyleDeclaration
 import cssrule

@@ -9,7 +9,7 @@ TODO:
 """
 __all__ = ['CSSCapture']
 __docformat__ = 'restructuredtext'
-__version__ = '$Id: csscapture.py 1547 2008-12-10 20:42:26Z cthedot $'
+__version__ = '$Id: csscapture.py 81879 2011-07-22 03:07:15Z  $'
 
 from cssutils.script import CSSCapture
 import logging

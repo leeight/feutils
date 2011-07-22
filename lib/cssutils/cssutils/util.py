@@ -2,7 +2,7 @@
 """
 __all__ = []
 __docformat__ = 'restructuredtext'
-__version__ = '$Id: util.py 2017 2010-07-17 10:07:00Z cthedot $'
+__version__ = '$Id: util.py 81879 2011-07-22 03:07:15Z  $'
 
 from helper import normalize
 from itertools import ifilter

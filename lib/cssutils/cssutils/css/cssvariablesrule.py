@@ -3,7 +3,7 @@
 """
 __all__ = ['CSSVariablesRule']
 __docformat__ = 'restructuredtext'
-__version__ = '$Id: cssfontfacerule.py 1818 2009-07-30 21:39:00Z cthedot $'
+__version__ = '$Id: cssvariablesrule.py 81879 2011-07-22 03:07:15Z  $'
 
 from cssvariablesdeclaration import CSSVariablesDeclaration
 import cssrule

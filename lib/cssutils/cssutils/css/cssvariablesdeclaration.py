@@ -3,7 +3,7 @@ http://disruptive-innovations.com/zoo/cssvariables/#mozTocId496530
 """
 __all__ = ['CSSVariablesDeclaration']
 __docformat__ = 'restructuredtext'
-__version__ = '$Id: cssstyledeclaration.py 1819 2009-08-01 20:52:43Z cthedot $'
+__version__ = '$Id: cssvariablesdeclaration.py 81879 2011-07-22 03:07:15Z  $'
 
 from cssutils.prodparser import *
 from cssutils.helper import normalize
