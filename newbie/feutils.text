@@ -103,3 +103,49 @@ TODO
 如果工具集更新了，我们只需要切换到`WORK_DIR`，执行命令：
 
     svn update
+
+### ChangeLog
+
+1. 添加了`Fzip`, `Fformat`的支持
+2. Linux平台支持了`Fsvn add`, `Fmake`
+3. Windows平台下面添加了Finstall和Funinstall的命令
+4. 升级了Fhelp
+
+#### 如何升级？
+
+如果已经安装好了`feutils`工具集，直接去`sdcfe`目录下面执行`svn update`即可.
+
+#### Fzip
+
+支持压缩js,css,json，未来还会支持压缩html
+
+    Usage: Fzip.py [options] input
+
+    Options:
+      -h, --help            show this help message and exit
+      -e ENGINE, --engine=ENGINE
+                            compressor engine
+      -c CHARSET, --charset=CHARSET
+                            input charset
+      -o OUTPUT, --output=OUTPUT
+                            output file
+
+#### Fformat
+
+跟`Fzip`的作用相反，把压缩之后的文件格式化，方便查看代码，现在支持js,css,json，未来还会支持html
+
+    Usage: Fformat.py [options] input
+
+    Options:
+      -h, --help            show this help message and exit
+      -t TYPE, --type=TYPE  input type
+      -o OUTPUT, --output=OUTPUT
+                            output file
+
+#### Finstall
+
+仅限于Windows平台，执行之后，在右键菜单里面添加了`Process with Fformat`和`Process with Fzip`两个命令
+
+#### Funinstall
+
+仅限于Windows平台，执行之后，把右键菜单里面的两个命令去掉
