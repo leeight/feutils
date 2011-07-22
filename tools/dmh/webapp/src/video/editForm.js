@@ -5,7 +5,6 @@ goog.require('ui.Timeline');
 goog.require('ui.Form');
 goog.require('ui.Label');
 goog.require('ui.Timeline');
-goog.require('ui.Timeline');
 
 goog.provide('video.EditForm');
 
@@ -18,9 +17,9 @@ video.EditForm = function() {
     er.FormAction.call(this);
     
     var me = this;
-    //
-    me.videoInfo = er.context.get('video.info');
-
+    //用户上传视频成功后将视频信息写入到er.context,如果用户不是来源自上传页面（如刷新当前页），则尝试获取cookie中的用户上次上传的视频信息
+    me.videoInfo = er.context.get('video.info') || baidu.json.parse(baidu.cookie.get('video.info'));
+    //测试使用
 	me.videoInfo = me.videoInfo || {
 		count : 189,
 		width : 788,
@@ -51,7 +50,11 @@ video.EditForm = function() {
       }
     });
     
-    er.context.set('video.info', me.videoInfo)
+    er.context.set('video.info', me.videoInfo);
+    //存入cookie，用户刷新当前页而不是从上传页面过来时记住上次上传的视频信息
+    //cookie有效时间为当天，因为每天夜里服务器会清除所有用户上传的视频
+    var now = new Date();
+    baidu.cookie.set('video.info', baidu.json.stringify(me.videoInfo), {expires : new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1)});
     
     baidu.object.extend(me.videoInfo, {
       //每帧持续时间，该参数决定图片轮转速度
@@ -230,9 +233,20 @@ video.EditForm.prototype = {
       };
       return baidu.url.jsonToQuery(extraParam);
 	},
+    /**
+     * 表单提交前
+     */
+    onFormSubmit : function(params){
+        
+        video.EditForm.superClass.onFormSubmit.call(this, params); 
+        //loading提示
+        dn.loading.show(video.config.loading.convert);
+    },
     
     /**@inherits */
     onSubmitFinish : function(data){
+      
+      dn.loading.hide();
       
       var me = this,
           debugFfmpegDom;
@@ -257,7 +271,12 @@ video.EditForm.prototype = {
       //裁剪后的视频预览
       window.store = {};
       window.store['123'] = video.config.DAN_AD_CONFIG;
+      //loading提示
+      dn.loading.show(video.config.loading.preview);
+      
       BAIDU_DAN_showAd("123"); 
+      //隐藏loading
+      dn.loading.hide();
     }
 };
 baidu.inherits(video.EditForm, er.FormAction);

@@ -24,10 +24,16 @@ dn.Loading = function() {
 /**
  * 显示loading
  */
-dn.Loading.prototype.show = function() {
+dn.Loading.prototype.show = function(text) {
     ui.Mask.show();
     if (baidu.g(this.ID)) {
+        
+        text = text || '加载中，请稍后...';
         baidu.show(this.ID);
+        var textDom = baidu.dom.q('loading-text')[0];
+        if(textDom){
+            textDom.innerHTML = text;
+        }
         if (baidu.ie && baidu.ie < 7) {
             baidu.g(this.ID).style.top = '120px';
         }

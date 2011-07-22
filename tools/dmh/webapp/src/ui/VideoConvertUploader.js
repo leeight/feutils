@@ -28,7 +28,7 @@ ui.VideoConvertUploader = function(options) {
 
   this.type = 'Uploader';
   this.form = 1;
-  this.url = '/bin/ffmpeg/upload.php'
+  this.url = video.config.url.upload;
   
 };
 baidu.inherits(ui.VideoConvertUploader, ui.Uploader);
@@ -39,19 +39,25 @@ baidu.inherits(ui.VideoConvertUploader, ui.Uploader);
  */
 ui.VideoConvertUploader.prototype.wrapper;
 
+/**
+ * 绑定事件
+ */
+ui.VideoConvertUploader.prototype.bindEvent = function() {
+    
+    var me = this;
+    
+    ui.VideoConvertUploader.superClass.bindEvent.call(me);
+    
+    
+    this.addListener(ui.events.BEFORE_CHANGE, function(){
+        dn.loading.show(video.config.loading.upload);
+    });
+};
 
 /** @inheritDoc */
 ui.VideoConvertUploader.prototype.render = function(opt_main) {
   ui.VideoConvertUploader.superClass.render.call(this, opt_main);
-
-  this.wrapper = document.createElement('DIV');
-  this.wrapper.id = this.getId('wrapper');
-  baidu.addClass(this.wrapper, this.getClass('preview'));
-  baidu.dom.insertAfter(this.wrapper, this.main);
-
 };
-
-
 
 /**
  * 处理服务器端返回的数据.
@@ -60,6 +66,9 @@ ui.VideoConvertUploader.prototype.render = function(opt_main) {
  */
 
 ui.VideoConvertUploader.prototype.processResponse = function(data) {
+  
+  dn.loading.hide();
+  
   if (data.success === true) {
     //保存视频信息
     er.context.set('video.info', data.result);

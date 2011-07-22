@@ -36,7 +36,15 @@ video.config = {
    * url配置
    */
   'url': {
-    convert: 'bin/ffmpeg/video.php'
+    convert: 'bin/ffmpeg/video.php',
+    upload : '/bin/ffmpeg/upload.php'
+  },
+  
+  'loading' : {
+    load : '加载中，请稍后...',
+    upload : '正在上传视频...',
+    convert : '正在转换视频...',
+    preview : '正在载入预览...'
   },
   
   /**
