@@ -12,6 +12,7 @@
  
 import os
 import sys
+import platform
  
  
 __author__ = 'leeight <liyubei@baidu.com>'
@@ -20,31 +21,18 @@ __revision = '$Revision$'
 
 FHELP_PY_PATH = os.path.dirname(os.path.abspath(__file__))
 
-def which(program):
-  def is_exe(fpath):
-    return os.path.exists(fpath) and os.access(fpath, os.X_OK)
-
-  fpath, fname = os.path.split(program)
-  if fpath:
-    if is_exe(program):
-      return program
-  else:
-    for path in os.environ["PATH"].split(os.pathsep):
-      exe_file = os.path.join(path, program)
-      if is_exe(exe_file):
-        return exe_file
-
-  return None
-
 def main():
   commands = []
   for entry in os.listdir(FHELP_PY_PATH):
     if os.path.isfile(os.path.join(FHELP_PY_PATH, entry)):
       if entry.startswith('F'):
         if entry.find(".") == -1:
-          print which(entry)
-          if which(entry):
-            commands.append(entry)
+          if platform.system() == "Windows":
+            if os.path.exists(entry + ".bat"):
+              commands.append(entry)
+          else:
+            if os.access(entry, os.X_OK):
+              commands.append(entry)
 
   print "Available commands:"
   for command in commands:
