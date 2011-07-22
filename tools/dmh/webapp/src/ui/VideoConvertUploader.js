@@ -72,6 +72,10 @@ ui.VideoConvertUploader.prototype.processResponse = function(data) {
   if (data.success === true) {
     //保存视频信息
     er.context.set('video.info', data.result);
+    //存入cookie，用户刷新当前页而不是从上传页面过来时记住上次上传的视频信息
+    //cookie有效时间为当天，因为每天夜里服务器会清除所有用户上传的视频
+    var now = new Date();
+    baidu.cookie.set('video.info', baidu.json.stringify(data.result), {expires : new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1)});
     //进入第二步，视频编辑
     er.locator.redirect('/video/edit');
     //this.trigger(ui.events.UPLOAD_SUCCESS);

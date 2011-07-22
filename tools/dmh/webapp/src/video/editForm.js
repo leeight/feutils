@@ -51,10 +51,6 @@ video.EditForm = function() {
     });
     
     er.context.set('video.info', me.videoInfo);
-    //存入cookie，用户刷新当前页而不是从上传页面过来时记住上次上传的视频信息
-    //cookie有效时间为当天，因为每天夜里服务器会清除所有用户上传的视频
-    var now = new Date();
-    baidu.cookie.set('video.info', baidu.json.stringify(me.videoInfo), {expires : new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1)});
     
     baidu.object.extend(me.videoInfo, {
       //每帧持续时间，该参数决定图片轮转速度
@@ -250,7 +246,6 @@ video.EditForm.prototype = {
       
       var me = this,
           debugFfmpegDom;
-          
       
       //填充调试信息   
       if(debugFfmpegDom = baidu.g('debug_ffmpeg')){
@@ -264,7 +259,7 @@ video.EditForm.prototype = {
       video.config.DAN_AD_CONFIG['_html']['target_url'] 
         = video.config.FFMPEG_PATH + baidu.string.trim(data.result.gen_video_path) + '?random=' + Math.random();
       //如果前面加载过demo视频，移除之
-      var ins = baidu.dom.query('body > ins:first');  
+      var ins = baidu.dom.query('body > ins:first');
       if(ins.length){
         baidu.dom.remove(ins[0]);
       }
