@@ -12,6 +12,7 @@
  
 import os
 import sys
+import platform
  
  
 __author__ = 'leeight <liyubei@baidu.com>'
@@ -26,7 +27,12 @@ def main():
     if os.path.isfile(os.path.join(FHELP_PY_PATH, entry)):
       if entry.startswith('F'):
         if entry.find(".") == -1:
-          commands.append(entry)
+          if platform.system() == "Windows":
+            if os.path.exists(os.path.join(FHELP_PY_PATH, entry + ".bat")):
+              commands.append(entry)
+          else:
+            if os.access(entry, os.X_OK):
+              commands.append(entry)
 
   print "Available commands:"
   for command in commands:
