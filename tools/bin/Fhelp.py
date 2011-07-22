@@ -28,6 +28,7 @@ def main():
       if entry.startswith('F'):
         if entry.find(".") == -1:
           if platform.system() == "Windows":
+            print entry + '.bat'
             if os.path.exists(entry + ".bat"):
               commands.append(entry)
           else:
