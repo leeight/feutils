@@ -13,4 +13,4 @@ hkcr,"*\Shell\Fzip"
 
 [Install_AddReg]
 hkcr,"*\Shell\Fzip",,,"Process with F&zip"
-hkcr,"*\Shell\Fzip\command",,,"""%01%\Fzip.bat"" ""%%1"" -o ""%%1.ziped"""
+hkcr,"*\Shell\Fzip\command",,,"""%01%\Fzip.bat"" ""%%1"" -o ""DEFAULT_NAME"""
