@@ -42,6 +42,7 @@ def main():
     if os.path.isfile(os.path.join(FHELP_PY_PATH, entry)):
       if entry.startswith('F'):
         if entry.find(".") == -1:
+          print which(entry)
           if which(entry):
             commands.append(entry)
 
