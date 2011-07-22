@@ -1,0 +1,16 @@
+[Version]
+Signature="$CHICAGO$"
+Provider=liyubei@baidu.com, 2011
+
+[DefaultInstall]
+AddReg=Install_AddReg
+
+[DefaultUnInstall]
+DelReg=Uninstall_DelReg
+
+[Uninstall_DelReg]
+hkcr,"*\Shell\Fzip"
+
+[Install_AddReg]
+hkcr,"*\Shell\Fzip",,,"Process with F&zip"
+hkcr,"*\Shell\Fzip\command",,,"""%01%\Fzip.bat"" ""%%1"" -o ""DEFAULT_NAME"""

@@ -4,7 +4,7 @@
 # ***************************************************************************
 # 
 # Copyright (c) 2011 Baidu.com, Inc. All Rights Reserved
-# $Id: Fzip.py 81896 2011-07-22 03:59:44Z  $ 
+# $Id: Fzip.py 81937 2011-07-22 06:20:48Z  $ 
 # 对css，js，html进行一些简单的压缩处理
 # **************************************************************************/
  
@@ -32,7 +32,7 @@ copyleft = "/*! Copyright " + str(datetime.now().year) + " Baidu Inc. All Rights
  
 __author__ = 'leeight <liyubei@baidu.com>'
 __date__ = '2011/07/22 11:08:49'
-__revision = '$Revision: 81896 $'
+__revision = '$Revision: 81937 $'
 
 
 def get_java_version():
@@ -120,6 +120,9 @@ def main():
     parser.print_help()
   else:
     input = args[0]
+    if options.output == "DEFAULT_NAME":
+      fpath, fname = os.path.split(input)
+      options.output = os.path.join(fpath, 'ziped.' + fname)
     options.output = open(options.output, 'w') if \
                      options.output else sys.stdout
     handler = None

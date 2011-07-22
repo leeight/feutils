@@ -4,7 +4,7 @@
 # ***************************************************************************
 # 
 # Copyright (c) 2011 Baidu.com, Inc. All Rights Reserved
-# $Id: Fformat.py 81900 2011-07-22 04:18:27Z  $ 
+# $Id: Fformat.py 81942 2011-07-22 06:23:27Z  $ 
 # 格式化一些文件，比如js,css,json等等
 # **************************************************************************/
  
@@ -20,7 +20,7 @@ sys.path.insert(0, os.path.join(LIB_HOME, 'cssutils'))
 
 __author__ = 'leeight <liyubei@baidu.com>'
 __date__ = '2011/07/21 23:40:46'
-__revision = '$Revision: 81900 $'
+__revision = '$Revision: 81942 $'
 
 def format_js(input, options):
   import jsbeautifier
@@ -57,6 +57,9 @@ def main():
     parser.print_help()
   else:
     input = args[0]
+    if options.output == "DEFAULT_NAME":
+      fpath, fname = os.path.split(input)
+      options.output = os.path.join(fpath, 'formated.' + fname)
     options.output = open(options.output, 'w') if \
                      options.output else sys.stdout
     handler = None

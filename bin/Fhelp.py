@@ -26,13 +26,12 @@ def main():
   for entry in os.listdir(FHELP_PY_PATH):
     if os.path.isfile(os.path.join(FHELP_PY_PATH, entry)):
       if entry.startswith('F'):
-        if entry.find(".") == -1:
-          if platform.system() == "Windows":
-            if os.path.exists(os.path.join(FHELP_PY_PATH, entry + ".bat")):
-              commands.append(entry)
-          else:
-            if os.access(entry, os.X_OK):
-              commands.append(entry)
+        if platform.system() == "Windows":
+          if entry.endswith(".bat"):
+            commands.append(entry.replace(".bat", ""))
+        else:
+          if entry.find(".") == -1 and os.access(entry, os.X_OK):
+            commands.append(entry)
 
   print "Available commands:"
   for command in commands:
