@@ -10,3 +10,5 @@ feutils is short form front-end utility tools, which is used to help web develop
 ......
 
 please fork it from git://github.com/leeight/feutils.git
+
+参考了kissy-tools一些脚本的实现，有些工具也来自于kissy-tools
