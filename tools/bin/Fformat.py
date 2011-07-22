@@ -29,7 +29,7 @@ def format_js(input, options):
 
 def format_css(input, options):
   import cssutils
-  sheet = cssutils.parseString(input)
+  sheet = cssutils.parseFile(input)
   string = sheet.cssText
   options.output.write(string)
 
