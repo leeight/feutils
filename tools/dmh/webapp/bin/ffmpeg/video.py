@@ -175,6 +175,16 @@ def split_video(video):
 
   return videoInfo
 
+def mkdir(dirname):
+  videoInfo = {}
+  
+  if not os.path.exists(dirname):
+    videoInfo['createDir'] = 'true'
+    os.makedirs(dirname)
+  else:
+    videoInfo['createDir'] = 'false'
+  return videoInfo
+
 def main(http):
   
   paramArr = http.path.split('?')[1].split('&')
@@ -185,6 +195,8 @@ def main(http):
   
   if paramMap['o'] == 'split':
     videoInfo = split_video(paramMap['filename'])
+  elif paramMap['o'] == 'mkdir':
+    videoInfo = mkdir(paramMap['dirname'])
   else:
     videoInfo = convert(paramMap['crop'], paramMap['filename'], paramMap['bin'], paramMap['start'], paramMap['frames'], paramMap['size'], paramMap['bps'])
 #  body = '{';
