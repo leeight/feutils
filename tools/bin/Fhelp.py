@@ -28,8 +28,7 @@ def main():
       if entry.startswith('F'):
         if entry.find(".") == -1:
           if platform.system() == "Windows":
-            print entry + '.bat'
-            if os.path.exists(entry + ".bat"):
+            if os.path.exists(os.path.join(FHELP_PY_PATH, entry + ".bat")):
               commands.append(entry)
           else:
             if os.access(entry, os.X_OK):
