@@ -35,7 +35,7 @@ video.EditForm = function() {
         //在前端获取视频尺寸
 	    var tmpImgDiv = baidu.dom.create('div', {style:'position:absolute;left:-1000px;top:-1000px'});
 	    document.body.appendChild(tmpImgDiv);
-	    var tmpImgObj = baidu.dom.create('img', {src: video.config.FFMPEG_PATH + me.model.target + '/' + '1.jpg'});
+	    var tmpImgObj = baidu.dom.create('img', {src: video.config.FFMPEG_PATH + me.videoInfo.target + '/' + '1.jpg'});
 	    tmpImgDiv.appendChild(tmpImgObj);
 	    me.videoInfo.width = parseInt(baidu.dom.getStyle(tmpImgObj, 'width'));
 	    me.videoInfo.height = parseInt(baidu.dom.getStyle(tmpImgObj, 'height'));
@@ -238,6 +238,22 @@ video.EditForm.prototype = {
         //loading提示
         dn.loading.show(video.config.loading.convert);
     },
+    /**
+     * 离开当前action时
+     */
+    leaveInternal : function(){
+        var me = this;
+        //如果加载过预览视频，移除之
+        me.removePreview();
+        //删除选择区域
+        baidu.array.each(baidu.dom.q('imgareaselect-selection'), function(dom){
+            baidu.dom.remove(baidu.dom.getParent(dom));
+        });
+        //删除选择区域四周
+        baidu.array.each(baidu.dom.q('imgareaselect-outer'), function(dom){
+            baidu.dom.remove(dom);
+        });
+    },
     
     /**@inherits */
     onSubmitFinish : function(data){
@@ -258,20 +274,21 @@ video.EditForm.prototype = {
       //客户下载的flv地址
       video.config.DAN_AD_CONFIG['_html']['target_url'] 
         = video.config.FFMPEG_PATH + baidu.string.trim(data.result.gen_video_path) + '?random=' + Math.random();
-      //如果前面加载过demo视频，移除之
+      //如果加载过预览视频，移除之
+      me.removePreview();
+      //裁剪后的视频预览
+      window.store = {};
+      window.store['123'] = video.config.DAN_AD_CONFIG;
+      BAIDU_DAN_showAd("123"); 
+    },
+    /**
+     * 移除预览
+     */
+    removePreview : function(){
       var ins = baidu.dom.query('body > ins:first');
       if(ins.length){
         baidu.dom.remove(ins[0]);
       }
-      //裁剪后的视频预览
-      window.store = {};
-      window.store['123'] = video.config.DAN_AD_CONFIG;
-      //loading提示
-      dn.loading.show(video.config.loading.preview);
-      
-      BAIDU_DAN_showAd("123"); 
-      //隐藏loading
-      dn.loading.hide();
     }
 };
 baidu.inherits(video.EditForm, er.FormAction);

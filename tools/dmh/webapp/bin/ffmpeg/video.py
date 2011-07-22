@@ -27,6 +27,9 @@ __author__ = 'leeight <liyubei@baidu.com>'
 __date__ = '2011/05/26 22:13:58'
 __revision = '$Revision: 6545 $'
 
+#切换到当前工作目录
+os.chdir(os.path.dirname(os.path.abspath(__file__)))
+
 PATH = ''
 PORT = 8999
 
@@ -53,7 +56,12 @@ def convert(crop, filename, bin='ffmpeg', start=0, frames=0, size='306x228', bps
   name, ext = os.path.splitext(filename)
   file_path,file_pre_name = os.path.split(name)
   
-  output = file_path + '/download/' + file_pre_name + '.' + bps + '.flv'
+  outputDir = file_path + '/download/'
+  
+  output = outputDir + file_pre_name + '.' + bps + '.flv'
+  
+  if not os.path.exists(outputDir):
+      os.makedirs(outputDir)
   
   videoInfo = {}
   
