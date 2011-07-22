@@ -57,6 +57,9 @@ def main():
     parser.print_help()
   else:
     input = args[0]
+    if options.output == "DEFAULT_NAME":
+      fpath, fname = os.path.split(input)
+      options.output = os.path.join(fpath, 'formated.' + fname)
     options.output = open(options.output, 'w') if \
                      options.output else sys.stdout
     handler = None
