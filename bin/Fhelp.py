@@ -30,8 +30,9 @@ def main():
           if entry.endswith(".bat"):
             commands.append(entry.replace(".bat", ""))
         else:
-          if entry.find(".") == -1 and os.access(entry, os.X_OK):
-            commands.append(entry)
+          if entry.find(".") == -1:
+            if os.access(os.path.join(FHELP_PY_PATH, entry), os.X_OK):
+              commands.append(entry)
 
   print "Available commands:"
   for command in commands:
