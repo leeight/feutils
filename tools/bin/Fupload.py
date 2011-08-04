@@ -26,9 +26,12 @@ __author__ = 'leeight <liyubei@baidu.com>'
 __date__ = '2011/07/28 17:20:18'
 __revision = '$Revision$'
 
-UPLOAD_ACTION_URL = "http://tc-apptest-cms00.tc.baidu.com:8000/service/app_action/?action=upload"
-LIST_ACTION_URL = "http://tc-apptest-cms00.tc.baidu.com:8000/service/app_action/?action=uploadIndex"
-PREFIX_URL = "http://tc-apptest-cms03.tc.baidu.com:8080/hn01/cms/"
+# UPLOAD_ACTION_URL = "http://tc-apptest-cms00.tc.baidu.com:8000/service/app_action/?action=upload"
+# LIST_ACTION_URL = "http://tc-apptest-cms00.tc.baidu.com:8000/service/app_action/?action=uploadIndex"
+# PREFIX_URL = "http://tc-apptest-cms03.tc.baidu.com:8080/hn01/cms/"
+UPLOAD_ACTION_URL = "http://icms.baidu.com:8080/service/app_action/?action=upload"
+LIST_ACTION_URL = "http://icms.baidu.com:8080/service/app_action/?action=uploadIndex"
+PREFIX_URL = "http://img.baidu.com/adm"
 
 def get_app_cfg_file():
   return os.path.expanduser("~/.Fupload.ini")
@@ -86,15 +89,18 @@ def upload(filename):
   params = { 
     "user_name" : user_info["app.user.username"],
     "password" : user_info["app.user.password"],
-    "top_ch_spell" : "cms",
+    "top_ch_spell" : "cbweb",
     "app_id" : "cms_r",
-    "group_id" : "2",
+    "group_id" : "7",
     "url" : PREFIX_URL,
     "commonfile" : open(filename, "rb") 
   }
   try:
     response = opener.open(UPLOAD_ACTION_URL, params)
-    return response.read()
+    content = response.read()
+    body = json.loads(content)
+    if body['success']:
+      return body['result']['file_domain'] + '/' + body['result']['file_name']
   except:
     logging.warning("Upload [%s] failed" % (filename))
     
@@ -106,14 +112,15 @@ def list_all_files():
   params = { 
     "user_name" : user_info["app.user.username"],
     "password" : user_info["app.user.password"],
-    "top_ch_spell" : "cms",
+    "top_ch_spell" : "cbweb",
     "app_id" : "cms_r",
-    "group_id" : "2",
+    "group_id" : "7",
     "url" : PREFIX_URL 
   }
   try:
     response = opener.open(LIST_ACTION_URL, params)
-    body = json.loads(response.read())
+    content = response.read()
+    body = json.loads(content)
     if body["success"]:
       for item in body["page"]["result"]:
         print "%s -> %s" % (item["name"], item["url"])
