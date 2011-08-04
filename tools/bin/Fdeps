@@ -6,5 +6,5 @@ lib_dir="${base_dir}/../lib"
 [ $# -eq 1 ] && {
   exec python "${lib_dir}/calcdeps.py" -o deps -p "$1" --output_file "$1/deps.js"
 } || {
-  echo "Usage: Fdeps <src_dir>"
+  echo "Usage: Fdeps src_dir"
 }
