@@ -92,6 +92,7 @@ def upload(filename):
     "top_ch_spell" : "cbweb",
     "app_id" : "cms_r",
     "group_id" : "7",
+    "type" : "11",
     "url" : PREFIX_URL,
     "commonfile" : open(filename, "rb") 
   }
@@ -100,7 +101,12 @@ def upload(filename):
     content = response.read()
     body = json.loads(content)
     if body['success']:
-      return body['result']['file_domain'] + '/' + body['result']['file_name']
+      domain = body['result']['file_domain']
+      name = body['result']['file_name']
+      ext = body['result']['file_ext']
+      if not domain.endswith("/"):
+        domain += "/"
+      return domain + name + "." + ext
   except:
     logging.warning("Upload [%s] failed" % (filename))
     
@@ -115,6 +121,7 @@ def list_all_files():
     "top_ch_spell" : "cbweb",
     "app_id" : "cms_r",
     "group_id" : "7",
+    "type" : "11",
     "url" : PREFIX_URL 
   }
   try:
