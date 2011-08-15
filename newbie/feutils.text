@@ -149,3 +149,14 @@ TODO
 #### Funinstall
 
 仅限于Windows平台，执行之后，把右键菜单里面的两个命令去掉
+
+#### Fupload
+
+开始支持通过cms的API，直接把静态文件上传到http://img.baidu.com的服务器上，使用方法如下：
+
+    Fupload ~/a.png
+
+第一次使用的时候，会提示你输入邮箱的用户名和密码，来进行认证，之后就不需要了。如果以后修改了
+用户名和密码，导致认证失败，无法上传，可以通过命名`Fupload -c`重新设置即可。
+
+上传成功之后，会返回线上的地址，例如`http://img.baidu.com/adm/a.png`，默认只是上传到`http://img.baidu.com/adm`目录下面。
