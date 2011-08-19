@@ -4,7 +4,7 @@
 # ***************************************************************************
 # 
 # Copyright (c) 2011 Baidu.com, Inc. All Rights Reserved
-# $Id: Ftangram.py 88322 2011-08-19 07:49:10Z  $ 
+# $Id: Ftangram.py 88336 2011-08-19 08:00:41Z  $ 
 # 
 # **************************************************************************/
  
@@ -21,7 +21,7 @@ from optparse import OptionParser
  
 __author__ = 'leeight <liyubei@baidu.com>'
 __date__ = '2011/08/19 13:42:18'
-__revision = '$Revision: 88322 $'
+__revision = '$Revision: 88336 $'
 
 
 from closure_linter import javascripttokenizer
@@ -68,7 +68,7 @@ def tangram_compile(args, options):
     options.output.write(codecs.open(args[0], 'r', options.charset).read().encode("utf-8"))
     program = "\n".join([
       tangram,
-    ] + map(lambda x : file(x), args[1:]))
+    ] + map(lambda x : codecs.open(x, 'r', options.charset).read().encode("utf-8"), args[1:]))
   else:
     program = "\n".join([
       tangram,
