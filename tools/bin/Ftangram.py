@@ -29,21 +29,55 @@ from closure_linter import tokenutil
 
 TokenType = javascripttokens.JavaScriptTokenType
 
+API_ALIAS_MAP = {
+  "baidu.format" : "baidu.string.format",
+  "baidu.setStyles" : "baidu.dom.setStyles",
+  "baidu.inherits" : "baidu.lang.inherits",
+  "baidu.show" : "baidu.dom.show",
+  "baidu.addClass" : "baidu.dom.addClass",
+  "baidu.removeClass" : "baidu.dom.removeClass",
+  "baidu.Q" : "baidu.dom.q",
+  "baidu.hide" : "baidu.dom.hide",
+  "baidu.isString" : "baidu.lang.isString",
+  "baidu.G" : "baidu.dom.g",
+  "baidu.g" : "baidu.dom.g",
+  "baidu.insertHTML" : "baidu.dom.insertHTML",
+  "baidu.setStyle" : "baidu.dom.setStyle",
+  "baidu.getAttr" : "baidu.dom.getAttr",
+  "baidu.encodeHTML" : "baidu.string.encodeHTML",
+  "baidu.trim" : "baidu.string.trim",
+  "baidu.isObject" : "baidu.lang.isObject",
+  "baidu.setAttrs" : "baidu.dom.setAttrs",
+  "baidu.un" : "baidu.event.un",
+  "baidu.on" : "baidu.event.on",
+  "baidu.q" : "baidu.dom.q",
+  "baidu.getStyle" : "baidu.dom.getStyle",
+  "baidu.each" : "baidu.array.each",
+  "baidu.decodeHTML" : "baidu.string.decodeHTML",
+  "baidu.extend" : "baidu.object.extend",
+  "baidu.setAttr" : "baidu.dom.setAttr"
+}
+
 def tangram_compile(args, output):
   tokens = set()
   for filename in args:
     tokens.update(collect_tokens(filename))
-  fetch_remote_source(list(tokens))
+  script = fetch_remote_source(list(tokens))
+  output.write(script)
+
+def normalize_api_name(tokens):
+  return map(lambda x : API_ALIAS_MAP[x] if x in API_ALIAS_MAP else x, tokens)
 
 def fetch_remote_source(tokens):
   """
   发起HTTP请求，获取代码
   """
 
+  tokens = normalize_api_name(tokens)
   src = "\n".join(map(lambda x : "///import %s;" % x, tokens))
   request = urllib2.Request("http://tangram.baidu.com/codesearch/script/code.php")
   request.add_data(urllib.urlencode({
-    "compress" : "yui",
+    "compress" : "source",
     "isLite" : "0",
     "nobase" : "false",
     "nouibase" : "false",
@@ -52,10 +86,13 @@ def fetch_remote_source(tokens):
     "src" : src,
     "tag" : "src",
     "version" : "tangram-component_stable",
-    "viewSource" : "0"
   }))
   handler = urllib2.urlopen(request)
-  print handler.read()
+  try:
+    body = handler.read()
+    return body
+  except (urllib2.URLError, urllib2.HTTPError, httplib.BadStatusLine, httplib.IncompleteRead, socket.timeout):
+    return "/** == E R R O R  H A P P E N E D  == */"
 
 def collect_tokens(filename):
   tokens = set()
@@ -82,12 +119,12 @@ def main():
  
   (options, args) = parser.parse_args()
 
+  options.output = open(options.output, 'w') if options.output else sys.stdout
   if options.functions:
-    fetch_remote_source(filter(lambda x : x.startswith("baidu"), options.functions))
+    options.output.write(fetch_remote_source(filter(lambda x : x.startswith("baidu"), options.functions)))
   elif len(args) <= 0:
     parser.print_help()
   else:
-    options.output = open(options.output, 'w') if options.output else sys.stdout
     tangram_compile(args, options.output)
 
 if __name__ == "__main__":
