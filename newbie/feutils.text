@@ -160,3 +160,58 @@ TODO
 用户名和密码，导致认证失败，无法上传，可以通过命名`Fupload -c`重新设置即可。
 
 上传成功之后，会返回线上的地址，例如`http://img.baidu.com/adm/a.png`，默认只是上传到`http://img.baidu.com/adm`目录下面。
+
+#### Ftangram
+
+平时使用tangram开发应用的时候，一般为了方便，都是把整个tangram引入到项目中来，例如，经常看到如下的代码：
+
+    ::html
+    <!doctype html>
+    <html>
+      <head>
+        <meta charset="utf-8">
+        <script type="text/javascript" src="http://the/path/to/tangram/stable.js"></script>
+        <script type="text/javascript" src="app.js"></script>
+      </head>
+      <body>
+        foobar
+      </body>
+    </html>
+
+而我们`app.js`的内容可能是下面这样子的：
+
+    :::javascript
+    function Ad() {
+    }
+    Ad.prototype.render = function() {
+      ...
+      baidu.g("id").innerHTML = html;
+      ...
+      baidu.on("id", "click", function(){});
+      ...
+    }
+
+当我们要发布的时候，可以直接用线上的tangram，如果你考虑到tangram还是比较大，可能会手工通过tangram的[codesearch工具](http://tangram.baidu.com/codesearch/codesearch.html)
+合并一份儿体积比较小的代码出来，但是手工的方式很不方便，而且容易出错，万一漏掉某个函数就麻烦了。因此想写这个工具来解决
+这个问题，我们开始的时候，直接引用最全的tangram，发布的之后，通过工具`Ftangram`，分析代码中使用到的`tangram`函数的地方，然后
+自动把这些函数的实现获取下来。例如：
+
+    Ftangram app.js -o app.compiled.js
+
+大家就能看到，`app.compiled.js`里面已经有了`baidu.g`和`baidu.event.on`的实现了，其它都没有了，之后我们再使用`Fzip`这个工具，压缩
+一下就能发布了，o(∩∩)o...哈哈.
+
+`Ftangram`有很多参数，可以通过`--help`查看。
+
+    Usage: Ftangram.py [options] file1 [file2 [file3] ... ]
+
+    Options:
+      -h, --help            show this help message and exit
+      -o OUTPUT, --output=OUTPUT
+                            output file
+      -f FUNCTIONS, --functions=FUNCTIONS                   # 获取某个api的实现，支持多个。如果有这个参数，其它的都会被忽略掉。
+      -l, --keep-first-file-position                        # 不解释，看代码去
+      -w OUTPUT_WRAPPER, --output_wrapper=OUTPUT_WRAPPER    # 如果想把代码输出到闭包里面去，-w "(function(){%output%})()"
+                            default is %output%
+      -c CHARSET, --charset=CHARSET                         # 输入文件的编码，默认是utf-8，如果是gbk，请设置
+
