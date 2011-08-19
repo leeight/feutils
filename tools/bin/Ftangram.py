@@ -15,6 +15,7 @@ import sys
 import logging
 import urllib2
 import urllib
+import codecs
 from optparse import OptionParser
  
  
@@ -58,12 +59,22 @@ API_ALIAS_MAP = {
   "baidu.setAttr" : "baidu.dom.setAttr"
 }
 
-def tangram_compile(args, output):
+def tangram_compile(args, options):
   tokens = set()
   for filename in args:
     tokens.update(collect_tokens(filename))
-  script = fetch_remote_source(list(tokens))
-  output.write(script)
+  tangram = fetch_remote_source(list(tokens))
+  if options.keep_first:
+    options.output.write(codecs.open(args[0], 'r', options.charset).read().encode("utf-8"))
+    program = "\n".join([
+      tangram,
+    ] + map(lambda x : file(x), args[1:]))
+  else:
+    program = "\n".join([
+      tangram,
+    ] + map(lambda x : codecs.open(x, 'r', options.charset).read().encode("utf-8"), args))
+    
+  options.output.write(options.output_wrapper.replace("%output%", program))
 
 def normalize_api_name(tokens):
   return map(lambda x : API_ALIAS_MAP[x] if x in API_ALIAS_MAP else x, tokens)
@@ -116,6 +127,11 @@ def main():
   parser = OptionParser("Usage: Ftangram.py [options] file1 [file2 [file3] ... ]")
   parser.add_option("-o", "--output", dest="output", help="output file")
   parser.add_option("-f", "--functions", dest="functions", action="append")
+  parser.add_option("-l", "--keep-first-file-position", dest="keep_first", 
+      action="store_true", default=False)
+  parser.add_option("-w", "--output_wrapper", dest="output_wrapper", 
+      default="%output%", help="default is %output%")
+  parser.add_option("-c", "--charset", dest="charset", default="utf-8")
  
   (options, args) = parser.parse_args()
 
@@ -125,7 +141,7 @@ def main():
   elif len(args) <= 0:
     parser.print_help()
   else:
-    tangram_compile(args, options.output)
+    tangram_compile(args, options)
 
 if __name__ == "__main__":
   main()
