@@ -62,6 +62,8 @@ def zip_js(input, options):
     args = ['java', '-jar', GCC_JAR, '--js', input]
     if options.charset:
       args += ['--charset', options.charset]
+    if options.compiler_flags:
+      args += options.compiler_flags
   else:
     args = ['java', '-jar', YUI_JAR, '--line-break', '800', '--type', 'js']
     if options.charset:
@@ -114,6 +116,13 @@ def main():
       help="input charset")
   parser.add_option("-o", "--output", dest="output", 
       help="output file")
+  parser.add_option('-f',
+                    '--compiler_flag',
+                    '--compiler_flags', # for backwards compatability
+                    dest='compiler_flags',
+                    action='append',
+                    help='Additional flag to pass to the Closure compiler. '
+                    'May be specified multiple times to pass multiple flags.')
 
   (options, args) = parser.parse_args()
   if len(args) <= 0:

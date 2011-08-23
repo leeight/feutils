@@ -56,7 +56,9 @@ API_ALIAS_MAP = {
   "baidu.each" : "baidu.array.each",
   "baidu.decodeHTML" : "baidu.string.decodeHTML",
   "baidu.extend" : "baidu.object.extend",
-  "baidu.setAttr" : "baidu.dom.setAttr"
+  "baidu.setAttr" : "baidu.dom.setAttr",
+  "baidu.dom.setOuterHeight" : "baidu.dom.setBorderBoxHeight",
+  "baidu.dom.setOuterWidth" : "baidu.dom.setBorderBoxWidth"
 }
 
 def tangram_compile(args, options):
