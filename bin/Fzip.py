@@ -4,7 +4,7 @@
 # ***************************************************************************
 # 
 # Copyright (c) 2011 Baidu.com, Inc. All Rights Reserved
-# $Id: Fzip.py 81937 2011-07-22 06:20:48Z  $ 
+# $Id: Fzip.py 88712 2011-08-23 03:43:06Z  $ 
 # 对css，js，html进行一些简单的压缩处理
 # **************************************************************************/
  
@@ -32,7 +32,7 @@ copyleft = "/*! Copyright " + str(datetime.now().year) + " Baidu Inc. All Rights
  
 __author__ = 'leeight <liyubei@baidu.com>'
 __date__ = '2011/07/22 11:08:49'
-__revision = '$Revision: 81937 $'
+__revision = '$Revision: 88712 $'
 
 
 def get_java_version():
@@ -62,6 +62,8 @@ def zip_js(input, options):
     args = ['java', '-jar', GCC_JAR, '--js', input]
     if options.charset:
       args += ['--charset', options.charset]
+    if options.compiler_flags:
+      args += options.compiler_flags
   else:
     args = ['java', '-jar', YUI_JAR, '--line-break', '800', '--type', 'js']
     if options.charset:
@@ -114,6 +116,13 @@ def main():
       help="input charset")
   parser.add_option("-o", "--output", dest="output", 
       help="output file")
+  parser.add_option('-f',
+                    '--compiler_flag',
+                    '--compiler_flags', # for backwards compatability
+                    dest='compiler_flags',
+                    action='append',
+                    help='Additional flag to pass to the Closure compiler. '
+                    'May be specified multiple times to pass multiple flags.')
 
   (options, args) = parser.parse_args()
   if len(args) <= 0:

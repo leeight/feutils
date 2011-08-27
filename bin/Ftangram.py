@@ -4,7 +4,7 @@
 # ***************************************************************************
 # 
 # Copyright (c) 2011 Baidu.com, Inc. All Rights Reserved
-# $Id: Ftangram.py 88336 2011-08-19 08:00:41Z  $ 
+# $Id: Ftangram.py 88712 2011-08-23 03:43:06Z  $ 
 # 
 # **************************************************************************/
  
@@ -21,7 +21,7 @@ from optparse import OptionParser
  
 __author__ = 'leeight <liyubei@baidu.com>'
 __date__ = '2011/08/19 13:42:18'
-__revision = '$Revision: 88336 $'
+__revision = '$Revision: 88712 $'
 
 
 from closure_linter import javascripttokenizer
@@ -56,7 +56,9 @@ API_ALIAS_MAP = {
   "baidu.each" : "baidu.array.each",
   "baidu.decodeHTML" : "baidu.string.decodeHTML",
   "baidu.extend" : "baidu.object.extend",
-  "baidu.setAttr" : "baidu.dom.setAttr"
+  "baidu.setAttr" : "baidu.dom.setAttr",
+  "baidu.dom.setOuterHeight" : "baidu.dom.setBorderBoxHeight",
+  "baidu.dom.setOuterWidth" : "baidu.dom.setBorderBoxWidth"
 }
 
 def tangram_compile(args, options):
