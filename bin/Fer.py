@@ -4,7 +4,7 @@
 # ***************************************************************************
 # 
 # Copyright (c) 2011 Baidu.com, Inc. All Rights Reserved
-# $Id: Fer.py 82952 2011-07-28 10:08:42Z  $ 
+# $Id: Fer.py 89356 2011-08-29 03:37:27Z  $ 
 # 
 # **************************************************************************/
  
@@ -19,7 +19,7 @@ from calcdeps import GetPathsFromOptions, PrintDeps, ExpandDirectories
 
 __author__ = 'leeight <liyubei@baidu.com>'
 __date__ = '2011/07/28 18:07:16'
-__revision = '$Revision: 82952 $'
+__revision = '$Revision: 89356 $'
 
 
 def gen_deps(options, args):

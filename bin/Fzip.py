@@ -4,7 +4,7 @@
 # ***************************************************************************
 # 
 # Copyright (c) 2011 Baidu.com, Inc. All Rights Reserved
-# $Id: Fzip.py 88712 2011-08-23 03:43:06Z  $ 
+# $Id: Fzip.py 89356 2011-08-29 03:37:27Z  $ 
 # 对css，js，html进行一些简单的压缩处理
 # **************************************************************************/
  
@@ -32,7 +32,7 @@ copyleft = "/*! Copyright " + str(datetime.now().year) + " Baidu Inc. All Rights
  
 __author__ = 'leeight <liyubei@baidu.com>'
 __date__ = '2011/07/22 11:08:49'
-__revision = '$Revision: 88712 $'
+__revision = '$Revision: 89356 $'
 
 
 def get_java_version():
