@@ -56,6 +56,32 @@ def zip_gcc(input, options):
 def zip_yui(input, options):
   return zip_js(input, options)
 
+def zip_string_impl(code, handler):
+  import cStringIO
+  import tempfile
+
+  f = tempfile.NamedTemporaryFile(delete=False)
+  f.write(code)
+  f.close()
+
+  class DefaultOptions: pass
+  options = DefaultOptions()
+  options.engine = None
+  options.compiler_flags = None
+  options.charset = None
+  options.output = cStringIO.StringIO()
+  
+  handler(f.name, options)
+  os.unlink(f.name)
+  
+  return options.output.getvalue()
+
+def zip_js_string(code):
+  return zip_string_impl(code, zip_js)
+
+def zip_css_string(code):
+  return zip_string_impl(code, zip_css)
+
 def zip_js(input, options):
   java_verion_check()
   if options.engine == 'gcc':
