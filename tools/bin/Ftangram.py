@@ -16,6 +16,9 @@ import logging
 import urllib2
 import urllib
 import codecs
+import httplib
+import socket
+import cStringIO
 from optparse import OptionParser
  
  
@@ -88,17 +91,12 @@ def fetch_remote_source(tokens):
 
   tokens = normalize_api_name(tokens)
   src = "\n".join(map(lambda x : "///import %s;" % x, tokens))
-  request = urllib2.Request("http://tangram.baidu.com/codesearch/script/code.php")
+  request = urllib2.Request("http://tangram.baidu.com/codesearch/code.php")
   request.add_data(urllib.urlencode({
     "compress" : "source",
-    "isLite" : "0",
-    "nobase" : "false",
-    "nouibase" : "false",
-    "short_key" : "",
-    "short_value" : "",
     "src" : src,
-    "tag" : "src",
-    "version" : "tangram-component_stable",
+    "version" : "Tangram-component",
+    "slavelib" : "Tangram-base",
   }))
   handler = urllib2.urlopen(request)
   try:
