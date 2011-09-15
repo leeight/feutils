@@ -2,4 +2,4 @@
 setlocal
 :: This is required with cygwin only.
 PATH=%~dp0;%PATH%
-call python "%~dp0Fcodereview.py" %*
+call python "%~dp0upload.py" %*
