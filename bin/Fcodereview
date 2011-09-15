@@ -7,4 +7,4 @@ if [ "${OSTYPE}" = "cygwin" -a "${TERM}" != "xterm" ]; then
    exit
 fi
 
-exec python "$base_dir/Fcodereview.py" "$@"
+exec python "$base_dir/upload.py" "$@"
