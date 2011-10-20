@@ -93,7 +93,7 @@ VCS_SUBVERSION = "Subversion"
 VCS_PERFORCE = "Perforce"
 VCS_CVS = "CVS"
 VCS_UNKNOWN = "Unknown"
-SCRIPT_VERSION = "7"
+SCRIPT_VERSION = "11"
 
 # whitelist for non-binary filetypes which do not start with "text/"
 # .mm (Objective-C) shows up as application/x-freemind on my Linux box.
@@ -551,9 +551,9 @@ group.add_option("-c", "--close", action="store", dest="closeId",type="int",
                  metavar="ISSUEID ", default=None,
                  help="Specify an issue id to close.")
 group.add_option("-o", "--owner", action="store_true", dest="owner",
-                 default=False,help="Restore the default reviewers from local file("+OWNER_FILE_LOCATION+"),the content like 'zhangsan,lisi'.")
+                 default=False,help="by default,Restore reviewers from local file("+OWNER_FILE_LOCATION+") if this file exists;and if param '--owner_file=OWNER_FILE' also be supplied,it will restore reviewers from 'OWNER_FILE'.file format like 'zhangsan,lisi'.")
 group.add_option("--owner_file", action="store", dest="owner_file",metavar="OWNER_FILE",
-                 default=None,help="Restore the default reviewers from OWNER_FILE,the content like 'zhangsan,lisi'.")
+                 default=None,help="only if '-o' param is supplied together,this param takes effect .Restore reviewers from OWNER_FILE,file content like 'zhangsan,lisi'.")
 # Issue
 group = parser.add_option_group("Issue options")
 group.add_option("-d", "--description", action="store", dest="description",
@@ -580,8 +580,11 @@ group.add_option("--public", action="store_true", dest="public",
                  default=False,
                  help="Make the issue can be reviewed by all users in cooder!")
 group.add_option("--space_public", action="store_true", dest="space_public",
+                 default=True,
+                 help="Make the issue can be reviewed by the users in issue's space! this option is selected by default")
+group.add_option("--private", action="store_true", dest="private",
                  default=False,
-                 help="Make the issue can be reviewed by the users in issue's space!")
+                 help="Make the issue can be reviewed only by issue's reviewers and ccs!")
 group.add_option("--file_encoding", action="store", dest="file_codec", default="utf-8",
                  help="Please spiecify file encoding, such as 'gbk', utf-8 is default")
 group.add_option("--no_check_authority", action="store_true", dest="no_check_authority",
@@ -2368,16 +2371,24 @@ def _getDefaultReviewers(filename):
 
 def _getReviewers(options,filename):
     reviewers = None
-    if options.owner_file:
-        succ, result = _getDefaultReviewers(options.owner_file)
-        if not succ:
-            ErrorExit("Read DefaultReviewers Fail: " + result)
-        reviewers = result
-    elif options.owner:
-        succ, result = _getDefaultReviewers(filename)
-        if not succ:
-            ErrorExit("Read DefaultReviewers Fail: " + result)
-        reviewers = result
+    
+    if options.owner:
+        if options.owner_file:
+            if not os.path.exists(options.owner_file):
+                print "[WARNING]:'%s' not found.ignore this error to continue!" %options.owner_file
+            else:
+                succ, result = _getDefaultReviewers(options.owner_file)
+                if not succ:
+                    ErrorExit("Read DefaultReviewers Fail: " + result)
+                reviewers = result
+        else:
+            if not os.path.exists(filename):
+                print "[WARNING]:'%s' not found.ignore this error to continue!" %filename 
+            else:
+                succ, result = _getDefaultReviewers(filename)
+                if not succ:
+                    ErrorExit("Read DefaultReviewers Fail: " + result)
+                reviewers = result
     if options.reviewers:
         if not reviewers:
             reviewers =  options.reviewers
@@ -2581,9 +2592,9 @@ def RealMain(argv, data=None):
     if not base and options.download_base:
         options.download_base = True
         logging.info("Enabled upload of base file")
-    if base:
-        if not base.startswith(BAIDU_SVN_SERVER):
-            ErrorExit("svn_url must be start with %s"%BAIDU_SVN_SERVER)
+#    if base:
+#        if not base.startswith(BAIDU_SVN_SERVER):
+#            ErrorExit("svn_url must be start with %s"%BAIDU_SVN_SERVER)
     if not options.assume_yes:
         vcs.CheckForUnknownFiles()
     print "Start Processing ..."
@@ -2736,6 +2747,11 @@ def RealMain(argv, data=None):
             print "Warning: Public flag ignored when updating an existing issue."
         else:
             form_fields.append(("public", "0"))
+    elif options.private:
+        if options.issue:
+            print "Warning: Private flag ignored when updating an existing issue."
+        else:
+            form_fields.append(("public", "1"))
     elif options.space_public:
         if options.issue:
             print "Warning: Space_public flag ignored when updating an existing issue."
