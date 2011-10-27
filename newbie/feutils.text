@@ -284,7 +284,7 @@ __如何使用__
             return fs.readFileSync("online.config.json", "utf8");
           });
 
-12. exit(0)，更多请参考[锦囊里面的server.js](https://svn.baidu.com/app/ecom/adcoup/trunk/jn-core/webapp/tools/server.js)
+12. exit(0)，更多请参考[锦囊里面的server.js](jn.server.js)
 
 __注意事项__
 
