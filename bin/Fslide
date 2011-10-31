@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+base_dir=$(dirname "$0")
+
+# Use the batch file as an entry point if on cygwin.
+if [ "${OSTYPE}" = "cygwin" -a "${TERM}" != "xterm" ]; then
+   ${base_dir}/Fslide.bat "$@"
+   exit
+fi
+
+which landslide &> /dev/null
+if [ $? -eq 1 ]; then
+  echo "Can't find landslide, please install it use the following command"
+  echo "easy_install landslide"
+fi
+
+landslide "$@"
