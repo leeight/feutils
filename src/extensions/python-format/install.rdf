@@ -18,7 +18,7 @@
   <RDF:Description RDF:about="rdf:#$bvEm42"
                    em:id="{ec8030f7-c20a-464f-9b0e-13a3a9e97384}"
                    em:minVersion="3.0"
-                   em:maxVersion="5.0.*" />
+                   em:maxVersion="7.0.*" />
   <RDF:Description RDF:about="rdf:#$gvEm42"
                    em:id="{a6fd85ed-e919-4a43-a5af-8da18bda539f}"
                    em:minVersion="1.0.9"
