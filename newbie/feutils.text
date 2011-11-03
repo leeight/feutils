@@ -290,6 +290,7 @@ __注意事项__
 
 1. 文件的编码都必须是utf8，其它类型的编码nodejs暂时还不太容易处理.
 2. addHandler的第一个参数是url，最好要有后缀名，Fserver会自动添加Response Header中的Content-Type.
+3. 恺华同学测试，发现`Win7 64bit`下面因为node.js的问题，暂时无法正常使用，需要等待node.js升级支持`Win7 64bit`才可以.
 
 #### Fcooder
 
