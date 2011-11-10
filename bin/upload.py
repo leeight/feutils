@@ -29,6 +29,8 @@ Supported version control systems:
 
 It is important for Git/Mercurial users to specify a tree/node/branch to diff
 against by using the '--rev' option.
+
+version: FC only
 """
 # This code is derived from appcfg.py in the App Engine SDK (open source),
 # and from ASPN recipe #146306.
@@ -49,6 +51,7 @@ import sys
 import urllib
 import urllib2
 import urlparse
+import glob
 from urllib2 import URLError
 
 # The md5 module was deprecated in Python 2.5.
@@ -93,7 +96,7 @@ VCS_SUBVERSION = "Subversion"
 VCS_PERFORCE = "Perforce"
 VCS_CVS = "CVS"
 VCS_UNKNOWN = "Unknown"
-SCRIPT_VERSION = "11"
+SCRIPT_VERSION = "13"
 
 # whitelist for non-binary filetypes which do not start with "text/"
 # .mm (Objective-C) shows up as application/x-freemind on my Linux box.
@@ -115,10 +118,12 @@ VCS_ABBREVIATIONS = {
 # The result of parsing Subversion's [auto-props] setting.
 svn_auto_props_map = None
 
-OWNER_FILE_LOCATION = os.getcwd()+"/owner.txt"
+OWNER_FILE_LOCATION = os.getcwd()+"/OWNER"
 DEFAULT_LIST_NUM  = 10
 
 BAIDU_SVN_SERVER = "https://svn.baidu.com/"
+
+COODER_DEBUG = False
 
 def GetEmail(prompt):
     """Prompts the user for their email address and returns it.
@@ -551,7 +556,7 @@ group.add_option("-c", "--close", action="store", dest="closeId",type="int",
                  metavar="ISSUEID ", default=None,
                  help="Specify an issue id to close.")
 group.add_option("-o", "--owner", action="store_true", dest="owner",
-                 default=False,help="by default,Restore reviewers from local file("+OWNER_FILE_LOCATION+") if this file exists;and if param '--owner_file=OWNER_FILE' also be supplied,it will restore reviewers from 'OWNER_FILE'.file format like 'zhangsan,lisi'.")
+                 default=True,help="by default,Restore reviewers from local file("+OWNER_FILE_LOCATION+") if this file exists;and if param '--owner_file=OWNER_FILE' also be supplied,it will restore reviewers from 'OWNER_FILE'.file format like 'zhangsan,lisi'.")
 group.add_option("--owner_file", action="store", dest="owner_file",metavar="OWNER_FILE",
                  default=None,help="only if '-o' param is supplied together,this param takes effect .Restore reviewers from OWNER_FILE,file content like 'zhangsan,lisi'.")
 # Issue
@@ -574,8 +579,11 @@ group.add_option("--cc", action="store", dest="cc",
                  metavar="CC", default=None,
                  help="Add CC (comma separated email addresses prefix).")
 group.add_option("--bcc", action="store_true", dest="brocastcc",
-                 metavar="BROCASTCC", default=False,
+                 metavar="BROCASTCC", default=True,
                  help="Enable who can read or edit the secret module also can view and edit this issue. ")
+group.add_option("--nobcc", action="store_true", dest="nobrocastcc",
+                 metavar="NOBROCASTCC", default=False,
+                 help="Disable bcc feature.")
 group.add_option("--public", action="store_true", dest="public",
                  default=False,
                  help="Make the issue can be reviewed by all users in cooder!")
@@ -585,8 +593,8 @@ group.add_option("--space_public", action="store_true", dest="space_public",
 group.add_option("--private", action="store_true", dest="private",
                  default=False,
                  help="Make the issue can be reviewed only by issue's reviewers and ccs!")
-group.add_option("--file_encoding", action="store", dest="file_codec", default="utf-8",
-                 help="Please spiecify file encoding, such as 'gbk', utf-8 is default")
+group.add_option("--file_encoding", action="store", dest="file_codec", default="gbk",
+                 help="Please spiecify file encoding, such as 'utf-8', default is gbk")
 group.add_option("--no_check_authority", action="store_true", dest="no_check_authority",
                  default=False,
                  help="Don't check reviewers and cc's svn authority")
@@ -630,6 +638,18 @@ group.add_option("--nomail", action="store_true",
 group.add_option("--version", action="store_true",
                  dest="version", default=False,
                  help="Display the scripts version.")
+group.add_option("--include_files", action="store",dest="include_pattern", default=None,
+                 help="when generating diff data,only include files which are refered by this param. eg:--include_files=\"*.py,*.js\",it will include files pattern like '*.py' and '*.js' in current dir and its child dirs. when generating diff data . when using with '--exclude_files' together,it will filter files with '--include_files' pattern first,with include_file_set as result,and then filter include_file_set with '--exclude_files'")
+group.add_option("--exclude_files", action="store",dest="exclude_pattern", default=None,
+                 help="when generating diff data,ignore files which are refered by this param.when using with '--include_files' together,it will filter files with '--include_files' pattern first,with include_file_set as result,and then filter include_file_set with '--exclude_files'")
+group.add_option("--vcs", action="store", dest="vcs",
+                 metavar="VCS", default=None,
+                 help=("Version control system (optional, usually upload.py "
+                       "already guesses the right VCS)."))
+group.add_option("--emulate_svn_auto_props", action="store_true",
+                 dest="emulate_svn_auto_props", default=False,
+                 help=("Emulate Subversion's auto properties feature."))
+
 
 
 def GetRpcServer(server, email=None, host_override=None, save_cookies=True,
@@ -787,10 +807,31 @@ class VersionControlSystem(object):
       options: Command line options.
     """
         self.options = options
+           
+        if self.options.file_codec != 'utf-8':
+            self.file_codec = self.options.file_codec
+        else:
+            self.file_codec = None
 
+    def DecodingAndEncoding(self, multilines):
+        if self.file_codec:
+            afterstr = ""
+            for line in multilines.splitlines():
+                try:
+                    afterstr += line.decode(self.file_codec,'ignore').encode("utf-8",'ignore') + "\n"
+                except:
+                    afterstr += line + "\n" 
+            if not multilines.endswith('\n'):
+                afterstr = afterstr[:-1]
+            return afterstr
+        return multilines
+    
     def PostProcessDiff(self, diff):
         """Return the diff with any special post processing this VCS needs, e.g.
     to include an svn-style "Index:"."""
+        #change encoding to utf8   
+        if self.file_codec:
+            diff = self.DecodingAndEncoding(diff)
         return diff
 
     def GenerateDiff(self, args):
@@ -834,7 +875,66 @@ class VersionControlSystem(object):
 
         raise NotImplementedError(
             "abstract method -- subclass %s must override" % self.__class__)
-
+    def filterDiffByPattern(self,diff):
+        #include_pattern
+        if self.options.include_pattern:
+            curdir = os.getcwd()
+            patternlist = _getPatternList(self.options.include_pattern)
+            includefiles = getPatternFileList(curdir,patternlist)
+            os.chdir(curdir)
+            if COODER_DEBUG:
+                print "include files:"
+                for file in includefiles:
+                    print file
+                print "\n\n"
+            filter_diff = ""
+            bSkip = True
+            for line in diff.splitlines(True):
+                if line.startswith('Index:') or line.startswith('Property changes on:'):
+                    unused, filename = line.split(':', 1)
+                    # On Windows if a file has property changes its filename uses '\'
+                    # instead of '/'.
+                    filename = filename.strip().replace('\\', '/')
+                    if includefiles.__contains__(filename):
+                        bSkip = False
+                        filter_diff += line
+                    else:
+                        bSkip = True
+                else:
+                    if not bSkip:
+                        filter_diff += line
+            diff = filter_diff
+        #exclude_pattern   
+        if self.options.exclude_pattern:
+            curdir = os.getcwd()
+            patternlist = _getPatternList(self.options.exclude_pattern)
+            excludefiles = getPatternFileList(curdir,patternlist)
+            os.chdir(curdir)
+            if COODER_DEBUG:
+                print "exclude files:"
+                for file in excludefiles:
+                    print file
+                print "\n\n"
+            filter_diff = ""
+            bSkip = True
+            for line in diff.splitlines(True):
+                if line.startswith('Index:') or line.startswith('Property changes on:'):
+                    unused, filename = line.split(':', 1)
+                    # On Windows if a file has property changes its filename uses '\'
+                    # instead of '/'.
+                    filename = filename.strip().replace('\\', '/')
+                    if not excludefiles.__contains__(filename):
+                        bSkip = False
+                        filter_diff += line
+                    else:
+                        bSkip = True
+                else:
+                    if not bSkip:
+                        filter_diff += line
+            diff = filter_diff
+            
+        return diff
+                 
 
     def GetBaseFiles(self, diff):
         """Helper that calls GetBase file for each file in the patch.
@@ -914,7 +1014,7 @@ class VersionControlSystem(object):
 
         patches = dict()
         [patches.setdefault(v, k) for k, v in patch_list]
-        for filename in patches.keys():        
+        for filename in patches.keys():
             base_content, new_content, is_binary, status = files[filename]
             file_id_str = patches.get(filename)
             if file_id_str.find("nobase") != -1:
@@ -964,10 +1064,6 @@ class SubversionVCS(VersionControlSystem):
                 self.rev_end = match.group(3)
         else:
             self.rev_start = self.rev_end = None
-        if self.options.file_codec != 'utf-8':
-            self.file_codec = self.options.file_codec
-        else:
-            self.file_codec = None
         # Cache output from "svn list -r REVNO dirname".
         # Keys: dirname, Values: 2-tuple (ouput for start rev and end rev).
         self.svnls_cache = {}
@@ -997,30 +1093,6 @@ class SubversionVCS(VersionControlSystem):
             self.options.revision = self.rev_start + ":" + self.rev_end
             logging.info("auto_post_review: %s-%s", self.rev_start, self.rev_end)
 
-    def DecodingAndEncoding(self, multilines):
-        if self.file_codec:
-            afterstr = ""
-            for line in multilines.splitlines():
-                try:
-                    afterstr += line.decode(self.file_codec,'ignore').encode("utf-8",'ignore') + "\n"
-                except:
-                    afterstr += line + "\n" 
-            if not multilines.endswith('\n'):
-                afterstr = afterstr[:-1]
-            return afterstr
-        return multilines
-
-    def PostProcessDiff(self, svndiff):
-        """Return the diff with any special post processing this VCS needs, e.g.
-        to include an svn-style "Index:"."""
-        svnutfdiff = "" 
-        if self.file_codec: 
-        #for line in svndiff.splitlines():
-            svnutfdiff = self.DecodingAndEncoding(svndiff)
-        else:
-            svnutfdiff = svndiff
-    
-        return svnutfdiff
   
     def GuessBase(self, required):
         """Wrapper for _GuessBase."""
@@ -1163,7 +1235,7 @@ class SubversionVCS(VersionControlSystem):
         finally:
             file.close()
         return result
-
+    
     def listFilesFromSvn(self,dirname,rev):
         if dirname not in self.svnls_cache:
             if self.tagdiff:
@@ -1415,7 +1487,7 @@ class GitVCS(VersionControlSystem):
         # Map of new filename -> old filename for renames.
         self.renames = {}
 
-    def PostProcessDiff(self, gitdiff):
+    def _changeDiffToSvnstyle(self, gitdiff):
         """Converts the diff output to include an svn-style "Index:" line as well
     as record the hashes of the files, so we can upload them along with our
     diff."""
@@ -1486,8 +1558,9 @@ class GitVCS(VersionControlSystem):
         # git config key "diff.external" is used).
         env = os.environ.copy()
         if 'GIT_EXTERNAL_DIFF' in env: del env['GIT_EXTERNAL_DIFF']
-        return RunShell(["git", "diff", "--no-ext-diff", "--full-index", "-M"]
+        gitdiff = RunShell(["git", "diff", "--no-ext-diff", "--full-index", "-M"]
                         + extra_args, env=env)
+        return self._changeDiffToSvnstyle(gitdiff)
 
     def GetUnknownFiles(self):
         status = RunShell(["git", "ls-files", "--exclude-standard", "--others"],
@@ -1534,6 +1607,9 @@ class GitVCS(VersionControlSystem):
             # it is reconstructed from the diff.
             if is_image and hash_after:
                 new_content = self.GetFileContent(hash_after, is_binary)
+        if not is_binary:
+            if self.file_codec:
+                base_content = self.DecodingAndEncoding(base_content)
 
         return (base_content, new_content, is_binary, status)
 
@@ -2352,6 +2428,7 @@ def get_who_is_me(rpc_server):
     except urllib2.HTTPError:
         ErrorExit("get owner's name error!")
 
+
 def _getDefaultReviewers(filename):
     if not os.path.exists(filename):
         return False,"'%s' not found.please check your settings!" %filename 
@@ -2519,6 +2596,42 @@ def writeIssueInfo(filename,issue):
     issuefile.write(issue)
     issuefile.close()
 
+class PatternParams:
+    pass
+
+def _getPatternList(patterns):
+    patternlist = patterns.split(",")
+    result = []
+    for pattern in patternlist:
+        pattern = pattern.strip()
+        if pattern:
+            pattern = pattern.replace('\\', '/')
+            result.append(pattern)            
+    return result
+
+def _getPatternFileList(args,dirname,files):
+    for pattern in args.patternlist:
+        os.chdir(dirname)
+        files = glob.glob(pattern)
+        pre_path= dirname.split(args.rootdir)[1]
+        if pre_path:
+            pre_path = pre_path[1:] + "/"
+            pre_path = pre_path.replace('\\', '/')
+        for file in files:
+            file_path = pre_path + file.replace('\\', '/')
+            if not file_path in args.filelist:
+                args.filelist.append(file_path)
+
+def getPatternFileList(rootdir,patternlist):
+
+    args = PatternParams()
+    args.filelist = []
+    args.patternlist = patternlist
+    args.rootdir = rootdir
+    os.path.walk(rootdir, _getPatternFileList,args)
+    return args.filelist
+    
+
 def RealMain(argv, data=None):
     """The real main function.
 
@@ -2564,7 +2677,7 @@ def RealMain(argv, data=None):
         if options.assume_yes:
             print prompt + "\nAssume the answer is yes ,continue."
             pass
-        else:     
+        else:
             answer = raw_input(prompt).strip()
             if answer != "y":
                 ErrorExit("User aborted") 
@@ -2580,6 +2693,13 @@ def RealMain(argv, data=None):
         options.auto_post_review = True
         
     vcs = GuessVCS(options)
+    
+        
+    #if vcs is not svn ,check options only for svn
+    if not isinstance(vcs, SubversionVCS):
+        if options.brocastcc or options.no_check_authority or options.revision_review or options.base_revision or options.listandpatch or options.auto_post_review:
+            ErrorExit("params '--bcc,-l,--full_review,--baserev,--no_check_authority,--auto_post_review' is only for svn!")
+
 
     base = options.base_url
     if isinstance(vcs, SubversionVCS):
@@ -2600,6 +2720,9 @@ def RealMain(argv, data=None):
     print "Start Processing ..."
     if data is None:
         data = vcs.GenerateDiff(args)
+        data = vcs.filterDiffByPattern(data)
+        if not data:
+            ErrorExit("diff is empty,please check!")
     files = vcs.GetBaseFiles(data)
     data = vcs.PostProcessDiff(data)
     if options.print_diffs:
@@ -2629,51 +2752,56 @@ def RealMain(argv, data=None):
             if cc != "":
                 users.append(cc)
         form_fields.append(("cc", options.cc))
-    if options.brocastcc:
-        print "loadding bcc ...\r",
-        brocastcc = _getBrocastCCs(options.server,base)
-        try:
-            brocastcclist = eval(brocastcc)
-        except:
-            prompt = "bcc get error.details:%s.Are you sure to continue?(y/N) " %brocastcc
-            if options.assume_yes:
-                print prompt + "\nAssume the answer is yes ,continue."
-                pass
-            else:    
-                answer = raw_input(prompt).strip()
-                if answer != "y":
-                    ErrorExit("User aborted") 
-            brocastcclist = None
-        if brocastcclist:
-            if len(brocastcclist)>600:
-                print "bcc users exceed 600,it will be truncated to 600."
-                brocastcclist = brocastcclist[:600]
-            form_fields.append(("brocastcc", (",").join(brocastcclist)))
-    #check owner's authority
-    owner = get_who_is_me(rpc_server)
-    if owner:
-        ulist = []
-        ulist.append(owner)
-        remsg = checkSvnAuthority(ulist,base,options.server)
-        if remsg != "":
-            ErrorExit("FATAL : you have no authority to %s , details: %s" %(base,remsg))
-    else:
-        ErrorExit("FATAL : you must login first!")
-    # check svn authority for reviewers and cc 
-    if len(users) > 0 and not options.no_check_authority:
-        result = checkSvnAuthority(users,base,options.server)
-        if result != "":
-            print "WARNING : check svn authority , " + result
-            prompt = "Are you sure to continue?(y/N) "
-            if options.assume_yes:
-                print prompt + "\nAssume the answer is yes ,continue."
-                pass
-            else:             
-                answer = raw_input(prompt).strip()
-                if answer != "y":
-                    ErrorExit("User aborted") 
-        else:  
-            print "svn authority check OK!"       
+    #if vcs is SVN,check brocastcc
+    if isinstance(vcs, SubversionVCS):
+        if options.brocastcc and not options.nobrocastcc:
+            print "loadding bcc ...\r",
+            brocastcc = _getBrocastCCs(options.server,base)
+            try:
+                brocastcclist = eval(brocastcc)
+            except:
+                prompt = "bcc get error.details:%s.Are you sure to continue?(y/N) " %brocastcc
+                if options.assume_yes:
+                    print prompt + "\nAssume the answer is yes ,continue."
+                    pass
+                else:    
+                    answer = raw_input(prompt).strip()
+                    if answer != "y":
+                        ErrorExit("User aborted") 
+                brocastcclist = None
+            if brocastcclist:
+                if len(brocastcclist)>600:
+                    print "bcc users exceed 600,it will be truncated to 600."
+                    brocastcclist = brocastcclist[:600]
+                form_fields.append(("brocastcc", (",").join(brocastcclist)))
+    #if vcs is SVN,check authority
+    if isinstance(vcs, SubversionVCS):
+        #check owner's authority
+        owner = get_who_is_me(rpc_server)
+        if owner:
+            ulist = []
+            ulist.append(owner)
+            remsg = checkSvnAuthority(ulist,base,options.server)
+            if remsg != "":
+                ErrorExit("FATAL : you have no authority to %s , details: %s" %(base,remsg))
+        else:
+            ErrorExit("FATAL : you must login first!")
+            
+        # check svn authority for reviewers and cc 
+        if len(users) > 0 and not options.no_check_authority:
+            result = checkSvnAuthority(users,base,options.server)
+            if result != "":
+                print "WARNING : check svn authority , " + result
+                prompt = "Are you sure to continue?(y/N) "
+                if options.assume_yes:
+                    print prompt + "\nAssume the answer is yes ,continue."
+                    pass
+                else:     
+                    answer = raw_input(prompt).strip()
+                    if answer != "y":
+                        ErrorExit("User aborted") 
+            else:  
+                print "svn authority check OK!"       
     
     if options.listandpatch:
         issueId = _listIssues(rpc_server, base)
@@ -2710,8 +2838,10 @@ def RealMain(argv, data=None):
         form_fields.append(("issue", str(options.issue)))
     if options.email:
         form_fields.append(("user", options.email))
-     
-    description = options.description
+    description = None
+    if not options.issue:
+        desprompt = "please descript this issue: "
+        description = options.description or raw_input(desprompt).strip()
     if options.description_file:
         if options.description:
             ErrorExit("Can't specify description and description_file")
@@ -2802,12 +2932,6 @@ def RealMain(argv, data=None):
     
     if options.auto_post_review:
         vcs.writeLastRev(vcs.rev_end)
-    # write the issue id
-    try:
-        filename = os.path.join(os.path.abspath(os.path.dirname(sys.argv[0])),"issue.info")
-        writeIssueInfo(filename,issue)
-    except:
-        pass
   
     return issue, patchset
 
