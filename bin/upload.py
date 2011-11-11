@@ -29,8 +29,6 @@ Supported version control systems:
 
 It is important for Git/Mercurial users to specify a tree/node/branch to diff
 against by using the '--rev' option.
-
-version: FC only
 """
 # This code is derived from appcfg.py in the App Engine SDK (open source),
 # and from ASPN recipe #146306.
@@ -118,7 +116,7 @@ VCS_ABBREVIATIONS = {
 # The result of parsing Subversion's [auto-props] setting.
 svn_auto_props_map = None
 
-OWNER_FILE_LOCATION = os.getcwd()+"/OWNER"
+OWNER_FILE_LOCATION = os.getcwd()+"/owner.txt"
 DEFAULT_LIST_NUM  = 10
 
 BAIDU_SVN_SERVER = "https://svn.baidu.com/"
@@ -556,7 +554,7 @@ group.add_option("-c", "--close", action="store", dest="closeId",type="int",
                  metavar="ISSUEID ", default=None,
                  help="Specify an issue id to close.")
 group.add_option("-o", "--owner", action="store_true", dest="owner",
-                 default=True,help="by default,Restore reviewers from local file("+OWNER_FILE_LOCATION+") if this file exists;and if param '--owner_file=OWNER_FILE' also be supplied,it will restore reviewers from 'OWNER_FILE'.file format like 'zhangsan,lisi'.")
+                 default=False,help="by default,Restore reviewers from local file("+OWNER_FILE_LOCATION+") if this file exists;and if param '--owner_file=OWNER_FILE' also be supplied,it will restore reviewers from 'OWNER_FILE'.file format like 'zhangsan,lisi'.")
 group.add_option("--owner_file", action="store", dest="owner_file",metavar="OWNER_FILE",
                  default=None,help="only if '-o' param is supplied together,this param takes effect .Restore reviewers from OWNER_FILE,file content like 'zhangsan,lisi'.")
 # Issue
@@ -579,11 +577,8 @@ group.add_option("--cc", action="store", dest="cc",
                  metavar="CC", default=None,
                  help="Add CC (comma separated email addresses prefix).")
 group.add_option("--bcc", action="store_true", dest="brocastcc",
-                 metavar="BROCASTCC", default=True,
+                 metavar="BROCASTCC", default=False,
                  help="Enable who can read or edit the secret module also can view and edit this issue. ")
-group.add_option("--nobcc", action="store_true", dest="nobrocastcc",
-                 metavar="NOBROCASTCC", default=False,
-                 help="Disable bcc feature.")
 group.add_option("--public", action="store_true", dest="public",
                  default=False,
                  help="Make the issue can be reviewed by all users in cooder!")
@@ -593,8 +588,8 @@ group.add_option("--space_public", action="store_true", dest="space_public",
 group.add_option("--private", action="store_true", dest="private",
                  default=False,
                  help="Make the issue can be reviewed only by issue's reviewers and ccs!")
-group.add_option("--file_encoding", action="store", dest="file_codec", default="gbk",
-                 help="Please spiecify file encoding, such as 'utf-8', default is gbk")
+group.add_option("--file_encoding", action="store", dest="file_codec", default="utf-8",
+                 help="Please spiecify file encoding, such as 'gbk', utf-8 is default")
 group.add_option("--no_check_authority", action="store_true", dest="no_check_authority",
                  default=False,
                  help="Don't check reviewers and cc's svn authority")
@@ -807,7 +802,7 @@ class VersionControlSystem(object):
       options: Command line options.
     """
         self.options = options
-           
+        
         if self.options.file_codec != 'utf-8':
             self.file_codec = self.options.file_codec
         else:
@@ -875,6 +870,7 @@ class VersionControlSystem(object):
 
         raise NotImplementedError(
             "abstract method -- subclass %s must override" % self.__class__)
+
     def filterDiffByPattern(self,diff):
         #include_pattern
         if self.options.include_pattern:
@@ -935,7 +931,6 @@ class VersionControlSystem(object):
             
         return diff
                  
-
     def GetBaseFiles(self, diff):
         """Helper that calls GetBase file for each file in the patch.
 
@@ -1014,7 +1009,7 @@ class VersionControlSystem(object):
 
         patches = dict()
         [patches.setdefault(v, k) for k, v in patch_list]
-        for filename in patches.keys():
+        for filename in patches.keys():        
             base_content, new_content, is_binary, status = files[filename]
             file_id_str = patches.get(filename)
             if file_id_str.find("nobase") != -1:
@@ -1235,7 +1230,7 @@ class SubversionVCS(VersionControlSystem):
         finally:
             file.close()
         return result
-    
+
     def listFilesFromSvn(self,dirname,rev):
         if dirname not in self.svnls_cache:
             if self.tagdiff:
@@ -1543,7 +1538,8 @@ class GitVCS(VersionControlSystem):
         # Add auto property for the last seen file.
         assert filename is not None
         AddSubversionPropertyChange(filename)
-        return "".join(svndiff)
+        svndiff = "".join(svndiff) 
+        return svndiff
 
     def GenerateDiff(self, extra_args):
         extra_args = extra_args[:]
@@ -2428,7 +2424,6 @@ def get_who_is_me(rpc_server):
     except urllib2.HTTPError:
         ErrorExit("get owner's name error!")
 
-
 def _getDefaultReviewers(filename):
     if not os.path.exists(filename):
         return False,"'%s' not found.please check your settings!" %filename 
@@ -2631,7 +2626,8 @@ def getPatternFileList(rootdir,patternlist):
     os.path.walk(rootdir, _getPatternFileList,args)
     return args.filelist
     
-
+   
+    
 def RealMain(argv, data=None):
     """The real main function.
 
@@ -2677,7 +2673,7 @@ def RealMain(argv, data=None):
         if options.assume_yes:
             print prompt + "\nAssume the answer is yes ,continue."
             pass
-        else:
+        else:     
             answer = raw_input(prompt).strip()
             if answer != "y":
                 ErrorExit("User aborted") 
@@ -2694,7 +2690,6 @@ def RealMain(argv, data=None):
         
     vcs = GuessVCS(options)
     
-        
     #if vcs is not svn ,check options only for svn
     if not isinstance(vcs, SubversionVCS):
         if options.brocastcc or options.no_check_authority or options.revision_review or options.base_revision or options.listandpatch or options.auto_post_review:
@@ -2725,6 +2720,7 @@ def RealMain(argv, data=None):
             ErrorExit("diff is empty,please check!")
     files = vcs.GetBaseFiles(data)
     data = vcs.PostProcessDiff(data)
+   
     if options.print_diffs:
         print "Rietveld diff start:*****"
         print data
@@ -2754,7 +2750,7 @@ def RealMain(argv, data=None):
         form_fields.append(("cc", options.cc))
     #if vcs is SVN,check brocastcc
     if isinstance(vcs, SubversionVCS):
-        if options.brocastcc and not options.nobrocastcc:
+        if options.brocastcc:
             print "loadding bcc ...\r",
             brocastcc = _getBrocastCCs(options.server,base)
             try:
@@ -2774,6 +2770,7 @@ def RealMain(argv, data=None):
                     print "bcc users exceed 600,it will be truncated to 600."
                     brocastcclist = brocastcclist[:600]
                 form_fields.append(("brocastcc", (",").join(brocastcclist)))
+    
     #if vcs is SVN,check authority
     if isinstance(vcs, SubversionVCS):
         #check owner's authority
@@ -2786,7 +2783,6 @@ def RealMain(argv, data=None):
                 ErrorExit("FATAL : you have no authority to %s , details: %s" %(base,remsg))
         else:
             ErrorExit("FATAL : you must login first!")
-            
         # check svn authority for reviewers and cc 
         if len(users) > 0 and not options.no_check_authority:
             result = checkSvnAuthority(users,base,options.server)
@@ -2796,7 +2792,7 @@ def RealMain(argv, data=None):
                 if options.assume_yes:
                     print prompt + "\nAssume the answer is yes ,continue."
                     pass
-                else:     
+                else:             
                     answer = raw_input(prompt).strip()
                     if answer != "y":
                         ErrorExit("User aborted") 
@@ -2838,10 +2834,8 @@ def RealMain(argv, data=None):
         form_fields.append(("issue", str(options.issue)))
     if options.email:
         form_fields.append(("user", options.email))
-    description = None
-    if not options.issue:
-        desprompt = "please descript this issue: "
-        description = options.description or raw_input(desprompt).strip()
+     
+    description = options.description
     if options.description_file:
         if options.description:
             ErrorExit("Can't specify description and description_file")
@@ -2932,6 +2926,12 @@ def RealMain(argv, data=None):
     
     if options.auto_post_review:
         vcs.writeLastRev(vcs.rev_end)
+    # write the issue id
+    try:
+        filename = os.path.join(os.path.abspath(os.path.dirname(sys.argv[0])),"issue.info")
+        writeIssueInfo(filename,issue)
+    except:
+        pass
   
     return issue, patchset
 
