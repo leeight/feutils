@@ -145,6 +145,17 @@ function echo_env() {
 }
 
 /**
+ * 获取不同系统下面的python版本
+ * @return {string}
+ */
+function getPython () {
+  if (_('env.OS') == 'Windows_NT') {
+    return "python";
+  } else {
+    return "python2.7";
+  }
+}
+/**
  * 需要在ant脚本里面添加这句话
  * <property environment="env" />
  * @return {string} null device.
@@ -301,6 +312,20 @@ function svnversion() {
   } catch (e) {
     return 'BUILD_VERSION';
   }
+}
+
+/**
+ * @return {string} 机器名.
+ */
+function hostname() {
+  var property = uuid();
+
+  var task = createTask('exec');
+  task.setExecutable('hostname');
+  task.setOutputproperty(property);
+  task.perform();
+
+  return _(property);
 }
 
 /**
@@ -768,8 +793,10 @@ function writeFile(input, content, opt_append) {
     parentDir.mkdirs();
   }
 
+  //use OutputStreamWriter instead, so it could specify charset encoder
   var writer = new java.io.BufferedWriter(
-    new java.io.FileWriter(file, opt_append === true));
+      new java.io.OutputStreamWriter(new java.io.FileOutputStream(file, opt_append === true), "utf-8")
+  );
   writer.write(content);
   writer.close();
 }
@@ -898,11 +925,11 @@ function merge_js(input, opt_output) {
 function compile_js(input, opt_extraflags) {
   echo('compiling ' + input + ' ...');
   var extraflags = [
-    '--define=\'dn.COMPILED="true"\'',
-    '--css_directory_in=src',
-    '--css_output_file=' + getPath(_('build.dir') + '/app.css'),
-    '--tpl_directory_in=src',
-    '--tpl_output_file=' + getPath(_('build.dir') + '/tpl.html'),
+    //'--define=\'dn.COMPILED="true"\'',
+    //'--css_directory_in=src',
+    //'--css_output_file=' + getPath(_('build.dir') + '/app.css'),
+    //'--tpl_directory_in=src',
+    //'--tpl_output_file=' + getPath(_('build.dir') + '/tpl.html'),
     '--warning_level=VERBOSE'
   ];
 
