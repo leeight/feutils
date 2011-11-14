@@ -171,6 +171,7 @@ def BuildDependenciesFromFiles(files, base_path):
       requires = set()
       provides = set()
       for line in file_handle:
+        line = line.strip()
         if re.match(req_regex, line):
           requires.add(re.search(req_regex, line).group(1))
         if re.match(include_regex, line):
@@ -263,6 +264,7 @@ def CalculateDependencies(paths, inputs):
     file_handle = open(input_file, 'r')
     try:
       for line in file_handle:
+        line = line.strip()
         if re.match(req_regex, line):
           require = re.search(req_regex, line).group(1)
           ResolveDependencies(require, search_hash, result_list, seen_list)
@@ -301,6 +303,7 @@ def FindClosureBasePath(paths):
       # Sanity check that this is the Closure base file.  Check that this
       # is where goog is defined.
       for line in f:
+        line = line.strip()
         if line.startswith('var goog = goog || {};'):
           is_base = True
           break
