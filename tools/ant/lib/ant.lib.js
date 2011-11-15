@@ -149,12 +149,21 @@ function echo_env() {
  * @return {string}
  */
 function getPython () {
-  if (_('env.OS') == 'Windows_NT') {
-    return "python";
-  } else {
+  if (_('env.USER') == 'scmpf') {
     return "python2.7";
+  } else {
+    return "python";
   }
 }
+
+/**
+ * 获取不同系统下面的python版本
+ * @return {string}
+ */
+function PYTHON() {
+  return getPython();
+}
+
 /**
  * 需要在ant脚本里面添加这句话
  * <property environment="env" />
