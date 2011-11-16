@@ -4,7 +4,7 @@
 # ***************************************************************************
 # 
 # Copyright (c) 2011 Baidu.com, Inc. All Rights Reserved
-# $Id: Fupload.py 87719 2011-08-15 07:06:00Z  $ 
+# $Id: Fupload.py 97150 2011-11-16 09:14:36Z  $ 
 # 上传到cms的文件接口
 # **************************************************************************/
  
@@ -24,7 +24,7 @@ from MultipartPostHandler import MultipartPostHandler
  
 __author__ = 'leeight <liyubei@baidu.com>'
 __date__ = '2011/07/28 17:20:18'
-__revision = '$Revision: 87719 $'
+__revision = '$Revision: 97150 $'
 
 # UPLOAD_ACTION_URL = "http://tc-apptest-cms00.tc.baidu.com:8000/service/app_action/?action=upload"
 # LIST_ACTION_URL = "http://tc-apptest-cms00.tc.baidu.com:8000/service/app_action/?action=uploadIndex"
@@ -32,6 +32,15 @@ __revision = '$Revision: 87719 $'
 UPLOAD_ACTION_URL = "http://icms.baidu.com:8080/service/app_action/?action=upload"
 LIST_ACTION_URL = "http://icms.baidu.com:8080/service/app_action/?action=uploadIndex"
 PREFIX_URL = "http://img.baidu.com/adm"
+
+"""
+type的取值
+0:原文件名上传
+10：随机文件名图片上传到产品线服务器
+11：随机文件名图片上传到空间服务器
+12：随机文件名图片上传到日文空间服务器
+2：视频文件上传到产品线服务器
+"""
 
 def get_app_cfg_file():
   return os.path.expanduser("~/.Fupload.ini")
@@ -92,7 +101,7 @@ def upload(filename):
     "top_ch_spell" : "cbweb",
     "app_id" : "cms_r",
     "group_id" : "7",
-    "type" : "11",
+    "type" : "0",
     "url" : PREFIX_URL,
     "commonfile" : open(filename, "rb") 
   }
@@ -121,7 +130,7 @@ def list_all_files():
     "top_ch_spell" : "cbweb",
     "app_id" : "cms_r",
     "group_id" : "7",
-    "type" : "11",
+    "type" : "0",
     "url" : PREFIX_URL 
   }
   try:
