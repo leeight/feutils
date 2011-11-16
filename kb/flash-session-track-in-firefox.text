@@ -35,11 +35,11 @@
 
 登陆后 Flash 第一次进行上传时，自身没有 JSESSIONID 这个 Cookie，所以使用手工拼接到请求 URL 中的浏览器 JSESSIONID 即 XXX 进行提交，服务器解析出了 JSESSIONID 并且在内存中找到了其对应的 session 信息，成功进行了身份验证，最后返回上传成功的信息。
 
-![2nd Flash Request](demo/ff-flash-session-track-1.png "2nd Flash Request")
+![2nd Flash Request](demo/ff-flash-session-track-2.png "2nd Flash Request")
 
 然而当 XXX 这个 session ID 超时以后，Flash 仍然以刚才重写过的 URL 发送请求(图中[1])，服务器解析出 JSESSIONID 后发现已经没有 XXX 这个 session 了，于是重新创建了一个 ID 为 YYY 的 session(图中[2])，并且在返回的响应中除了登陆失败的信息外还加入了 SET-COOKIE:JSESSIONID=YYY 的请求头(图中[3])。于是这时在 Flash 的 LSO (“Flash cookies”) 中却把这个不带用户登录信息的 session ID 保存了下来。
 
-![3rd Flash Request](demo/ff-flash-session-track-1.png "3rd Flash Request")
+![3rd Flash Request](demo/ff-flash-session-track-3.png "3rd Flash Request")
 
 发现登陆超时后，用户重新登陆，在新的 ID 为 ZZZ 的 session 中留下了有效的登录信息，进入上传页面后，生成了新的拼接 JSESSIONID 的 URL 传递给 Flash 控件，此时进行上传时， Flash 发送的请求既包含了 URL 中的 JSESSIONID，也带了 Cookie 请求头中的 JSESSIONID(图中[1])。按 Servlet 规范，当请求有 Cookie 头中的 JSESSIONID 时，URL 中的就被忽略了，于是服务端判断此请求应该在 YYY 这个 session 中进行处理(图中[2])，于是导致了用户看似已登录，Flash 请求却使用了另一未登录的 session 导致上传失败。
 
