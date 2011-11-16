@@ -1,4 +1,4 @@
-# $Id: universal.py 6112 2009-09-03 07:27:59Z milde $
+# $Id: universal.py 97013 2011-11-16 03:35:47Z  $
 # Authors: David Goodger <goodger@python.org>; Ueli Schlaepfer
 # Copyright: This module has been placed in the public domain.
 

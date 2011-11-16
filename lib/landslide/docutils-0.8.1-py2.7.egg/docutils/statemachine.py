@@ -1,4 +1,4 @@
- # $Id: statemachine.py 7037 2011-05-19 08:56:27Z milde $
+ # $Id: statemachine.py 97013 2011-11-16 03:35:47Z  $
 # Author: David Goodger <goodger@python.org>
 # Copyright: This module has been placed in the public domain.
 

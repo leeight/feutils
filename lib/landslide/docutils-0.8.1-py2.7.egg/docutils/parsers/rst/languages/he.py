@@ -1,5 +1,5 @@
 # Author: Meir Kriheli
-# Id: $Id: he.py 6460 2010-10-29 22:18:44Z milde $
+# Id: $Id: he.py 97013 2011-11-16 03:35:47Z  $
 # Copyright: This module has been placed in the public domain.
 
 # New language mappings are welcome.  Before doing a new translation, please

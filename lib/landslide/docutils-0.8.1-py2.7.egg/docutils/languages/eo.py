@@ -1,4 +1,4 @@
-# $Id: eo.py 4564 2006-05-21 20:44:42Z wiemann $
+# $Id: eo.py 97013 2011-11-16 03:35:47Z  $
 # Author: Marcelo Huerta San Martin <richieadler@users.sourceforge.net>
 # Copyright: This module has been placed in the public domain.
 

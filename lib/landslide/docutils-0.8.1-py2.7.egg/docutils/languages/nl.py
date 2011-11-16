@@ -1,4 +1,4 @@
-# $Id: nl.py 4564 2006-05-21 20:44:42Z wiemann $
+# $Id: nl.py 97013 2011-11-16 03:35:47Z  $
 # Author: Martijn Pieters <mjpieters@users.sourceforge.net>
 # Copyright: This module has been placed in the public domain.
 

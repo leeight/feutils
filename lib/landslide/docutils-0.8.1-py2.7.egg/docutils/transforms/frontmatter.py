@@ -1,4 +1,4 @@
-# $Id: frontmatter.py 5618 2008-07-28 08:37:32Z strank $
+# $Id: frontmatter.py 97013 2011-11-16 03:35:47Z  $
 # Author: David Goodger, Ueli Schlaepfer <goodger@python.org>
 # Copyright: This module has been placed in the public domain.
 

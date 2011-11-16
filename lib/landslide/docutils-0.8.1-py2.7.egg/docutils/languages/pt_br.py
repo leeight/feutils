@@ -1,4 +1,4 @@
-# $Id: pt_br.py 5567 2008-06-03 01:11:03Z goodger $
+# $Id: pt_br.py 97013 2011-11-16 03:35:47Z  $
 # Author: David Goodger <goodger@python.org>
 # Copyright: This module has been placed in the public domain.
 

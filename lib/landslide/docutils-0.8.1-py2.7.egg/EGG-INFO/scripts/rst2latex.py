@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-# $Id: rst2latex.py 5905 2009-04-16 12:04:49Z milde $
+# $Id: rst2latex.py 97013 2011-11-16 03:35:47Z  $
 # Author: David Goodger <goodger@python.org>
 # Copyright: This module has been placed in the public domain.
 

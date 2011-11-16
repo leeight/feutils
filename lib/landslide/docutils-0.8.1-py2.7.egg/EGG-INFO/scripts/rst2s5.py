@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-# $Id: rst2s5.py 4564 2006-05-21 20:44:42Z wiemann $
+# $Id: rst2s5.py 97013 2011-11-16 03:35:47Z  $
 # Author: Chris Liechti <cliechti@gmx.net>
 # Copyright: This module has been placed in the public domain.
 

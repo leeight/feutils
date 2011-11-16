@@ -2,8 +2,8 @@
 # -*- coding: utf8 -*-
 
 # :Author: Günter Milde <milde@users.sourceforge.net>
-# :Revision: $Revision: 7102 $
-# :Date: $Date: 2011-08-24 15:36:28 +0200 (Mit, 24 Aug 2011) $
+# :Revision: $Revision: 97013 $
+# :Date: $Date: 2011-11-16 11:35:47 +0800 (Wed, 16 Nov 2011) $
 # :Copyright: © 2010 Günter Milde.
 # :License: Released under the terms of the `2-Clause BSD license`_, in short:
 # 

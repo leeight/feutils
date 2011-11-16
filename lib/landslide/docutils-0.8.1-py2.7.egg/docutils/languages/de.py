@@ -1,4 +1,4 @@
-# $Id: de.py 4564 2006-05-21 20:44:42Z wiemann $
+# $Id: de.py 97013 2011-11-16 03:35:47Z  $
 # Author: Gunnar Schwant <g.schwant@gmx.de>
 # Copyright: This module has been placed in the public domain.
 

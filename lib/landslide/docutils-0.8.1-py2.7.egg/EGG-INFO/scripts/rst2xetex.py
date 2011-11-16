@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-# $Id: rst2xetex.py 7038 2011-05-19 09:12:02Z milde $
+# $Id: rst2xetex.py 97013 2011-11-16 03:35:47Z  $
 # Author: Guenter Milde
 # Copyright: This module has been placed in the public domain.
 

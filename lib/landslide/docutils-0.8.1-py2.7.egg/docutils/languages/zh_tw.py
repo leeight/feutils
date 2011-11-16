@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# $Id: zh_tw.py 4564 2006-05-21 20:44:42Z wiemann $
+# $Id: zh_tw.py 97013 2011-11-16 03:35:47Z  $
 # Author: Joe YS Jaw <joeysj@users.sourceforge.net>
 # Copyright: This module has been placed in the public domain.
 

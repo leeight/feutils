@@ -1,4 +1,4 @@
-# $Id: html.py 4667 2006-07-12 21:40:56Z wiemann $
+# $Id: html.py 97013 2011-11-16 03:35:47Z  $
 # Author: David Goodger <goodger@python.org>
 # Copyright: This module has been placed in the public domain.
 

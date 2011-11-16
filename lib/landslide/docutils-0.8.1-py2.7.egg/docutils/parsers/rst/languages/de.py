@@ -1,4 +1,4 @@
-# $Id: de.py 6460 2010-10-29 22:18:44Z milde $
+# $Id: de.py 97013 2011-11-16 03:35:47Z  $
 # Authors: Engelbert Gruber <grubert@users.sourceforge.net>;
 #          Lea Wiemann <LeWiemann@gmail.com>
 # Copyright: This module has been placed in the public domain.

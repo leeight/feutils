@@ -1,4 +1,4 @@
-# $Id: nodes.py 7054 2011-06-07 15:05:58Z milde $
+# $Id: nodes.py 97013 2011-11-16 03:35:47Z  $
 # Author: David Goodger <goodger@python.org>
 # Copyright: This module has been placed in the public domain.
 

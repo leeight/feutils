@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 # Author: David Goodger
 # Contact: goodger@users.sourceforge.net
-# Revision: $Revision: 4229 $
-# Date: $Date: 2005-12-23 00:46:16 +0100 (Fri, 23 Dec 2005) $
+# Revision: $Revision: 97013 $
+# Date: $Date: 2011-11-16 11:35:47 +0800 (Wed, 16 Nov 2011) $
 # Copyright: This module has been placed in the public domain.
 
 # New language mappings are welcome.  Before doing a new translation, please

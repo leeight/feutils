@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf8 -*-
 
-# :Id: $Id: error_reporting.py 7073 2011-07-07 06:49:19Z milde $
+# :Id: $Id: error_reporting.py 97013 2011-11-16 03:35:47Z  $
 # :Copyright: © 2011 Günter Milde.
 # :License: Released under the terms of the `2-Clause BSD license`_, in short:
 # 

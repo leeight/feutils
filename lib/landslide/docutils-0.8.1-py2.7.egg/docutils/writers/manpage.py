@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# $Id: manpage.py 7048 2011-06-04 12:35:19Z grubert $
+# $Id: manpage.py 97013 2011-11-16 03:35:47Z  $
 # Author: Engelbert Gruber <grubert@users.sourceforge.net>
 # Copyright: This module is put into the public domain.
 

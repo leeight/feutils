@@ -1,4 +1,4 @@
-# $Id: fi.py 6460 2010-10-29 22:18:44Z milde $
+# $Id: fi.py 97013 2011-11-16 03:35:47Z  $
 # Author: Asko Soukka <asko.soukka@iki.fi>
 # Copyright: This module has been placed in the public domain.
 

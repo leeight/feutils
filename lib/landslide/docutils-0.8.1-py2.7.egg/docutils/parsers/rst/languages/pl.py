@@ -1,4 +1,4 @@
-# $Id$
+# $Id: pl.py 97013 2011-11-16 03:35:47Z  $
 # Author: Robert Wojciechowicz <rw@smsnet.pl>
 # Copyright: This module has been placed in the public domain.
 

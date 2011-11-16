@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf8 -*-
 
-# :Id: $Id: latex2mathml.py 7058 2011-06-27 11:38:56Z milde $
+# :Id: $Id: latex2mathml.py 97013 2011-11-16 03:35:47Z  $
 # :Copyright: © 2010 Günter Milde.
 #             Based on rst2mathml.py from the latex_math sandbox project
 #             © 2005 Jens Jørgen Mortensen

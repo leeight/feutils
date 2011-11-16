@@ -1,4 +1,4 @@
-# $Id: components.py 4564 2006-05-21 20:44:42Z wiemann $
+# $Id: components.py 97013 2011-11-16 03:35:47Z  $
 # Author: David Goodger <goodger@python.org>
 # Copyright: This module has been placed in the public domain.
 

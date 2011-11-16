@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-# $Id: rst2odt.py 5839 2009-01-07 19:09:28Z dkuhlman $
+# $Id: rst2odt.py 97013 2011-11-16 03:35:47Z  $
 # Author: Dave Kuhlman <dkuhlman@rexx.com>
 # Copyright: This module has been placed in the public domain.
 

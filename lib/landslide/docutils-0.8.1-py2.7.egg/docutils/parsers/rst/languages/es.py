@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# $Id: es.py 6460 2010-10-29 22:18:44Z milde $
+# $Id: es.py 97013 2011-11-16 03:35:47Z  $
 # Author: Marcelo Huerta San Martín <richieadler@users.sourceforge.net>
 # Copyright: This module has been placed in the public domain.
 

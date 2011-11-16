@@ -1,4 +1,4 @@
-# $Id: _compat.py 5908 2009-04-21 13:43:23Z goodger $
+# $Id: _compat.py 97013 2011-11-16 03:35:47Z  $
 # Author: Georg Brandl <georg@python.org>
 # Copyright: This module has been placed in the public domain.
 

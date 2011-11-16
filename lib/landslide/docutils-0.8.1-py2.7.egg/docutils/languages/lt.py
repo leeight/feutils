@@ -1,5 +1,5 @@
 # -*- coding: utf8 -*-
-# $Id: lt.py 6459 2010-10-29 22:07:34Z milde $
+# $Id: lt.py 97013 2011-11-16 03:35:47Z  $
 # Author: Dalius Dobravolskas <dalius.do...@gmail.com>
 # Copyright: This module has been placed in the public domain.
 
@@ -60,7 +60,7 @@ author_separators = [';', ',']
 """List of separator strings for the 'Authors' bibliographic field. Tried in
 order."""
 # -*- coding: utf8 -*-
-# $Id: lt.py 6459 2010-10-29 22:07:34Z milde $
+# $Id: lt.py 97013 2011-11-16 03:35:47Z  $
 # Author: David Goodger <goodger@python.org>
 # Copyright: This module has been placed in the public domain.
 

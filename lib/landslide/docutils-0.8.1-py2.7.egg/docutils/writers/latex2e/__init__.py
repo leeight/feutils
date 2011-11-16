@@ -1,5 +1,5 @@
 # .. coding: utf8
-# $Id: __init__.py 7102 2011-08-24 13:36:28Z milde $
+# $Id: __init__.py 97013 2011-11-16 03:35:47Z  $
 # Author: Engelbert Gruber <grubert@users.sourceforge.net>
 # Copyright: This module has been placed in the public domain.
 

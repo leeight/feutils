@@ -1,4 +1,4 @@
-# $Id: roles.py 6451 2010-10-25 08:02:43Z milde $
+# $Id: roles.py 97013 2011-11-16 03:35:47Z  $
 # Author: Edward Loper <edloper@gradient.cis.upenn.edu>
 # Copyright: This module has been placed in the public domain.
 

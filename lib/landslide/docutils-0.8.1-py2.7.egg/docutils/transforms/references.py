@@ -1,4 +1,4 @@
-# $Id: references.py 6167 2009-10-11 14:51:42Z grubert $
+# $Id: references.py 97013 2011-11-16 03:35:47Z  $
 # Author: David Goodger <goodger@python.org>
 # Copyright: This module has been placed in the public domain.
 
