@@ -292,6 +292,36 @@ __注意事项__
 2. addHandler的第一个参数是url，最好要有后缀名，Fserver会自动添加Response Header中的Content-Type.
 3. 恺华同学测试，发现`Win7 64bit`下面因为node.js的问题，暂时无法正常使用，需要等待node.js升级支持`Win7 64bit`才可以.
 
+#### Fslide
+
+对`landside`的一个包装，只需要更新feutils即可使用，无须安装，推荐使用`Markdown`的语法写PPT，例如：
+
+    :::markdown
+    # 这是一个PPT
+
+    ------
+
+    ## 这是标题1
+    1. xxx
+    2. yyy
+    3. zzz
+
+    -------
+
+    ## 这是标题2
+
+        !javascript
+        var a = 10;
+        var b = 20;
+        var c = /30/gi;
+
+执行命令
+
+    :::bash
+    Fslide -i demo.markdown
+
+之后的效果可以从这里[查看](presentation.html)
+
 #### Fcooder
 
 仅仅是Linux平台下，为了规避<http://cooder.baidu.com>的缺陷而写一个脚本，一般不推荐使用.
