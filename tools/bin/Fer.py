@@ -180,6 +180,64 @@ def gen_deps(options, args):
     sys.exit(1)
 
 def build(options, args):
+  #prepareing: create folders, copy the main.html to output directory
+  if(not options.output_dir):
+    tmp_dir = 'tmp'
+  else:
+    tmp_dir = options.output_dir + '/tmp'
+  if os.path.exists(tmp_dir):
+    shutil.rmtree(tmp_dir)
+  os.makedirs(tmp_dir)
+  if not options.main_html:
+    logging.error('Could not find the html file to build')
+    sys.exit(1)
+  dir, filename = os.path.split(options.main_html)
+  main_path = os.path.join(tmp_dir, filename)
+  shutil.copy2(options.main_html, main_path)
+  # get some variables
+  search_paths = GetPathsFromOptions(options)
+  base_path = FindClosureBasePath(search_paths)
+  # fetch javascript code from main.html
+  compiler = get_html_processor(options.main_html, options)
+  main_js = compiler.get_script()
+  open(tmp_dir + '/main_js.js', 'w').write(main_js)
+  ext_scripts = compiler.get_external_scripts()
+  deps = CalculateDependencies(search_paths, [tmp_dir + '/main_js.js'])
+  arr = []
+  for dep in deps:
+    if dep.endswith('main_js.js') or dep.endswith('base.js'):
+      print(dep)
+    else:
+      arr.append(dep)
+  out = open(tmp_dir + '/merged_js.js', 'w')
+  files = arr
+  if ext_scripts:
+    files = files + ext_scripts
+  if options.extern_js_files:
+    files = files + options.extern_js_files
+  print(files)
+  merge_files(files, out)
+  # remove all goog.require('xx')
+  merged_file = open(tmp_dir + '/merged_js.js', 'r')
+  merged_content = merged_file.read()
+  merged_file.close()
+  merged_content = re.sub(req_regex, '', merged_content)
+  merged_content = re.sub(prov_regex, '', merged_content)
+  # create pl.compiled.js and remove merged_js.js, main_js.js
+  output_file_path = '';
+  if options.output_file:
+    output_file_path = os.path.join(tmp_dir,options.output_file)
+    open(os.path.join(tmp_dir,options.output_file), 'w').write(merged_content)
+  else:
+    output_file_path = tmp_dir + '/pl.compiled.js'
+    open(tmp_dir + '/pl.compiled.js', 'w').write(merged_content)
+  os.remove(tmp_dir + '/merged_js.js')
+  os.remove(tmp_dir + '/main_js.js')
+  # add compiled js in main.html
+  jsPath, jsFilename = os.path.split(output_file_path)
+  open(main_path, 'w').write('<!doctype html>\n' + '<html>\n<head><title>test '+ jsFilename +'</title></head>\n<body>\n' + '<script type="text/javascript" src="'+ jsFilename +'"></script>\n</body>\n</html>')
+
+def pl_build(options, args):
   # prepareing: create folders, copy the main.html to output directory
   if(os.path.exists(options.output_dir)):
     shutil.rmtree(options.output_dir)
@@ -298,6 +356,11 @@ def main():
                     default=False,
                     action="store_true",
                     help='run gcc lint')
+  parser.add_option('--pl_build',
+                    dest='pl_build',
+                    default=False,
+                    action="store_true",
+                    help='build pl project')
   parser.add_option('-p',
                     '--path',
                     dest='paths',
@@ -372,6 +435,8 @@ def main():
   if options.gcc_lint:
     gcc_lint(options, args)
     return
+  if options.pl_build:
+    pl_build(options, args)
 
 if __name__ == "__main__":
   main()
