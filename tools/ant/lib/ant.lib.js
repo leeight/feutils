@@ -148,11 +148,11 @@ function echo_env() {
  * 获取不同系统下面的python版本
  * @return {string}
  */
-function getPython () {
+function getPython() {
   if (_('env.USER') == 'scmpf') {
-    return "python2.7";
+    return 'python2.7';
   } else {
-    return "python";
+    return 'python';
   }
 }
 
@@ -162,6 +162,19 @@ function getPython () {
  */
 function PYTHON() {
   return getPython();
+}
+
+/**
+ * 调用jython来执行python脚本
+ * @param {Array.<string>=} opt_args 一些默认的参数.
+ */
+function JYTHON(opt_args) {
+  var args = ['-jar ' + (_('tools.dir') + '/lib/jython-2.5.2.jar')];
+  if (isArray(opt_args)) {
+    args = args.concat(opt_args);
+  }
+
+  exec('java', args);
 }
 
 /**
@@ -599,6 +612,7 @@ function exec(command, opt_args, opt_output) {
   }
 
   try {
+    logger.debug(command + (isArray(opt_args) ? (' ' + opt_args.join(' ')) : ''));
     task.perform();
   } catch (e) {
     logger.warning(command + ' failed.');
@@ -804,7 +818,7 @@ function writeFile(input, content, opt_append) {
 
   //use OutputStreamWriter instead, so it could specify charset encoder
   var writer = new java.io.BufferedWriter(
-      new java.io.OutputStreamWriter(new java.io.FileOutputStream(file, opt_append === true), "utf-8")
+      new java.io.OutputStreamWriter(new java.io.FileOutputStream(file, opt_append === true), 'utf-8')
   );
   writer.write(content);
   writer.close();
