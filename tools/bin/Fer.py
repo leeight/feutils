@@ -179,7 +179,7 @@ def gen_deps(options, args):
     logging.error('Could not find Closure Library in the specified paths')
     sys.exit(1)
 
-def build(options, args):
+def pl_build(options, args):
   #prepareing: create folders, copy the main.html to output directory
   if(not options.output_dir):
     tmp_dir = 'tmp'
@@ -236,16 +236,20 @@ def build(options, args):
   # add compiled js in main.html
   jsPath, jsFilename = os.path.split(output_file_path)
   open(main_path, 'w').write('<!doctype html>\n' + '<html>\n<head><title>test '+ jsFilename +'</title></head>\n<body>\n' + '<script type="text/javascript" src="'+ jsFilename +'"></script>\n</body>\n</html>')
-
-def pl_build(options, args):
+  
+def build(options, args):
   # prepareing: create folders, copy the main.html to output directory
-  if(os.path.exists(options.output_dir)):
-    shutil.rmtree(options.output_dir)
-  tmp_dir = options.output_dir + '/tmp'
+  if(not options.output_dir):
+    tmp_dir = 'tmp'
+  else:
+    tmp_dir = options.output_dir + '/tmp'
+  if os.path.exists(tmp_dir):
+    shutil.rmtree(tmp_dir)
   os.makedirs(tmp_dir)
   dir, filename = os.path.split(options.main_html)
-  main_path = os.path.join(options.output_dir, filename)
+  main_path = os.path.join(tmp_dir, filename)
   shutil.copy2(options.main_html, main_path)
+  
   # get some variables
   search_paths = GetPathsFromOptions(options)
   base_path = FindClosureBasePath(search_paths)
@@ -351,16 +355,16 @@ def main():
                     default=False,
                     action="store_true",
                     help='build project')
-  parser.add_option('--gcc_lint',
-                    dest='gcc_lint',
-                    default=False,
-                    action="store_true",
-                    help='run gcc lint')
   parser.add_option('--pl_build',
                     dest='pl_build',
                     default=False,
                     action="store_true",
                     help='build pl project')
+  parser.add_option('--gcc_lint',
+                    dest='gcc_lint',
+                    default=False,
+                    action="store_true",
+                    help='run gcc lint')
   parser.add_option('-p',
                     '--path',
                     dest='paths',
@@ -435,8 +439,10 @@ def main():
   if options.gcc_lint:
     gcc_lint(options, args)
     return
+
   if options.pl_build:
     pl_build(options, args)
+    return
 
 if __name__ == "__main__":
   main()
