@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+base_dir=$(dirname "$0")
+lib_dir="${base_dir}/../lib/landslide"
+
+# Use the batch file as an entry point if on cygwin.
+if [ "${OSTYPE}" = "cygwin" -a "${TERM}" != "xterm" ]; then
+   ${base_dir}/Fslide.bat "$@"
+   exit
+fi
+
+export PYTHONPATH="${PYTHONPATH}:${lib_dir}/docutils-0.8.1-py2.7.egg"
+export PYTHONPATH="${PYTHONPATH}:${lib_dir}/Jinja2-2.6-py2.7.egg"
+export PYTHONPATH="${PYTHONPATH}:${lib_dir}/Markdown-2.0.3-py2.7.egg"
+export PYTHONPATH="${PYTHONPATH}:${lib_dir}/Pygments-1.4.egg"
+export PYTHONPATH="${PYTHONPATH}:${lib_dir}/landslide-1.0.0-py2.7.egg"
+exec python -S "${lib_dir}/landslide-1.0.0-py2.7.egg/landslide/main.py" "$@"
+# exec python -S -c "import sys;import tokenize;from pprint import pprint as pp;pp(sys.path)"

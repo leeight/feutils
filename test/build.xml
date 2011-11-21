@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<project basedir="." default="test">
+  <property name="tools.dir" value="${basedir}/.." />
+  <property name="ant.lib.js" value="${tools.dir}/ant/lib/ant.lib.js" />
+  <property environment="env" />
+
+  <target name="test">
+    <script language="javascript" src="${ant.lib.js}">
+    <![CDATA[
+      JYTHON(['-c "import sys;print(sys.path);"']);
+      JYTHON(['-V']);
+    ]]>
+    </script>
+  </target>
+</project>

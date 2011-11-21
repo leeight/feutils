@@ -1,0 +1,84 @@
+libjavascript-beautifier-perl (0.17-2) UNRELEASED; urgency=low
+
+  * debian/rules: switch order of arguments to dh.
+
+ -- gregor herrmann <gregoa@debian.org>  Wed, 28 Jul 2010 14:32:46 -0400
+
+libjavascript-beautifier-perl (0.17-1) unstable; urgency=low
+
+  [ Jonathan Yu ]
+  * New upstream release
+  * Refresh patch to match new js_beautify.pl
+
+  [ Ryan Niebur ]
+  * Update ryan52's email address
+
+  [ gregor herrmann ]
+  * debian/control: Changed: (build-)depend on perl instead of perl-
+    modules.
+
+ -- Jonathan Yu <jawnsy@cpan.org>  Wed, 30 Dec 2009 23:35:29 -0500
+
+libjavascript-beautifier-perl (0.16-1) unstable; urgency=low
+
+  * New upstream release
+    + Fix array indentation regressions
+  * Depend on perl >= 5.10.1 or libtest-simple-perl >= 0.88
+
+ -- Jonathan Yu <jawnsy@cpan.org>  Tue, 22 Sep 2009 06:38:52 -0400
+
+libjavascript-beautifier-perl (0.15-1) unstable; urgency=low
+
+  [ Jonathan Yu ]
+  * New upstream release
+    + Changes to handling of arrays
+
+  [ Ryan Niebur ]
+  * Update jawnsy's email address
+
+ -- Jonathan Yu <jawnsy@cpan.org>  Sat, 19 Sep 2009 20:39:48 -0400
+
+libjavascript-beautifier-perl (0.14-1) unstable; urgency=low
+
+  * New upstream release
+  * Debian Policy 3.8.3
+
+ -- Ryan Niebur <ryanryan52@gmail.com>  Wed, 19 Aug 2009 16:04:02 -0700
+
+libjavascript-beautifier-perl (0.13-1) unstable; urgency=low
+
+  * New upstream release (0.12)
+    + Allow unescaped / in regular expression character classes
+    + Fixed broken <!-- / --> handline
+    + Added space between anonymous function parentheses
+  * Standards-Version 3.8.2 (no changes)
+  * Updated description in control file
+  * Added myself to Uploaders and Copyright
+  * Refreshed patch, renamed to remove-pl-extension.patch (Closes: #538676)
+    + Patch the file before renaming, and unpatch after renaming, so that it
+      works with the new quilt patch system
+
+  * New upstream release (0.13)
+    + Fix for prefix operators (increment,decrement)
+    + Put spaces in front of colons in ternary (a ? b : c) expressions
+    + No spaces in front of colons in class literals ({ 1: "a", 2: "b" })
+    + Remove spaces between unary +/-/~ and the operand (-a, case -1, !a)
+    + Add a blank line between a new block and the start of an expression
+
+ -- Jonathan Yu <frequency@cpan.org>  Sun, 02 Aug 2009 06:41:58 -0400
+
+libjavascript-beautifier-perl (0.11-1) unstable; urgency=low
+
+  [ Nathan Handler ]
+  * debian/watch: Update to ignore development releases.
+
+  [ Ryan Niebur ]
+  * New upstream release
+
+ -- Ryan Niebur <ryanryan52@gmail.com>  Mon, 08 Jun 2009 00:21:33 -0700
+
+libjavascript-beautifier-perl (0.09-1) unstable; urgency=low
+
+  * Initial Release. (Closes: #531140)
+
+ -- Ryan Niebur <ryanryan52@gmail.com>  Sun, 31 May 2009 19:59:01 -0700
