@@ -101,6 +101,17 @@ function echo(msg) {
 }
 
 /**
+ * @param {string=} opt_msg 退出当前的Build进程.
+ */
+function fail(opt_msg) {
+  var task = createTask('fail');
+  if (opt_msg) {
+    task.setMessage(opt_msg);
+  }
+  task.perform();
+}
+
+/**
  * @param {Array.<string>|string} input 要删除的目录.
  */
 function rmdir(input) {
@@ -447,9 +458,10 @@ function gcc(input, output, opt_jar, opt_extraflags, opt_error) {
   }
 
   try {
+    logger.debug('java -jar ' + jar + (isArray(extraflags) ? (' ' + extraflags.join(' ')) : ''));
     task.perform();
   } catch (e) {
-    echo('gcc failed');
+    fail('gcc failed');
   }
 }
 
@@ -615,8 +627,7 @@ function exec(command, opt_args, opt_output) {
     logger.debug(command + (isArray(opt_args) ? (' ' + opt_args.join(' ')) : ''));
     task.perform();
   } catch (e) {
-    logger.warning(command + ' failed.');
-    logger.warning(e);
+    fail(e.toString());
   }
 }
 
@@ -658,8 +669,7 @@ function javamail(from, to, subject, message) {
   try {
     task.perform();
   } catch (e) {
-    logger.warning('mail failed.');
-    logger.warning(e);
+    fail(e.toString());
   }
 }
 
@@ -697,8 +707,7 @@ function mail(from, to, title, body, opt_headers) {
   try {
     task.perform();
   } catch (e) {
-    logger.warning('mail failed.');
-    logger.warning(e);
+    fail(e.toString());
   }
 }
 
