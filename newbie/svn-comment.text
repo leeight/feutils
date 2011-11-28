@@ -26,8 +26,9 @@
    而且进行回复的`Reviewer`不是发起CodeReview的本人。
 3. 代码`CI`成功之后，会自动把对应的ISSUE设置为CLOSE的状态。
 4. `LGTM`是`Looks Good To Me`的缩写。
+5. 特例：`ISSUE=IGNORE`，支持自动化脚本的提交以及不需要CodeReview的情况。
 
 ## References
 
 1. <http://wiki.babel.baidu.com/twiki/bin/view/Com/Ecom/CM-ET-CHANGLE-LOG-STD>
-
+2. <http://wiki.babel.baidu.com/twiki/bin/view/Com/Pmo/Scm/CI_HOOK>
