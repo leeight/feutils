@@ -7,17 +7,17 @@
 这里介绍的是往`jn-core/webapp`目录提交代码的规范。SVN COMMENT里面必须包含：
 
     :::ini
+    # 详细的改动信息
+    # 空一行
     ISSUE=ISSUE号   # 非空，必须为数字
     TESTED=MANUAL   # 手工测试
-    # 空一行
-    # 详细的改动信息
 
 例如：
 
+    这次改动修复了一个BUG，ID是XXXXXX
+    
     ISSUE=123456
     TESTED=MANUAL
-
-    这次改动修复了一个BUG，ID是XXXXXX
 
 **ISSUE**
 
