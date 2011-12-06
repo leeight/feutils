@@ -100,7 +100,8 @@ SCRIPT_VERSION = "14"
 # .mm (Objective-C) shows up as application/x-freemind on my Linux box.
 TEXT_MIMETYPES = ['application/javascript', 'application/json',
                   'application/x-javascript', 'application/xml',
-                  'application/x-freemind', 'application/x-sh']
+                  'application/x-freemind', 'application/x-sh',
+                  'application/x-httpd-php']
 
 VCS_ABBREVIATIONS = {
   VCS_MERCURIAL.lower(): VCS_MERCURIAL,
@@ -1608,11 +1609,16 @@ class GitVCS(VersionControlSystem):
             ErrorExit("Got error status from 'git show %s'" % file_hash)
         return data
 
+    def IsBinaryData(self, data):
+        """Returns true if data contains a null byte."""
+        # Derived from how Mercurial's heuristic, see
+        # http://selenic.com/hg/file/848a6658069e/mercurial/util.py#l229
+        return bool(data and "\0" in data)
+
     def GetBaseFile(self, filename):
         hash_before, hash_after = self.hashes.get(filename, (None,None))
         base_content = None
         new_content = None
-        is_binary = self.IsBinary(filename)
         status = None
 
         if filename in self.renames:
@@ -1628,6 +1634,7 @@ class GitVCS(VersionControlSystem):
         else:
             status = "M"
 
+        is_binary = self.IsBinaryData(base_content)
         is_image = self.IsImage(filename)
 
         # Grab the before/after content if we need it.
