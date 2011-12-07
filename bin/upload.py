@@ -94,7 +94,7 @@ VCS_SUBVERSION = "Subversion"
 VCS_PERFORCE = "Perforce"
 VCS_CVS = "CVS"
 VCS_UNKNOWN = "Unknown"
-SCRIPT_VERSION = "13"
+SCRIPT_VERSION = "15"
 
 # whitelist for non-binary filetypes which do not start with "text/"
 # .mm (Objective-C) shows up as application/x-freemind on my Linux box.
@@ -637,6 +637,12 @@ group.add_option("--include_files", action="store",dest="include_pattern", defau
                  help="when generating diff data,only include files which are refered by this param. eg:--include_files=\"*.py,*.js\",it will include files pattern like '*.py' and '*.js' in current dir and its child dirs. when generating diff data . when using with '--exclude_files' together,it will filter files with '--include_files' pattern first,with include_file_set as result,and then filter include_file_set with '--exclude_files'")
 group.add_option("--exclude_files", action="store",dest="exclude_pattern", default=None,
                  help="when generating diff data,ignore files which are refered by this param.when using with '--include_files' together,it will filter files with '--include_files' pattern first,with include_file_set as result,and then filter include_file_set with '--exclude_files'")
+group.add_option("--disdetect_filecode", action="store_true",
+                 dest="disdetect_filecode", default=False,
+                 help="Disable detect filecode on server.")
+group.add_option("--filecodemap","--filecodemap", action="store",
+                 dest="filecodemap", default=None,
+                 help="specify filecode if existing file different 'file_encoding'.eg:demo.txt:gbk,demo2.py:utf-8 .")
 group.add_option("--vcs", action="store", dest="vcs",
                  metavar="VCS", default=None,
                  help=("Version control system (optional, usually upload.py "
@@ -802,18 +808,50 @@ class VersionControlSystem(object):
       options: Command line options.
     """
         self.options = options
-        
-        if self.options.file_codec != 'utf-8':
-            self.file_codec = self.options.file_codec
-        else:
-            self.file_codec = None
-
+        self.file_codec = self.options.file_codec
+        self.filecodemap={}
+        if self.options.filecodemap:
+            codegroups = self.options.filecodemap.split(',')
+            for group in codegroups:
+                temp= group.split(":")
+                if temp[1].lower() != 'gbk' and temp[1].lower() !='utf-8':
+                    ErrorExit("--filecodemap's code should only in 'gbk' or 'utf-8',code type %s not allowed" %temp[1])
+                else:
+                    self.filecodemap[temp[0]]=temp[1]
+    
     def DecodingAndEncoding(self, multilines):
-        if self.file_codec:
+        afterstr = ""
+        code = self.file_codec
+        for line in multilines.splitlines():
+            if line.startswith('Index:') or line.startswith('Property changes on:'):
+                unused, filename = line.split(':', 1)
+                filename = filename.strip().replace('\\', '/')
+                if self.filecodemap.has_key(filename):
+                    code = self.filecodemap[filename]
+                else:
+                    code = self.file_codec
+            if code.lower() != 'utf-8':
+                try:
+                    afterstr += line.decode(code,'ignore').encode("utf-8",'ignore') + "\n"
+                except:
+                    afterstr += line + "\n" 
+            else:
+                afterstr += line + "\n"
+        if not multilines.endswith('\n'):
+            afterstr = afterstr[:-1]
+        return afterstr
+   
+    
+    def DecodingAndEncodingByFile(self, multilines,filename):
+        if self.filecodemap.has_key(filename):
+            code = self.filecodemap[filename]
+        else:
+            code = self.file_codec
+        if code.lower() != 'utf-8':
             afterstr = ""
             for line in multilines.splitlines():
                 try:
-                    afterstr += line.decode(self.file_codec,'ignore').encode("utf-8",'ignore') + "\n"
+                    afterstr += line.decode(code,'ignore').encode("utf-8",'ignore') + "\n"
                 except:
                     afterstr += line + "\n" 
             if not multilines.endswith('\n'):
@@ -825,8 +863,7 @@ class VersionControlSystem(object):
         """Return the diff with any special post processing this VCS needs, e.g.
     to include an svn-style "Index:"."""
         #change encoding to utf8   
-        if self.file_codec:
-            diff = self.DecodingAndEncoding(diff)
+        diff = self.DecodingAndEncoding(diff)
         return diff
 
     def GenerateDiff(self, args):
@@ -999,6 +1036,10 @@ class VersionControlSystem(object):
                 form_fields.append(("file_too_large", "1"))
             if options.email:
                 form_fields.append(("user", options.email))
+            if options.disdetect_filecode:
+                form_fields.append(('disdetect_filecode',"1"))
+            else:
+                form_fields.append(('disdetect_filecode',"0"))
             ctype, body = EncodeMultipartFormData(form_fields,
                                                   [("data", filename, content)])
             response_body = rpc_server.Send(url, body,
@@ -1037,6 +1078,11 @@ class VersionControlSystem(object):
         if mimetype in TEXT_MIMETYPES:
             return False
         return not mimetype.startswith("text/")
+    def IsBinaryData(self, data):
+        """Returns true if data contains a null byte."""
+        # Derived from how Mercurial's heuristic, see
+        # http://selenic.com/hg/file/848a6658069e/mercurial/util.py#l229
+        return bool(data and "\0" in data)
 
 
 class SubversionVCS(VersionControlSystem):
@@ -1209,8 +1255,8 @@ class SubversionVCS(VersionControlSystem):
                 return "$%s::%s$" % (m.group(1), " " * len(m.group(3)))
             return "$%s$" % m.group(1)
         keywords = [keyword
-                    for name in keyword_str.split(" ")
-                    for keyword in svn_keywords.get(name, [])]
+                    for name in keyword_str.split("\n")
+                    for keyword in svn_keywords.get(name.strip(), [])]
         return re.sub(r"\$(%s):(:?)([^\$]+)\$" % '|'.join(keywords), repl, content)
 
     def GetUnknownFiles(self):
@@ -1378,20 +1424,17 @@ class SubversionVCS(VersionControlSystem):
                     base_content = RunShell(["svn", "cat", url],
                                             universal_newlines=universal_newlines,
                                             silent_ok=True)
-                    if self.file_codec:
-                        base_content = self.DecodingAndEncoding(base_content)
+                    base_content = self.DecodingAndEncodingByFile(base_content,filename)
                 elif self.tagdiff:
                     url = "%s/%s" % (self.rev_start, filename)
                     base_content = RunShell(["svn", "cat", url],
                                             universal_newlines=universal_newlines,
                                             silent_ok=True)
-                    if self.file_codec:
-                        base_content = self.DecodingAndEncoding(base_content)
+                    base_content = self.DecodingAndEncodingByFile(base_content,filename)
                 else:
                     base_content, ret_code = RunShellWithReturnCode(
                       ["svn", "cat", filename], universal_newlines=universal_newlines)
-                    if self.file_codec:
-                        base_content = self.DecodingAndEncoding(base_content)
+                    base_content = self.DecodingAndEncodingByFile(base_content,filename)
                     if ret_code and status[0] == "R":
                         # It's a replaced file without local history (see issue208).
                         # The base file needs to be fetched from the server.
@@ -1399,8 +1442,7 @@ class SubversionVCS(VersionControlSystem):
                         base_content = RunShell(["svn", "cat", url],
                                                 universal_newlines=universal_newlines,
                                                 silent_ok=True)
-                        if self.file_codec:
-                            base_content = self.DecodingAndEncoding(base_content)
+                        base_content = self.DecodingAndEncodingByFile(base_content,filename)
                     elif ret_code:
                         ErrorExit("Got error status from 'svn cat %s'" % filename)
                 if not is_binary:
@@ -1575,7 +1617,6 @@ class GitVCS(VersionControlSystem):
         hash_before, hash_after = self.hashes.get(filename, (None,None))
         base_content = None
         new_content = None
-        is_binary = self.IsBinary(filename)
         status = None
 
         if filename in self.renames:
@@ -1591,6 +1632,7 @@ class GitVCS(VersionControlSystem):
         else:
             status = "M"
 
+        is_binary = self.IsBinaryData(base_content)
         is_image = self.IsImage(filename)
 
         # Grab the before/after content if we need it.
@@ -1604,8 +1646,7 @@ class GitVCS(VersionControlSystem):
             if is_image and hash_after:
                 new_content = self.GetFileContent(hash_after, is_binary)
         if not is_binary:
-            if self.file_codec:
-                base_content = self.DecodingAndEncoding(base_content)
+            base_content = self.DecodingAndEncodingByFile(base_content, filename)
 
         return (base_content, new_content, is_binary, status)
 
@@ -2895,6 +2936,10 @@ def RealMain(argv, data=None):
     else:
         uploaded_diff_file = [("data", "data.diff", data)]
     form_fields.append(("source", "upload_script"))
+    if options.disdetect_filecode:
+        form_fields.append(('disdetect_filecode',"1"))
+    else:
+        form_fields.append(('disdetect_filecode',"0"))
     ctype, body = EncodeMultipartFormData(form_fields, uploaded_diff_file)
     response_body = rpc_server.Send("/upload", body, content_type=ctype)
     patchset = None
