@@ -151,9 +151,11 @@ def find_include(line, css_includes, html_includes, base_path):
     include_file = re.search(include_regex, line).group(1)
     include_file = os.path.join(os.path.dirname(base_path), include_file)
     if include_file.endswith(".html") or include_file.endswith(".htm"):
-      html_includes.append(include_file)
+      if not include_file in html_includes:
+        html_includes.append(include_file)
     else:
-      css_includes.append(include_file)
+      if not include_file in css_includes:
+        css_includes.append(include_file)
 
 def merge_files(files, out):
   try:
@@ -239,17 +241,13 @@ def pl_build(options, args):
   
 def build(options, args):
   # prepareing: create folders, copy the main.html to output directory
-  if(not options.output_dir):
-    tmp_dir = 'tmp'
-  else:
-    tmp_dir = options.output_dir + '/tmp'
-  if os.path.exists(tmp_dir):
-    shutil.rmtree(tmp_dir)
+  if(os.path.exists(options.output_dir)):
+    shutil.rmtree(options.output_dir)
+  tmp_dir = options.output_dir + '/tmp'
   os.makedirs(tmp_dir)
   dir, filename = os.path.split(options.main_html)
-  main_path = os.path.join(tmp_dir, filename)
+  main_path = os.path.join(options.output_dir, filename)
   shutil.copy2(options.main_html, main_path)
-  
   # get some variables
   search_paths = GetPathsFromOptions(options)
   base_path = FindClosureBasePath(search_paths)
