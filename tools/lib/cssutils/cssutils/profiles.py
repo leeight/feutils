@@ -456,6 +456,7 @@ properties[Profiles.CSS_LEVEL_2] = {
     'max-width': r'{length}|{percentage}|none|inherit',
     'min-height': r'{length}|{percentage}|none|inherit',
     'min-width': r'{length}|{percentage}|none|inherit',
+    'zoom': r'{length}|{percentage}|none|inherit',
     'orphans': r'{integer}|inherit',
     'outline-color': r'{outline-color}',
     'outline-style': r'{outline-style}',

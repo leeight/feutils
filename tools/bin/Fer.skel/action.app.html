@@ -1,0 +1,57 @@
+<!doctype html>
+<!--
+/***************************************************************************
+ *
+ * Copyright (c) %(app.create.year)s Baidu.com, Inc. All Rights Reserved
+ * $Id$
+ *
+ **************************************************************************/
+
+
+
+/**
+ * src/%(app.package.path)s/%(app.action_name)s.app.html ~ %(app.create.time)s
+ * @author %(app.user.email)s (%(app.user.name)s)
+ * @version $Revision$ 
+ * @description
+ *
+ **/
+-->
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>[MOCKUP]%(app.name)s</title>
+    <script type="text/javascript" src="%(app.rel_path)s/../assets/js/tangram-base-1.3.7.1.js"></script>
+    <script type="text/javascript" src="%(app.rel_path)s/base.js"></script>
+    <script type="text/javascript">
+        goog.require('app.Launch');
+        goog.require('er.controller');
+        goog.require('er.locator');
+
+        goog.require('%(app.name)s');
+
+        if (!COMPILED) {
+            goog.require('%(app.module)s.mockup');
+        }
+    </script>
+    <!--[if IE]><![endif]-->
+    <!--[if IE 6]><![endif]-->
+    <!--[if gte IE 7]><![endif]-->
+</head>
+<body>
+    <div id="Main"></div>
+</body>
+<script type="text/javascript">
+baidu.on(window, 'load', function(){
+    // app.Launch用来保证所有的模板和样式都加载完了
+    // FIXME 解决IE6下面的样式overflow的问题？
+    app.Launch(function() {
+        er.controller.init();
+        var loc = er.locator.getLocation();
+        if (!loc || loc == '/') {
+            er.locator.redirect('%(app.action_path)s');
+        }
+    });
+});
+</script>
+</html>

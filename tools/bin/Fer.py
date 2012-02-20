@@ -2,14 +2,14 @@
 #!-*- coding:utf-8 -*-
 #!vim: set ts=4 sw=4 sts=4 tw=100 noet:
 # ***************************************************************************
-# 
+#
 # Copyright (c) 2011 Baidu.com, Inc. All Rights Reserved
-# $Id$ 
-# 
+# $Id$
+#
 # **************************************************************************/
- 
- 
- 
+
+
+
 import os
 import sys
 import logging
@@ -20,9 +20,13 @@ import codecs
 import shutil
 import tempfile
 import subprocess
-from HTMLParser import HTMLParser
-from calcdeps import GetPathsFromOptions, PrintDeps, ExpandDirectories, CalculateDependencies, FindClosureBasePath
+import ConfigParser
+import Frewriter
+import calcdeps
+from datetime import datetime
+from closure_linter import javascripttokens
 
+TokenType = javascripttokens.JavaScriptTokenType
 
 __author__ = 'leeight <liyubei@baidu.com>'
 __date__ = '2011/07/28 18:07:16'
@@ -32,114 +36,13 @@ req_regex = re.compile('goog\.require\s*\(\s*[\'\"]([^\)]+)[\'\"]\s*\);?', re.M|
 prov_regex = re.compile('goog\.provide\s*\(\s*[\'\"]([^\)]+)[\'\"]\s*\);?', re.M|re.S)
 include_regex = re.compile('goog\.include\s*\(\s*[\'\"]([^\)]+)[\'\"]\s*\);?', re.M|re.S)
 line_sep_regex = re.compile('\r?\n', re.M|re.S)
+action_name_regex = re.compile('(?P<package>([a-z\d_]+\.)+)(?P<action_name>[A-Z]\w+)', re.M|re.S)
 
-def utf8(s):
-  if isinstance(s, unicode):
-    return s.encode("utf-8")
-  assert isinstance(s, str)
-  return s
+FER_SKEL_DIR = os.path.join(os.path.dirname(__file__), 'Fer.skel')
 
-class HTMLProcessor(HTMLParser):
-  def __init__(self, extern_js_files):
-    HTMLParser.__init__(self)
-    self.extern_js_files = extern_js_files
-    self._in_script = False
-    self._in_external_script = False
-    self._script_text = cStringIO.StringIO()
-    self._main_text = cStringIO.StringIO()
-    self._external_scripts = []
-    self._external_styles = []
-
-  def _get_buffer(self):
-    if self._in_script:
-      if self._in_external_script:
-        return cStringIO.StringIO()
-      else:
-        return self._script_text
-    else:
-      return self._main_text
-
-  def _handle_tag(self, tag, attrs, self_close = False):
-    attr_dict = dict(attrs)     # 把attrs转化为dict
-    if tag == 'script':
-      self._in_script = True
-      if attr_dict.get('src') is not None:
-        self._in_external_script = True
-        self._external_scripts.append(attr_dict.get('src'))
-      return
-    else:
-      if tag == 'link':
-        if attr_dict.get('rel') == 'stylesheet' and\
-            attr_dict.get('type') == 'text/css':
-          self._external_styles.append(attr_dict.get('href'))
-          return
-      
-      buffer = self._get_buffer()
-      buffer.write('<%s' % tag)
-      for k, v in attrs:
-        if v is None:
-          buffer.write(' %s' % utf8(k))
-        else:
-          buffer.write(' %s="%s"' % (utf8(k), utf8(v).replace('"', '&quot;')))
-
-      if self_close:
-        buffer.write(' />')
-      else:
-        buffer.write('>')
-
-  def handle_startendtag(self, tag, attrs):
-    self._handle_tag(tag, attrs, True)
-
-  def handle_starttag(self, tag, attrs):
-    self._handle_tag(tag, attrs, False)
-
-  def handle_endtag(self, tag):
-    if tag == 'script':
-      self._in_script = False
-      self._in_external_script = False
-    else:
-      if tag == 'head':
-        for file in self.extern_js_files:
-          self._get_buffer().write('<script type="text/javascript" src="' + file + '"></script>\n')
-        self._get_buffer().write('<script type="text/javascript" src="assets/js/core.js"></script>\n')
-        self._get_buffer().write('<link rel="stylesheet" type="text/css" href="assets/css/core.css" />\n')
-      
-      self._get_buffer().write("</%s>" % tag)
-    
-  def handle_charref(self, name):
-    self._get_buffer().write('&#%s;' % name)
-
-  def handle_entityref(self, name):
-    # FIXME 测试用例没问题，真正的页面a.html跑不过，奇怪.
-    if self._in_script:
-      self._get_buffer().write('&%s' % name)
-    else:
-      self._get_buffer().write('&%s;' % name)
-
-  def handle_comment(self, data):
-    if data.startswith("[if ") and data.endswith("<![endif]"):
-      # 保留条件注释
-      self._get_buffer().write("<!--%s-->" % utf8(data))
-
-  def handle_decl(self, decl):
-    self._get_buffer().write("<!%s>" % utf8(decl))
-
-  def handle_data(self, data):
-    self._get_buffer().write(utf8(data))
-
-  def get_script(self):
-    return self._script_text.getvalue()
-
-  def get_main(self):
-    return self._main_text.getvalue()
-  
-  def get_external_scripts(self):
-    return self._external_scripts
-
-  def get_external_styles(self):
-    return self._external_styles
 
 def get_html_processor(file, options):
+  from html_processor import HTMLProcessor
   compiler = HTMLProcessor(options.extern_js_files)
   contents = codecs.open(file, 'r', options.charset).read()
   compiler.feed(contents)
@@ -168,19 +71,22 @@ def merge_files(files, out):
   finally:
     out.close()
 
+#{{{gen_deps
 def gen_deps(options, args):
-  search_paths = GetPathsFromOptions(options)
+  search_paths = calcdeps.GetPathsFromOptions(options)
 
   if options.output_file:
-    out = open(options.output_file, 'w')
+    out = open(options.output_file, 'wb')
   else:
     out = sys.stdout
 
-  result = PrintDeps(search_paths, ExpandDirectories(options.deps or []), out)
+  result = calcdeps.PrintDeps(search_paths, calcdeps.ExpandDirectories(options.deps or []), out)
   if not result:
     logging.error('Could not find Closure Library in the specified paths')
     sys.exit(1)
+#}}}
 
+#{{{pl_build
 def pl_build(options, args):
   #prepareing: create folders, copy the main.html to output directory
   if(not options.output_dir):
@@ -197,14 +103,14 @@ def pl_build(options, args):
   main_path = os.path.join(tmp_dir, filename)
   shutil.copy2(options.main_html, main_path)
   # get some variables
-  search_paths = GetPathsFromOptions(options)
-  base_path = FindClosureBasePath(search_paths)
+  search_paths = calcdeps.GetPathsFromOptions(options)
+  base_path = calcdeps.FindClosureBasePath(search_paths)
   # fetch javascript code from main.html
   compiler = get_html_processor(options.main_html, options)
   main_js = compiler.get_script()
   open(tmp_dir + '/main_js.js', 'w').write(main_js)
   ext_scripts = compiler.get_external_scripts()
-  deps = CalculateDependencies(search_paths, [tmp_dir + '/main_js.js'])
+  deps = calcdeps.CalculateDependencies(search_paths, [tmp_dir + '/main_js.js'])
   arr = []
   for dep in deps:
     if dep.endswith('main_js.js') or dep.endswith('base.js'):
@@ -238,7 +144,9 @@ def pl_build(options, args):
   # add compiled js in main.html
   jsPath, jsFilename = os.path.split(output_file_path)
   open(main_path, 'w').write('<!doctype html>\n' + '<html>\n<head><title>test '+ jsFilename +'</title></head>\n<body>\n' + '<script type="text/javascript" src="'+ jsFilename +'"></script>\n</body>\n</html>')
-  
+#}}}
+
+#{{{build
 def build(options, args):
   # prepareing: create folders, copy the main.html to output directory
   if(os.path.exists(options.output_dir)):
@@ -249,17 +157,17 @@ def build(options, args):
   main_path = os.path.join(options.output_dir, filename)
   shutil.copy2(options.main_html, main_path)
   # get some variables
-  search_paths = GetPathsFromOptions(options)
-  base_path = FindClosureBasePath(search_paths)
+  search_paths = calcdeps.GetPathsFromOptions(options)
+  base_path = calcdeps.FindClosureBasePath(search_paths)
   # fetch javascript code from main.html, and store it in [%ouput_dir%/main_js.js]
   compiler = get_html_processor(main_path, options)
   main_js = compiler.get_script()
-  open(tmp_dir + '/main_js.js', 'w').write(main_js)
-  open(main_path, 'w').write(re.sub('(\r?\n+)+', '\n', compiler.get_main()))
+  open(tmp_dir + '/main_js.js', 'wb').write(main_js)
+  open(main_path, 'wb').write(re.sub('(\r?\n+)+', '\n', compiler.get_main()))
   ext_scripts = compiler.get_external_scripts()
   ext_styles = compiler.get_external_styles()
   # get the dependency list of js files, and put it in [%ouput_dir%/deps_list.js]
-  deps = CalculateDependencies(search_paths, [tmp_dir + '/main_js.js'])
+  deps = calcdeps.CalculateDependencies(search_paths, [tmp_dir + '/main_js.js'])
   out = open(tmp_dir + '/deps_list.js', 'w')
   for dep in deps:
     if not dep.endswith('main_js.js'):
@@ -306,141 +214,472 @@ def build(options, args):
     shutil.move(tmp_dir + k, options.output_dir + v + k)
   # clear tmp files
   shutil.rmtree(tmp_dir)
+#}}}
 
+#{{{gcc_lint
 def gcc_lint(options, args):
-  main_path = options.main_html
   # get some variables
-  search_paths = GetPathsFromOptions(options)
-  base_path = FindClosureBasePath(search_paths)
+  search_paths = calcdeps.GetPathsFromOptions(options)
+
   # fetch javascript code from main.html, and write it to a temp file
-  compiler = get_html_processor(main_path, options)
+  compiler = get_html_processor(options.main_html, options)
   main_js = compiler.get_script()
   (code, tmpfile) = tempfile.mkstemp(suffix='.js', prefix='gcc-lint-')
   open(tmpfile, 'w').write(main_js)
+
   # get the dependency list of js files
-  deps = CalculateDependencies(search_paths, [tmpfile])
-  deps_list = []
-  for dep in deps:
-    if not dep.endswith(tmpfile):
-      deps_list.append(dep)
-  # run google closure compiler to check javascript files in deps list
-  args = ['java', '-jar', options.compiler_jar]
-  for path in deps_list:
-    args += ['--js', path]
+  deps = calcdeps.CalculateDependencies(search_paths, [tmpfile])
+  out = open(os.path.devnull, 'w')
+  calcdeps.Compile(options.compiler_jar, deps, out, options.compiler_flags)
 
-  if options.compiler_flags:
-    args += options.compiler_flags
+  # 清理工作
+  os.remove(tmpfile)
+#}}}
 
-  logging.info('Checking javascript with the following command: %s', ' '.join(args))
-  proc = subprocess.Popen(args, stdout=subprocess.PIPE)
+#{{{gen_app
+def get_app_cfg_file():
+  return os.path.expanduser("~/.Fer.ini")
+
+def set_user_info():
+  """ 设置用户的信息app.user.name & app.user.email """
+  app_cfg_file = get_app_cfg_file()
+
+  try:
+    app_user_name = raw_input("app.user.name: ").strip()
+    app_user_email = raw_input("app.user.email: ").strip()
+
+    config = ConfigParser.ConfigParser()
+    config.read([app_cfg_file])
+
+    if not config.has_section('user'):
+      config.add_section('user')
+
+    config.set('user', 'name', app_user_name)
+    config.set('user', 'email', app_user_email)
+
+    config.write(open(app_cfg_file, 'wb'))
+  except KeyboardInterrupt:
+    sys.exit(0)
+
+def has_user_info():
+  app_cfg_file = get_app_cfg_file()
+  if not os.path.exists(app_cfg_file):
+    return False
+
+  config = ConfigParser.ConfigParser()
+  config.read([app_cfg_file])
+
+  if not config.has_section('user'):
+    return False
+
+  return True
+
+def get_user_info():
+  """ 返回用户的信息app.user.name & app.user.email """
+  if not has_user_info():
+    set_user_info()
+
+  config = ConfigParser.ConfigParser()
+  config.read([get_app_cfg_file()])
+
+  return {
+    "app.user.name": config.get('user', 'name'),
+    "app.user.email" : config.get('user', 'email')
+  }
+
+def get_date_info():
+  return {
+    "app.create.time" : datetime.now().strftime('%Y/%m/%d %H:%M:%S'),
+    "app.create.year" : datetime.now().strftime('%Y'),
+  }
+
+def generate_code(template_name, dst_path, app_cfg):
+  """ 根据模板生成代码 """
+  abs_path = os.path.join(FER_SKEL_DIR, template_name)
+  if os.path.exists(abs_path):
+    template = open(abs_path, 'r').read()
+    content = template % app_cfg
+    if os.path.exists(dst_path):
+      logging.info('M %s' % dst_path)
+    else:
+      logging.info('+ %s' % dst_path)
+    open(dst_path, 'wb').write(content)
+
+def create_module(module_path, app_cfg):
+  """ 生成module相关的代码 """
+  if not os.path.exists(module_path):
+    os.makedirs(module_path)
+
+  for name in ['module.js', 'mockup.js']:
+    abs_path = os.path.join(module_path, name)
+    if not os.path.exists(abs_path):
+      generate_code(name, abs_path, app_cfg)
+
+
+def create_action(path_prefix, action_name, app_cfg):
+  """ 生成action相关的代码 """
+  _ = lambda k : os.path.normpath(os.path.join(path_prefix, k))
+  generate_code('action.js', _(action_name + '.js'), app_cfg)
+  generate_code('action.css', _(action_name + '.css'), app_cfg)
+  generate_code('action.html', _(action_name + '.html'), app_cfg)
+  generate_code('action.app.html', _(action_name + '.app.html'), app_cfg)
+
+def register_action(module_path, action_path, app_cfg):
+  # 修改module.js，添加path和action关系
+  abs_path = os.path.join(module_path, 'module.js')
+  module_config_identifier = "%s.config" % app_cfg["app.module"]
+  first_token = Frewriter.tokenizer(open(abs_path).read())
+  token = Frewriter.find_token(first_token, module_config_identifier)
+  start_block = Frewriter.find_token(token, "{", TokenType.START_BLOCK)
+  end_block = Frewriter.find_end_token(start_block.next)
+  map_code = "\n// Autogenerated at %s\n%s['action'].push({'location':'%s','action':'%s'});" % (
+    datetime.now().strftime('%Y/%m/%d %H:%M:%S'), module_config_identifier,
+    action_path, app_cfg['app.name'])
+  Frewriter.append_code(end_block.previous, Frewriter.tokenizer(map_code))
+  open(abs_path, 'wb').write(Frewriter.dump_source(first_token))
+  logging.info('M %s' % abs_path)
+
+def update_deps():
+  """ 调用ant deps，更新deps.js """
+  proc = subprocess.Popen(['ant', 'deps'], stdout = subprocess.PIPE)
   (stdoutdata, stderrdata) = proc.communicate()
   if proc.returncode != 0:
-    logging.error('gcc-lint failed.')
+    logging.error('Update deps.js failed.')
     sys.exit(1)
 
+def gen_app(options, args):
+  """ 创建application """
+  if options.name is None:
+    logging.error('--name Could not be None.')
+    sys.exit(1)
+
+  name = options.name
+  match = action_name_regex.match(name)
+  if match is None:
+    logging.error('Invalid action name.')
+    sys.exit(1)
+
+  # name = "jn.this_is_a_module.ShowCaseDemo"
+  package = match.group("package")
+  action_name = match.group("action_name")
+
+  # 把ShowCaseDemo转化为show_case_demo的形式
+  lowercase_action_name = re.sub(r"\B[A-Z]",\
+      lambda z : '_' + chr(ord(z.group(0)) + 32), action_name).lower()
+
+  # ac-jn-this_is_a_module-show-case-demo
+  class_name = 'ac-' + package.replace('.', '-') + lowercase_action_name.replace('_', '-')
+
+  # jn_this_is_a_module_show_case_demo
+  view_name = package.replace('.', '_') + lowercase_action_name
+
+  # src/jn/this_is_a_module/show_case_demo
+  dst_module_path = os.path.join('src', *package.split('.'))
+  dst_path_prefix = os.path.join(dst_module_path, lowercase_action_name).replace('\\', '/')
+  action_path = options.action_path or dst_path_prefix[3:]   # /jn/this_is_a_module/show_case_demo
+
+  # 计算action.app.html跟src目录的相对路径../../
+  rel_path = os.path.relpath(os.path.abspath('src'), os.path.abspath(dst_module_path)).replace('\\', '/')
+
+  app_cfg = {
+    "app.module" : package[:-1],
+    "app.package.path" : package.replace('.', '/')[:-1],
+    "app.super_class" : options.super_class,
+    "app.rel_path" : rel_path,
+    "app.action_path" : action_path,
+    "app.action_name" : lowercase_action_name,
+    "app.class_name" : class_name,
+    "app.view_name" : view_name,
+    "app.name" : name,
+  }
+  app_cfg.update(get_user_info())
+  app_cfg.update(get_date_info())
+
+  # TODO 检测dst_module_prefix是否存在，不存在的话，创建新的
+  create_module(dst_module_path, app_cfg)
+  create_action(dst_module_path, lowercase_action_name, app_cfg)
+  register_action(dst_module_path, action_path, app_cfg)
+  # update_deps()
+#}}}
+
+#{{{gen_deploy
+def get_include_files(deps):
+  """
+  从deps中的文件列表找到所有的goog.include的内容
+  经典用法：
+  python externs/sdcfe/tools/bin/Fer.py
+         --gen_deploy
+         -p src
+         --entry_point src/jn/dashboard/landmark.app.html
+         -f "--compilation_level=BAIDU_OPTIMIZATIONS"
+         -f "--formatting=PRETTY_PRINT"
+         -f "--warning_level=VERBOSE"
+         -f "--externs=src/tangram.externs.js"
+         -f "--externs=src/pdc.externs.js"
+         -j assets/js/tangram-base-1.3.7.1.js
+  """
+  includes = []
+  for input_file in deps:
+    file_handle = open(input_file, 'r')
+    try:
+      for line in file_handle:
+        line = line.strip()
+        match = re.match(include_regex, line)
+        if match:
+          include_file = match.group(1)
+          if include_file in includes:
+            continue
+          else:
+            includes.append(include_file)
+    finally:
+      file_handle.close()
+
+  return includes
+
+def gen_deploy(options, args):
+  if not options.entry_point:
+    logging.error('--entry_point must be specified.')
+    sys.exit(1)
+
+  output_dir = options.output_dir
+  if os.path.exists(output_dir):
+    shutil.rmtree(output_dir)
+  os.makedirs(output_dir)
+
+  from assets_manager import AssetsManager
+  am = AssetsManager(output_dir)
+  extern_js_files = []
+  for asset in options.extern_js_files:
+    if os.path.exists(asset):
+      extern_js_files.append(am.add(asset))
+  options.extern_js_files = extern_js_files
+
+  compiler = get_html_processor(options.entry_point, options)
+  ep_content = compiler.get_main()
+  ep_code = compiler.get_script()
+
+  import tempfile
+  fd, ep_code_file = tempfile.mkstemp('.js')
+  open(ep_code_file, 'wb').write(ep_code)
+
+  search_paths = calcdeps.GetPathsFromOptions(options)
+  base_path = calcdeps.FindClosureBasePath(search_paths)
+  deps = calcdeps.CalculateDependencies(search_paths, [ep_code_file])
+  # print deps
+
+  # XXX [ep_code_file]放到第一位是保证css的顺序符合debug的预期
+  includes = get_include_files([ep_code_file] + deps)
+  # print includes
+
+  from css_rewriter import CssRewriter
+  rewriter = CssRewriter(".", am)
+  ep_css_code = []
+  ep_tpl_code = []
+  for input_file in includes:
+    input_file_path = os.path.join(os.path.dirname(base_path), input_file)
+    if not os.path.exists(input_file_path):
+      continue
+    code_content = open(input_file_path, 'rb').read()
+    if input_file.endswith(".css"):
+      ep_css_code.append(rewriter.rewrite(input_file_path))
+    else:
+      ep_tpl_code.append(code_content)
+
+  # 输出最终的entry_point_html文件
+  ep_file = os.path.basename(options.entry_point)
+  ep_css_file = os.path.splitext(ep_file)[0] + '.css'
+  ep_tpl_file = 'tpl.html'
+  ep_js_file = os.path.splitext(ep_file)[0] + '.js'
+
+  _ = lambda k : os.path.normpath(os.path.join(output_dir, k))
+  app_cfg = {
+    "app.js.path" : ep_js_file,
+    "app.css.path" : ep_css_file
+  }
+  open(_(ep_file), 'wb').write(re.sub('(\s*\r?\n)+', '\n', ep_content % app_cfg))
+  open(_(ep_css_file), 'wb').write(re.sub('\r\n', '\n', "\n".join(ep_css_code)))
+  open(_(ep_tpl_file), 'wb').write(re.sub('\r\n', '\n', "\n".join(ep_tpl_code)))
+  logging.info('+ %s' % _(ep_file))
+  logging.info('+ %s' % _(ep_css_file))
+  logging.info('+ %s' % _(ep_tpl_file))
+
+  # 生成helloworld.app.js文件
+  out = open(_(ep_js_file), 'wb')
+  define_flags = [
+    '--define="app.asyncResource=\'%s\'"' % ep_tpl_file,
+    '--define="er.config.CONTROL_IFRAME_URL=\'history.html\'"'
+  ]
+  calcdeps.Compile(options.compiler_jar, deps, out,
+    options.compiler_flags + define_flags)
+  logging.info('+ %s' % _(ep_js_file))
+
+  # 生成history.html
+  if os.path.exists(options.history_html_path):
+    shutil.copy(options.history_html_path, _('history.html'))
+    logging.info('+ %s' % _('history.html'))
+  else:
+    logging.error("%s not exists.", options.history_html_path)
+
+  # 清理工作
+  os.remove(ep_code_file)
+#}}}
+
 def main():
-  logging.basicConfig(format='Fer: %(message)s', level=logging.DEBUG)
-  
+  logging.basicConfig(format="%(levelname)-5s:%(name)s:%(message)s", level=logging.DEBUG)
+
   usage = 'usage: %prog [options] arg'
   parser = optparse.OptionParser(usage)
-  parser.add_option('--gen_deps',
-                    dest='gen_deps',
+
+#{{{
+  gen_deps_og = parser.add_option_group("Generate dependencies")
+  gen_deps_og.add_option('--gen_deps',
+                         dest='gen_deps',
+                         default=False,
+                         action="store_true",
+                         help='Generate deps.js.')
+
+  build_og = parser.add_option_group("Fer build process")
+  build_og.add_option('--build',
+                      dest='build',
+                      default=False,
+                      action="store_true",
+                      help='Build project.')
+
+  pl_build_og = parser.add_option_group("Build pl process")
+  pl_build_og.add_option('--pl_build',
+                         dest='pl_build',
+                         default=False,
+                         action="store_true",
+                         help='Build pl project.')
+
+  gcc_lint_og = parser.add_option_group("Goolge closure compiler lint")
+  gcc_lint_og.add_option('--gcc_lint',
+                         dest='gcc_lint',
+                         default=False,
+                         action="store_true",
+                         help='Run gcc lint.')
+
+  app_og = parser.add_option_group("Generate application code")
+  app_og.add_option('--gen_app',
+                    dest='gen_app',
                     default=False,
-                    action="store_true",
-                    help='generate deps.js')
-  parser.add_option('--build',
-                    dest='build',
+                    action='store_true',
+                    help="Generate application code.")
+  app_og.add_option('--name',
+                    dest='name',
+                    action='store',
+                    help="Action's full name. such as jn.this_is_a_module.ShowCase")
+  app_og.add_option('--action_path',
+                    dest='action_path',
+                    action='store',
+                    help="Set the action's path.")
+  app_og.add_option('--super_class',
+                    dest='super_class',
+                    default="er.ListAction",
+                    action="store",
+                    help="Set application super class, default is `er.ListAction`.")
+  app_og.add_option('--force',
+                    dest='force',
                     default=False,
-                    action="store_true",
-                    help='build project')
-  parser.add_option('--pl_build',
-                    dest='pl_build',
-                    default=False,
-                    action="store_true",
-                    help='build pl project')
-  parser.add_option('--gcc_lint',
-                    dest='gcc_lint',
-                    default=False,
-                    action="store_true",
-                    help='run gcc lint')
-  parser.add_option('-p',
-                    '--path',
-                    dest='paths',
-                    action='append',
-                    help='The paths that should be traversed to build the '
-                    'dependencies.')
-  parser.add_option('-d',
-                    '--dep',
-                    dest='deps',
-                    action='append',
-                    help='Directories or files that should be traversed to '
-                    'find required dependencies for the deps file. '
-                    'Does not generate dependency information for names '
-                    'provided by these files. Only useful in "deps" mode.')
-  parser.add_option('-e',
-                    '--exclude',
-                    dest='excludes',
-                    action='append',
-                    help='Files or directories to exclude from the --path '
-                    'and --input flags')
-  parser.add_option('-o',
-                    '--output_file',
-                    dest='output_file',
-                    action='store',
-                    help=('If specified, write output to this path instead of '
-                          'writing to standard output.'))
-  parser.add_option('-m',
-                    '--main_html',
-                    dest='main_html',
-                    action='store',
-                    help=('the html file to build'))
-  parser.add_option('-r',
-                    '--output_dir',
-                    dest='output_dir',
-                    action='store',
-                    help=('the output directory for build.'))
-  parser.add_option("-c",
-                    "--charset",
-                    dest="charset",
-                    default="utf-8",
-                    help=('specify the charset of main_html.'))
-  parser.add_option("-j",
-                    "--extern_js_file",
-                    dest="extern_js_files",
-                    action='append',
-                    default=[],
-                    help=('external js files which will put in the final ouput when build.'
-                          'html code.'))
-  parser.add_option('-a',
-                    '--compiler_jar',
-                    dest='compiler_jar',
-                    action='store',
-                    help='The location of the Closure compiler .jar file.')
-  parser.add_option('-f',
-                    '--compiler_flag',
-                    '--compiler_flags', # for backwards compatability
-                    dest='compiler_flags',
-                    action='append',
-                    help='Additional flag to pass to the Closure compiler. '
-                    'May be specified multiple times to pass multiple flags.')
-  
+                    action='store_true',
+                    help="Force overwrite the existed file.")
+
+  deploy_og = parser.add_option_group("Generate deployable code")
+  deploy_og.add_option('--gen_deploy',
+                       dest='gen_deploy',
+                       default=False,
+                       action='store_true',
+                       help="Generate deployable code.")
+  deploy_og.add_option('--entry_point',
+                       dest='entry_point',
+                       action='store',
+                       help="The application entry point.")
+  deploy_og.add_option('--history_html_path',
+                       dest='history_html_path',
+                       default='assets/history.html',
+                       action='store',
+                       help='The history.html path, default is assets/history.html.')
+
+  common_og = parser.add_option_group("Common options")
+  common_og.add_option('-p',
+                       '--path',
+                       dest='paths',
+                       action='append',
+                       help='The paths that should be traversed to build the dependencies.')
+  common_og.add_option('-d',
+                       '--dep',
+                       dest='deps',
+                       action='append',
+                       help='Directories or files that should be traversed to '
+                       'find required dependencies for the deps file. '
+                       'Does not generate dependency information for names '
+                       'provided by these files. Only useful in "deps" mode.')
+  common_og.add_option('-e',
+                       '--exclude',
+                       dest='excludes',
+                       action='append',
+                       help='Files or directories to exclude from the --path '
+                       'and --input flags')
+  common_og.add_option('-o',
+                       '--output_file',
+                       dest='output_file',
+                       action='store',
+                       help='If specified, write output to this path instead of '
+                       'writing to standard output.')
+  common_og.add_option('-m',
+                       '--main_html',
+                       dest='main_html',
+                       action='store',
+                       help='The html file to build.')
+  common_og.add_option('-r',
+                       '--output_dir',
+                       dest='output_dir',
+                       default='output',
+                       action='store',
+                       help='The output directory for build.')
+  common_og.add_option("-c",
+                       "--charset",
+                       dest="charset",
+                       default="utf-8",
+                       help='Specify the charset of main_html.')
+  common_og.add_option("-j",
+                       "--extern_js_file",
+                       dest="extern_js_files",
+                       action='append',
+                       default=[],
+                       help='External js files which will put in the final ouput when build.'
+                       'html code.')
+  common_og.add_option('-a',
+                       '--compiler_jar',
+                       dest='compiler_jar',
+                       default=os.path.normpath(os.path.join(os.path.dirname(__file__), '..', 'lib', 'google-closure-compiler.jar')),
+                       action='store',
+                       help='The location of the Closure compiler .jar file.')
+  common_og.add_option('-f',
+                       '--compiler_flag',
+                       '--compiler_flags', # for backwards compatability
+                       dest='compiler_flags',
+                       action='append',
+                       help='Additional flag to pass to the Closure compiler. '
+                       'May be specified multiple times to pass multiple flags.')
+#}}}
+
   (options, args) = parser.parse_args()
 
   if options.gen_deps:
     gen_deps(options, args)
-    return
-
-  if options.build:
+  elif options.build:
     build(options, args)
-    return
-
-  if options.gcc_lint:
+  elif options.gcc_lint:
     gcc_lint(options, args)
-    return
-
-  if options.pl_build:
+  elif options.pl_build:
     pl_build(options, args)
-    return
+  elif options.gen_app:
+    gen_app(options, args)
+  elif options.gen_deploy:
+    gen_deploy(options, args)
+  else:
+    parser.print_help()
 
 if __name__ == "__main__":
   main()

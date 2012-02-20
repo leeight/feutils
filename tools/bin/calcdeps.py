@@ -222,7 +222,6 @@ def BuildDependencyHashFromDependencies(deps):
       dep_hash[provide] = dep
   return dep_hash
 
-
 def CalculateDependencies(paths, inputs):
   """Calculates the dependencies for given inputs.
 
@@ -379,7 +378,7 @@ def GetRelpath(path, start):
 
 
 def PrintLine(msg, out):
-  out.write(msg)
+  out.write(msg.strip())
   out.write('\n')
 
 

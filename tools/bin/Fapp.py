@@ -7,9 +7,9 @@
 # $Id$ 
 # 
 # **************************************************************************/
- 
- 
- 
+
+
+
 import os
 import sys
 import logging
@@ -19,8 +19,8 @@ from shutil import copytree, ignore_patterns
 from string import Template
 from datetime import datetime
 from optparse import OptionParser
- 
- 
+
+
 __author__ = 'leeight <liyubei@baidu.com>'
 __date__ = '2011/04/15 15:32:16'
 __revision = '$Revision$'
@@ -73,7 +73,7 @@ def set_user_info():
 
     config = ConfigParser.ConfigParser()
     config.read([app_cfg_file])
-    
+
     if not config.has_section('user'):
       config.add_section('user')
 
