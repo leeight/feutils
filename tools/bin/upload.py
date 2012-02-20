@@ -94,7 +94,7 @@ VCS_SUBVERSION = "Subversion"
 VCS_PERFORCE = "Perforce"
 VCS_CVS = "CVS"
 VCS_UNKNOWN = "Unknown"
-SCRIPT_VERSION = "14"
+SCRIPT_VERSION = "15"
 
 # whitelist for non-binary filetypes which do not start with "text/"
 # .mm (Objective-C) shows up as application/x-freemind on my Linux box.
@@ -1079,6 +1079,11 @@ class VersionControlSystem(object):
         if mimetype in TEXT_MIMETYPES:
             return False
         return not mimetype.startswith("text/")
+    def IsBinaryData(self, data):
+        """Returns true if data contains a null byte."""
+        # Derived from how Mercurial's heuristic, see
+        # http://selenic.com/hg/file/848a6658069e/mercurial/util.py#l229
+        return bool(data and "\0" in data)
 
 
 class SubversionVCS(VersionControlSystem):
@@ -1251,8 +1256,8 @@ class SubversionVCS(VersionControlSystem):
                 return "$%s::%s$" % (m.group(1), " " * len(m.group(3)))
             return "$%s$" % m.group(1)
         keywords = [keyword
-                    for name in keyword_str.split(" ")
-                    for keyword in svn_keywords.get(name, [])]
+                    for name in keyword_str.split("\n")
+                    for keyword in svn_keywords.get(name.strip(), [])]
         return re.sub(r"\$(%s):(:?)([^\$]+)\$" % '|'.join(keywords), repl, content)
 
     def GetUnknownFiles(self):
@@ -1608,12 +1613,6 @@ class GitVCS(VersionControlSystem):
         if retcode:
             ErrorExit("Got error status from 'git show %s'" % file_hash)
         return data
-
-    def IsBinaryData(self, data):
-        """Returns true if data contains a null byte."""
-        # Derived from how Mercurial's heuristic, see
-        # http://selenic.com/hg/file/848a6658069e/mercurial/util.py#l229
-        return bool(data and "\0" in data)
 
     def GetBaseFile(self, filename):
         hash_before, hash_after = self.hashes.get(filename, (None,None))
