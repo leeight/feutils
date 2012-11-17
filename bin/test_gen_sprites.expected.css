@@ -1,0 +1,17 @@
+
+/*
+  spritemapper.output_image = %(output_dir)s/assets/image/test_gen_sprites-sprites.png
+  spritemapper.output_css = %(output_dir)s/test_gen_sprites-sprites.css
+*/
+.s1 {
+    color: red;
+    background: url('assets/image/test_gen_sprites-sprites-3eba5b70a60907a68fd39373b71b5d1e.png') no-repeat 0 -17px;
+}
+.s2 {
+    color: red;
+    background: url('assets/image/test_gen_sprites-sprites-3eba5b70a60907a68fd39373b71b5d1e.png') no-repeat 0 0;
+}
+.s3 {
+    font-size: 12px;
+    background: url(assets/image/esui.png);
+}

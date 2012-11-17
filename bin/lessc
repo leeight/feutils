@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+base_dir=$(dirname "$0")
+webapp_dir=$(readlink -f "${base_dir}/../../../..")
+
+cd $webapp_dir
+node tools/node_modules/less/bin/lessc "$@"

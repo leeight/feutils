@@ -1,6 +1,0 @@
-VERSION=$(shell grep "em:version=" install.rdf | awk -F[=\"] '{print $$3}')
-NAME=python-format
-
-all:
-	@rm -rf ../$(NAME)-$(VERSION).xpi
-	@zip -x Makefile -x "*.svn*" -r ../$(NAME)-$(VERSION).xpi .
