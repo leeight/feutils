@@ -1,4 +1,4 @@
-# Fer --gen_app
+# Fer
 
 leeight (liyubei@baidu.com)  
 2011/01/21
@@ -52,7 +52,7 @@ leeight (liyubei@baidu.com)
 
 现在我们需要把`path`和`action`关联起来，方法就是修改`module.js`中`jn.demo.config`的配置，添加`action`配置字段
 
-    :::javascript
+    ```javascript
     /**
      * @type {Object}
      * @const
@@ -65,6 +65,7 @@ leeight (liyubei@baidu.com)
             }
         ]
     };
+    ```
 
 OK，现在工作已经完成80%了，剩下的就是打开页面，调试我们这个action。但是页面在哪里呢？我们能够想到的最简单的方法就
 是创建一个页面，把所需要的代码都加载进来，然后调试。不错，这是正确的解决问题思路，但是如何加载所需要的代码呢？如何
@@ -94,9 +95,10 @@ OK，现在工作已经完成80%了，剩下的就是打开页面，调试我们
 因为我们的示例代码中没有这个依赖，而大多数情况下，这个依赖都是存在的，因此合乎常理的方法是修改`helloworld.js`，添加一个`jn.demo.config`
 或者`jn.demo.data`的依赖即可。
 
-    :::javascript
+    ```javascript
     goog.require("jn.demo.data");
     goog.require("jn.demo.config");
+    ```
 
 然后执行命令`ant deps`，更新依赖关系。
 
@@ -121,7 +123,7 @@ OK，现在工作已经完成80%了，剩下的就是打开页面，调试我们
 
 添加`path`到`action`的对应关系。
 
-    :::javascript
+    ```javascript
     /**
      * @type {Object}
      * @const
@@ -136,6 +138,7 @@ OK，现在工作已经完成80%了，剩下的就是打开页面，调试我们
             ...
         ]
     };
+    ```
 
 然后创建mockup页面：
 
@@ -171,11 +174,12 @@ OK，现在工作已经完成80%了，剩下的就是打开页面，调试我们
 
 我还希望它能支持额外的参数，例如：
 
-    :::bash
+    ```bash
     Fer --gen_app --name "jn.demo.ShowCase" \
         [--action_path "/jn/demo/xxx" [--super_class "er.ListAction"]]
     Fer --gen_app --name "jn.dashboard.Gold" --super_class "er.FormAction"
     Fer --gen_app --name "jn.dashboard.Landmark" --super_class "er.ListAction"
+    ```
 
 此外，如果要创建的`Action`或者`Path`已经存在了，给出相应的警告 :-)
 
@@ -195,7 +199,7 @@ OK，现在工作已经完成80%了，剩下的就是打开页面，调试我们
 
 添加`path`和`action`的依赖关系：
 
-    :::javascript
+    ```javascript
     /**
      * @type {Object}
      * @const
@@ -215,10 +219,11 @@ OK，现在工作已经完成80%了，剩下的就是打开页面，调试我们
             "order_list" : "/api/demo/jn/demo/order_list"
         }
     };
+    ```
 
 添加数据访问接口：
 
-    :::javascript
+    ```javascript
     /**
      * 后端数据访问接口
      * @type {Object.<string, function(string, Function, Function)>}.
@@ -233,10 +238,11 @@ OK，现在工作已经完成80%了，剩下的就是打开页面，调试我们
             "url" : jn.demo.config.url.order_list
         }
     ]);
+    ```
 
 然后更新`src/jn/demo/hellodata.js`，实现`initModel`和`afterInit`方法，如下：
 
-    :::javascript
+    ```javascript
     /** @inheritDoc */
     jn.demo.Hellodata.prototype.initModel = function(argMap, callback) {
         this.model['fields'] = [
@@ -252,6 +258,7 @@ OK，现在工作已经完成80%了，剩下的就是打开页面，调试我们
         this.list = this.page.getChild('list');
         this.requesterList = jn.demo.data.ad_list;
     }
+    ```
 
 最后，同样创建`hellodata.app.html`，查看效果 :-)
 
@@ -287,7 +294,7 @@ OK，现在工作已经完成80%了，剩下的就是打开页面，调试我们
 
 1. 分析`entry_point.html`，解析出所有的内联js代码，合并到一起用来后续进行分析，以Hello World为例，我们解析出来的代码如下：
 
-        :::javascript
+        ```javascript
                 goog.require('app.Launch');
                 goog.require('er.controller');
                 goog.require('er.locator');
@@ -309,10 +316,11 @@ OK，现在工作已经完成80%了，剩下的就是打开页面，调试我们
                 }
             });
         });
+        ```
 
 2. 通过分析上一步获取到的js代码中的`goog.require`，获取到一个文件列表，如下：
 
-        :::javascript
+        ```javascript
         src/base.js 
         src/er/base.js 
         src/er/template.js 
@@ -349,6 +357,7 @@ OK，现在工作已经完成80%了，剩下的就是打开页面，调试我们
         src/jn/demo/module.js 
         src/jn/demo/helloworld.js 
         /tmp/tmpZNSX4j.js     // 这个文件就是保存第一步解析出来的那些代码
+        ```
 
 3. 分析这个文件列表中的每个文件，找到符合`goog.include("*.css")`的特征的代码，将所有的css文件合并到一个css文件中。
    同时将符合`goog.include("*.html")`特征的代码，合并到tpl.html文件中。
@@ -356,16 +365,17 @@ OK，现在工作已经完成80%了，剩下的就是打开页面，调试我们
 4. 另外，因为css文件中会引用到图片，那么在合并css代码之前，需要对每个css文件进行rewrite，规则就是找到所有`background:`或者`background-image:`属性，
    如果里面有`url(...)`的样式定义，就对`url()`中引用的文件进行重写，例如：
 
-        :::css
+        ```css
         div { background: url(../../assets/img/esui.png); }
         /** 重写为 */
         div { background: url(assets/image/esui-7ff04e745d9498b864485adad6733f4f.png); }
+        ```
 
     同时，相应的资源文件也会被拷贝到输出目录中去。
 
 5. 另外，我们还需要对最终输出的js代码中的一些文件路径进行重写定义，主要有两个：
 
-        :::javascript
+        ```javascript
         /**
          * deploy模式下模板的路径
          * @define {string}
@@ -377,15 +387,17 @@ OK，现在工作已经完成80%了，剩下的就是打开页面，调试我们
          * @define {string}
          */
         er.config.CONTROL_IFRAME_URL = "/assets/history.html";
+        ```
 
     只需要在编译的时候，通过传递`--define`参数来修改这两个变量的值即可。
 
 6. 在整个生成部署代码的过程中，有一个`AssetsManager`用来管理所有的资源，它的用法很简单，传递给它一个可以
    访问的文件路径，然后它返回一个新的路径，例如：
 
-        :::python
+        ```python
         am = assets_manager.AssetsManager("/tmp/output")
         print am.add("assets/js/tangram-base-1.3.7.1.js")
+        ```
 
     同时会自动将这个资源拷贝到`/tmp/output`的合适目录中
 
@@ -408,16 +420,3 @@ OK，现在工作已经完成80%了，剩下的就是打开页面，调试我们
 1. Fer --gen\_deps
 2. 所有的命令都是在`webapp`目录下面执行
 3. cssutils对css进行重写的时候，可能导致某些样式丢失，需要修复这个问题(__TODO__)
-
-<style type="text/css">
-@page { 
-    @top-left {
-      /* content: "TOP SECRET"; */
-      /* color: red */
-    }
-    @bottom-right {
-        content: counter(page);
-        font-style: italic;
-    }
-}
-</style>
